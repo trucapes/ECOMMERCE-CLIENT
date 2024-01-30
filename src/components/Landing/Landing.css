@@ -7,7 +7,7 @@
   align-items: center;
   flex-direction: row;
   flex-wrap: wrap-reverse;
-  background-image: url("file:///E:/WebDevelopment/Intern/ECOMMERCE-CLIENT/src/asset/brand/outdoor3.jpg");
+  background-image: url("../../asset/brand/outdoor3.jpg");
   background-size: cover;
   position: relative;
 }
