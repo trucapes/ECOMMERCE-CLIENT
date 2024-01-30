@@ -36,7 +36,7 @@ const ItemCard = (props) => {
                         </Link>
                     </div>
                     <div className="product__description">
-                        <span>{props.item.description}</span>
+                        {/* <span>{props.item.description}</span> */}
                     </div>
                     <div className="product__price">
                         <span>${props.item.price}</span>

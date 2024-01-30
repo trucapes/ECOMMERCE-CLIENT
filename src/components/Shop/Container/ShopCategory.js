@@ -7,7 +7,7 @@ const ShopCategory = (props) => {
             <div className="shop__category__header">
                 <div className="shop__category__header__big">
                     <div className="shop__category__head">
-                        <h2>{props.name} Fashion</h2>
+                        <h2>{props.name} Lights</h2>
                     </div> 
                     <div className="shop__category__header__line"></div>
                 </div>
