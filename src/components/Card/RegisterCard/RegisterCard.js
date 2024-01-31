@@ -156,7 +156,7 @@ const RegisterCard = () => {
             <select
               onChange={(e) => {
                 e.preventDefault();
-                setCountry(e.target.value);
+                setEnteredCountry(e.target.value);
               }}
               type="text"
               name="country"
