@@ -3,11 +3,13 @@ import { Link } from "react-router-dom";
 import "./RegisterCard.css";
 import { Stack, FormControlLabel, Checkbox } from "@mui/material";
 import axios from "axios";
+import InputBox from "../../InputBox/InputBox";
+import AlertMsg from "../../Alert/AlertMsg";
+import { handleSignup } from "../../../helpers/Auth";
 
 const RegisterCard = () => {
   const [ISDcodes, setISDcodes] = useState([]);
   const [country, setCountry] = useState([]);
-
   const [fName, setFName] = useState("");
   const [lName, setLName] = useState("");
   const [email, setEmail] = useState("");
@@ -17,12 +19,26 @@ const RegisterCard = () => {
   const [comName, setComName] = useState(null);
   const [comWeb, setComWeb] = useState(null);
   const [role, setRole] = useState("");
-  const [agree, setAgree] = useState(false);
+  const [agree, setAgree] = useState(true);
   const [viewPassword, setViewPassword] = useState(false);
   const [viewCnfPassword, setViewCnfPassword] = useState(false);
   const [enteredISDcode, setEnteredISDcode] = useState("");
   const [cnfPassword, setCnfPassword] = useState("");
   const [password, setPassword] = useState("");
+
+  const [alert, setAlert] = useState(false);
+  const [msg, setMsg] = useState("");
+
+  const handleToggle = (e, toggleVariable, elementID, setter) => {
+    e.preventDefault();
+    if (toggleVariable) {
+      document.querySelector(`#${elementID}`).type = "password";
+      setter(!toggleVariable);
+    } else {
+      document.querySelector(`#${elementID}`).type = "text";
+      setter(!toggleVariable);
+    }
+  };
 
   useEffect(() => {
     axios.get("https://restcountries.com/v3.1/all").then((res) => {
@@ -52,59 +68,30 @@ const RegisterCard = () => {
       >
         <h1 className="font-roboto font-bold">Create Account</h1>
         <div className="w-full flex gap-4 flex-col sm:flex-row">
-          <div className="w-full">
-            <label htmlFor="firstName" className="font-roboto font-bold">
-              Enter First Name<span className="text-red-700">*</span>
-            </label>
-            <input
-              onChange={(e) => {
-                e.preventDefault();
-                setFName(e.target.value);
-              }}
-              type="text"
-              name="firstName"
-              id="firstName"
-              class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:border-slate-600 block w-full p-3"
-              placeholder="e.g. - John"
-              required=""
-            />
-          </div>
-          <div className="w-full">
-            <label htmlFor="secondName" className="font-roboto font-bold">
-              Enter Last Name<span className="text-red-700">*</span>
-            </label>
-            <input
-              onChange={(e) => {
-                e.preventDefault();
-                setLName(e.target.value);
-              }}
-              type="text"
-              name="secondName"
-              id="secondName"
-              class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:border-slate-600 block w-full p-3"
-              placeholder="e.g. - Deer"
-              required=""
-            />
-          </div>
+          <InputBox
+            label={"Enter First Name"}
+            required={true}
+            setter={setFName}
+            placeholder={"e.g. - John"}
+            name={"firstName"}
+          />
+          <InputBox
+            label={"Enter Last Name"}
+            required={true}
+            setter={setLName}
+            placeholder={"e.g. - Deer"}
+            name={"secondName"}
+          />
         </div>
         <div className="w-full flex gap-4 flex-col sm:flex-row">
-          <div className="w-full">
-            <label htmlFor="email" className="font-roboto font-bold">
-              Enter Your Email<span className="text-red-700">*</span>
-            </label>
-            <input
-              onChange={(e) => {
-                e.preventDefault();
-                setEmail(e.target.value);
-              }}
-              type="text"
-              name="email"
-              id="email"
-              class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:border-slate-600 block w-full p-3"
-              placeholder="e.g. - abc@def.com"
-              required=""
-            />
-          </div>
+          <InputBox
+            label={"Enter Your email"}
+            required={true}
+            setter={setEmail}
+            placeholder={"e.g. - abc@def.com"}
+            type={"email"}
+            name={"email"}
+          />
         </div>
         <div className="w-full flex gap-4 flex-col sm:flex-row">
           <div className=" w-full sm:w-[45%]">
@@ -119,8 +106,9 @@ const RegisterCard = () => {
               id="ISDcode"
               name="ISDcode"
               placeholder="Select ISD Code"
-              class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:border-slate-600 block w-full p-3"
+              className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:border-slate-600 block w-full p-3"
             >
+              <option value="">Select ISD Code</option>
               {ISDcodes.map((val, index) => {
                 if (!val) return;
                 return (
@@ -131,22 +119,13 @@ const RegisterCard = () => {
               })}
             </select>
           </div>
-          <div className="w-full">
-            <label htmlFor="mobile" className="font-roboto font-bold">
-              Enter Mobile No.<span className="text-red-700">*</span>
-            </label>
-            <input
-              onChange={(e) => {
-                e.preventDefault();
-                setMobile(e.target.value);
-              }}
-              id="mobile"
-              name="mobile"
-              type="text"
-              placeholder="e.g. - 12334567890"
-              class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:border-slate-600 block w-full p-3"
-            />
-          </div>
+          <InputBox
+            label={"Enter Mobile No."}
+            required={true}
+            setter={setMobile}
+            placeholder={"e.g. 1234567890"}
+            name={"mobile"}
+          />
         </div>
         <div className="w-full flex gap-4 flex-col sm:flex-row">
           <div className="w-full">
@@ -161,10 +140,11 @@ const RegisterCard = () => {
               type="text"
               name="country"
               id="country"
-              class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:border-slate-600 block w-full p-3"
+              className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:border-slate-600 block w-full p-3"
               placeholder="Select Country"
               required=""
             >
+              <option value="">Select Country</option>
               {country.map((val, index) => {
                 if (!val) return;
                 return (
@@ -175,61 +155,29 @@ const RegisterCard = () => {
               })}
             </select>
           </div>
-          <div className="w-full">
-            <label htmlFor="city" className="font-roboto font-bold">
-              Enter City<span className="text-red-700">*</span>
-            </label>
-            <input
-              onChange={(e) => {
-                e.preventDefault();
-                setCity(e.target.value);
-              }}
-              type="text"
-              name="city"
-              id="city"
-              class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:border-slate-600 block w-full p-3"
-              placeholder="e.g. - Delhi"
-              required=""
-            />
-          </div>
+          <InputBox
+            label={"Enter City"}
+            required={true}
+            setter={setCity}
+            placeholder={"e.g. New York"}
+            name={"city"}
+          />
         </div>
         <div className="w-full flex gap-4 flex-col sm:flex-row">
-          <div className="w-full">
-            <label htmlFor="companyName" className="font-roboto font-bold">
-              Enter Company/Business Name
-            </label>
-            <input
-              onChange={(e) => {
-                e.preventDefault();
-                setComName(e.target.value);
-              }}
-              type="text"
-              name="companyName"
-              id="companyName"
-              class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:border-slate-600 block w-full p-3"
-              placeholder="e.g. - Google"
-              required=""
-            />
-          </div>
-        </div>
-        <div className="w-full flex gap-4 flex-col sm:flex-row">
-          <div className="w-full">
-            <label htmlFor="companyWebsite" className="font-roboto font-bold">
-              Enter Company/Business Website
-            </label>
-            <input
-              onChange={(e) => {
-                e.preventDefault();
-                setComWeb(e.target.value);
-              }}
-              type="text"
-              name="companyWebsite"
-              id="companyWebsite"
-              class="bg-gray-50 border-gray-300 text-gray-900 rounded-lg focus:border-slate-600 block w-full p-3"
-              placeholder="e.g. - www.xyz.com"
-              required=""
-            />
-          </div>
+          <InputBox
+            label={"Enter Company/Business Name"}
+            required={false}
+            setter={setComName}
+            placeholder={"e.g. - Google"}
+            name={"companyName"}
+          />
+          <InputBox
+            label={"Enter Company/Business Website"}
+            required={false}
+            setter={setComWeb}
+            placeholder={"e.g. - www.example.com"}
+            name={"companyWebsite"}
+          />
         </div>
         <div className="w-full flex gap-4 flex-col sm:flex-row">
           <div className="w-full sm:w-[30%]">
@@ -237,6 +185,7 @@ const RegisterCard = () => {
               Register as<span className="text-red-700">*</span>
             </label>
             <select
+              defaultValue={""}
               onChange={(e) => {
                 e.preventDefault();
                 setRole(e.target.value);
@@ -244,10 +193,11 @@ const RegisterCard = () => {
               type="text"
               name="role"
               id="role"
-              class="bg-gray-50 border-gray-300 text-gray-900 rounded-lg focus:border-slate-600 block w-full p-3"
+              className="bg-gray-50 border-gray-300 text-gray-900 rounded-lg focus:border-slate-600 block w-full p-3"
               placeholder="e.g. - www.xyz.com"
               required=""
             >
+              <option value={""}>Select Role</option>
               <option value={"Distributor"}>Distributor</option>
               <option value={"Dealer"}>Dealer</option>
               <option value={"Contractor"}>Contractor</option>
@@ -255,85 +205,66 @@ const RegisterCard = () => {
           </div>
         </div>
         <div className="w-full flex gap-4 flex-col sm:flex-row">
-          <div className="w-full relative">
-            <label htmlFor="password" className="font-roboto font-bold">
-              Enter Password<span className="text-red-700">*</span>
-            </label>
-            <input
-              onChange={(e) => {
-                e.preventDefault();
-                setPassword(e.target.value);
-              }}
-              type="password"
-              name="password"
-              id="Registration-password"
-              class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:border-slate-600 block w-full p-3"
-              placeholder="Enter Password"
-              required=""
-            />
+          <InputBox
+            label={"Enter Password"}
+            className={"relative"}
+            type={"password"}
+            required={true}
+            setter={setPassword}
+            placeholder={"Enter Password"}
+            id={"Registration"}
+            name={"password"}
+          >
             <div
               onClick={(e) => {
-                e.preventDefault();
-                if (viewPassword) {
-                  document.querySelector("#Registration-password").type =
-                    "password";
-                  setViewPassword(!viewPassword);
-                } else {
-                  document.querySelector("#Registration-password").type =
-                    "text";
-                  setViewPassword(!viewPassword);
-                }
+                handleToggle(
+                  e,
+                  viewPassword,
+                  "Registration-password",
+                  setViewPassword
+                );
               }}
               className=" cursor-pointer w-fit h-fit absolute right-[5%] bottom-1/4 translate-y-1/4"
             >
               {viewPassword ? (
-                <i class="bi bi-eye-slash-fill"></i>
+                <i className="bi bi-eye-slash-fill"></i>
               ) : (
-                <i class="bi bi-eye-fill"></i>
+                <i className="bi bi-eye-fill"></i>
               )}
             </div>
-          </div>
-          <div className="w-full relative">
-            <label htmlFor="cnfPassword" className="font-roboto font-bold">
-              Re-enter Password<span className="text-red-700">*</span>
-            </label>
-            <input
-              onChange={(e) => {
-                e.preventDefault();
-                setCnfPassword(e.target.value);
-              }}
-              type="password"
-              name="cnfPassword"
-              id="Registration-cnfPassword"
-              class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:border-slate-600 block w-full p-3"
-              placeholder="Re-enter Password"
-              required=""
-            />
+          </InputBox>
+          <InputBox
+            label={"Re-enter Password"}
+            className={"relative"}
+            type={"password"}
+            required={true}
+            setter={setCnfPassword}
+            placeholder={"Re-enter Password"}
+            id={"Registration"}
+            name={"cnfPassword"}
+          >
             <div
               onClick={(e) => {
-                e.preventDefault();
-                if (viewCnfPassword) {
-                  document.querySelector("#Registration-cnfPassword").type =
-                    "password";
-                  setViewCnfPassword(!viewCnfPassword);
-                } else {
-                  document.querySelector("#Registration-cnfPassword").type =
-                    "text";
-                  setViewCnfPassword(!viewCnfPassword);
-                }
+                handleToggle(
+                  e,
+                  viewCnfPassword,
+                  "Registration-cnfPassword",
+                  setViewCnfPassword
+                );
               }}
               className="w-fit cursor-pointer h-fit absolute right-[5%] bottom-1/4 translate-y-1/4"
             >
               {viewCnfPassword ? (
-                <i class="bi bi-eye-slash-fill"></i>
+                <i className="bi bi-eye-slash-fill"></i>
               ) : (
-                <i class="bi bi-eye-fill"></i>
+                <i className="bi bi-eye-fill"></i>
               )}
             </div>
-          </div>
+          </InputBox>
         </div>
         <div
           onClick={(e) => {
+            e.preventDefault();
             setAgree(!agree);
           }}
           className=" w-full flex flex-row justify-start items-center"
@@ -348,7 +279,30 @@ const RegisterCard = () => {
           </h1>
         </div>
         <div className="w-full flex justify-center">
+          {alert ? <AlertMsg message={msg} /> : null}
+        </div>
+        <div className="w-full flex justify-center">
           <button
+            onClick={(e) => {
+              e.preventDefault();
+              handleSignup(
+                fName,
+                lName,
+                email,
+                mobile,
+                enteredCountry,
+                city,
+                comName,
+                comWeb,
+                role,
+                agree,
+                enteredISDcode,
+                password,
+                cnfPassword,
+                setAlert,
+                setMsg
+              );
+            }}
             type="submit"
             className="Registration-button w-fit text-black hover:text-white bg-[#ffe26e] duration-300 hover:bg-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >

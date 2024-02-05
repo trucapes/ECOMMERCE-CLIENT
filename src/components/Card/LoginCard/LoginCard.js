@@ -2,11 +2,28 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import "./LoginCard.css";
 import { Stack } from "@mui/material";
+import InputBox from "../../InputBox/InputBox";
+import AlertMsg from "../../Alert/AlertMsg";
+import { handleLogIn } from "../../../helpers/Auth";
 
 const RegisterCard = () => {
-  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [viewPassword, setViewPassword] = useState(false);
   const [password, setPassword] = useState("");
+
+  const [alert, setAlert] = useState(false);
+  const [msg, setMsg] = useState("");
+
+  const handleToggle = (e, toggleVariable, elementID, setter) => {
+    e.preventDefault();
+    if (toggleVariable) {
+      document.querySelector(`#${elementID}`).type = "password";
+      setter(!toggleVariable);
+    } else {
+      document.querySelector(`#${elementID}`).type = "text";
+      setter(!toggleVariable);
+    }
+  };
 
   return (
     <div className="register__card__container w-full flex justify-center items-center">
@@ -16,45 +33,34 @@ const RegisterCard = () => {
       >
         <h1 className="font-roboto font-bold">Log In</h1>
         <div className="w-full flex gap-4 flex-col sm:flex-row">
-          <div className="w-full">
-            <label htmlFor="email" className="font-roboto font-bold">
-              Enter Your Email<span className="text-red-700">*</span>
-            </label>
-            <input
-              onChange={(e) => setName(e.target.value)}
-              type="text"
-              name="email"
-              id="email"
-              class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:border-slate-600 block w-full p-3"
-              placeholder="e.g. - abc@def.com"
-              required=""
-            />
-          </div>
+          <InputBox
+            label={"Enter Your Email"}
+            required={true}
+            type={"email"}
+            name={"email"}
+            placeholder={"e.g. - abc@def.com"}
+            setter={setEmail}
+          />
         </div>
         <div className="w-full flex gap-4 flex-col sm:flex-row">
-          <div className="w-full relative">
-            <label htmlFor="password" className="font-roboto font-bold">
-              Enter Password<span className="text-red-700">*</span>
-            </label>
-            <input
-              onChange={(e) => setPassword(e.target.value)}
-              type="password"
-              name="password"
-              id="Login-password"
-              class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:border-slate-600 block w-full p-3"
-              placeholder="Enter Password"
-              required=""
-            />
+          <InputBox
+            label={"Enter Password"}
+            className={"relative"}
+            type={"password"}
+            required={true}
+            setter={setPassword}
+            placeholder={"Enter Password"}
+            id={"Login"}
+            name={"password"}
+          >
             <div
               onClick={(e) => {
-                e.preventDefault();
-                if (viewPassword) {
-                  document.querySelector("#Login-password").type = "password";
-                  setViewPassword(!viewPassword);
-                } else {
-                  document.querySelector("#Login-password").type = "text";
-                  setViewPassword(!viewPassword);
-                }
+                handleToggle(
+                  e,
+                  viewPassword,
+                  "Login-password",
+                  setViewPassword
+                );
               }}
               className="cursor-pointer w-fit h-fit absolute right-[5%] bottom-1/4 translate-y-1/4"
             >
@@ -64,10 +70,27 @@ const RegisterCard = () => {
                 <i class="bi bi-eye-fill"></i>
               )}
             </div>
-          </div>
+          </InputBox>
+        </div>
+        <div className="text-sm w-full flex justify-end">
+          <span>
+            <Link
+              className="text-blue-500 hover:underline cursor-pointer"
+              to={"/account/forgot"}
+            >
+              Forgot Password?
+            </Link>
+          </span>
+        </div>
+        <div className="w-full flex justify-center">
+          {alert ? <AlertMsg message={msg} /> : null}
         </div>
         <div className="w-full flex justify-center">
           <button
+            onClick={(e) => {
+              e.preventDefault();
+              handleLogIn(email, password, setAlert, setMsg);
+            }}
             type="submit"
             className="Registration-button w-fit text-black hover:text-white bg-[#ffe26e] duration-300 hover:bg-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           >
