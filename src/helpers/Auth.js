@@ -39,6 +39,15 @@ export function handleSignup(
       }, 2000);
       return;
     }
+    if (agree) {
+      setAlt(true);
+      setAltMsg("You must agree with the terms and conditions");
+      setTimeout(() => {
+        setAlt(false);
+        setAltMsg("");
+      }, 2000);
+      return;
+    }
     if (password == cnfPassword) {
       axios
         .post("http://localhost:3000/signup", {
@@ -90,21 +99,8 @@ export function handleSignup(
       setAltMsg("");
     }, 2000);
   }
-  console.log(
-    fName,
-    lName,
-    email,
-    mobile,
-    enteredCountry,
-    city,
-    comName,
-    comWeb,
-    role,
-    agree,
-    enterISDcode,
-    password
-  );
 }
+
 export function handleLogIn(email, password, setAlt, setAltMsg) {
   if (email != "" && password != "") {
     if (!pattern.test(email)) {
@@ -123,7 +119,7 @@ export function handleLogIn(email, password, setAlt, setAltMsg) {
           setAlt(true);
           setAltMsg("Log In Success");
           //set the token and UserContext and navigate to main page
-        } else if (res.data.sate == "doesNotExist") {
+        } else if (res.data.state == "doesNotExist") {
           setAlt(true);
           setAltMsg("Email doesn't exist in our record, plese register");
         } else {

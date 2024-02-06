@@ -20,6 +20,7 @@ import WishItemsProvider from "../Context/WishItemsProvider";
 import DrawerNav from "../components/Nav/DrawerNav/DrawerNav";
 import Checkout from "../components/Checkout/Checkout";
 import SearchProvider from "../Context/SearchProvider";
+import ForgotPassword from "../components/ForgotPassword/ForgotPassword";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
                 <Route path="manage" element={<ManageAccount />} />
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
+                <Route path="forgot" element={<ForgotPassword />} />
                 <Route path="*" element={<Login />} />
               </Route>
               <Route path="/shop" element={<Shop />} />

@@ -6,6 +6,7 @@ import axios from "axios";
 import InputBox from "../../InputBox/InputBox";
 import AlertMsg from "../../Alert/AlertMsg";
 import { handleSignup } from "../../../helpers/Auth";
+import handleToggle from "../../../helpers/VisibilityToggler";
 
 const RegisterCard = () => {
   const [ISDcodes, setISDcodes] = useState([]);
@@ -28,17 +29,6 @@ const RegisterCard = () => {
 
   const [alert, setAlert] = useState(false);
   const [msg, setMsg] = useState("");
-
-  const handleToggle = (e, toggleVariable, elementID, setter) => {
-    e.preventDefault();
-    if (toggleVariable) {
-      document.querySelector(`#${elementID}`).type = "password";
-      setter(!toggleVariable);
-    } else {
-      document.querySelector(`#${elementID}`).type = "text";
-      setter(!toggleVariable);
-    }
-  };
 
   useEffect(() => {
     axios.get("https://restcountries.com/v3.1/all").then((res) => {
@@ -64,7 +54,7 @@ const RegisterCard = () => {
     <div className="register__card__container w-full flex justify-center items-center">
       <Stack
         spacing={4}
-        className="shadow-md rounded-md w-[95%] sm:w-[90%] md:w-[80%] p-8"
+        className="shadow-md rounded-md w-full sm:w-[90%] md:w-[80%] p-4 sm:p-8"
       >
         <h1 className="font-roboto font-bold">Create Account</h1>
         <div className="w-full flex gap-4 flex-col sm:flex-row">
