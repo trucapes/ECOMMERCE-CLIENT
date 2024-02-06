@@ -3,12 +3,10 @@ import axios from "axios";
 var pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export function handleForgotPassword(
   email,
-  password,
-  cnfPassword,
   setAlt,
   setAltMsg
 ) {
-  if (email != "" && password != "" && cnfPassword != "") {
+  if (email != "") {
     if (!pattern.test(email)) {
       setAlt(true);
       setAltMsg("Enter valid email address");
@@ -19,12 +17,12 @@ export function handleForgotPassword(
       return;
     }
     axios
-      .post("http://localhost:3000/forgot", { email, password })
+      .post("http://localhost:3000/forgot", { email })
       .then((res) => {
         if (res.data.state == "done") {
           setAlt(true);
-          setAltMsg("Password changed Successfully");
-          //set the new token and UserContext and navigate to main page
+          setAltMsg("Password changed, new password has been sent to your email");
+          //set the new password and send it to email
         } else if (res.data.state == "doesNotExist") {
           setAlt(true);
           setAltMsg("Email doesn't exist in our record, plese register");
@@ -32,7 +30,7 @@ export function handleForgotPassword(
       })
       .catch((err) => {
         setAlt(true);
-        setAltMsg("Error While Sending the Data");
+        setAltMsg("Error while sending the data");
       })
       .finally(() => {
         setTimeout(() => {
@@ -42,7 +40,7 @@ export function handleForgotPassword(
       });
   } else {
     setAlt(true);
-    setAltMsg("Enter all fields");
+    setAltMsg("Please enter email address");
     setTimeout(() => {
       setAlt(false);
       setAltMsg("");
