@@ -17,10 +17,12 @@ import Login from "../components/Authentication/Login/Login";
 import Register from "../components/Authentication/Register/Register";
 import Wishlist from "../components/Wishlist";
 import WishItemsProvider from "../Context/WishItemsProvider";
-import DrawerNav from "../components/Nav/DrawerNav/DrawerNav";
-import Checkout from "../components/Checkout/Checkout";
 import SearchProvider from "../Context/SearchProvider";
 import ForgotPassword from "../components/ForgotPassword/ForgotPassword";
+import AdminOrder from "../routes/AdminOrder";
+import AdminProducts from "../routes/AdminProducts";
+import AdminUsers from "../routes/AdminUser";
+import ViewProduct from "../components/ProductPage/ViewProduct";
 
 function App() {
   return (
@@ -38,6 +40,14 @@ function App() {
                 <Route path="register" element={<Register />} />
                 <Route path="forgot" element={<ForgotPassword />} />
                 <Route path="*" element={<Login />} />
+              </Route>
+              <Route path="/admin">
+                <Route path="order" element={<AdminOrder />} />
+                <Route path="products" element={<AdminProducts />} />
+                <Route path="users" element={<AdminUsers />} />
+              </Route>
+              <Route path={"/product"}>
+                <Route path=":id" element={<ViewProduct />} />
               </Route>
               <Route path="/shop" element={<Shop />} />
               <Route path="/category">
