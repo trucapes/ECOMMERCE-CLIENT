@@ -55,7 +55,7 @@ export function handleSignup(
       }, 2000);
       return;
     }
-    if (agree) {
+    if (!agree) {
       setAlt(true);
       setAltMsg("You must agree with the terms and conditions");
       setTimeout(() => {
@@ -84,18 +84,12 @@ export function handleSignup(
         .then((res) => {
           if (res.data.error === false) {
             setAlt(true);
-            setAltMsg(
-              "Register Successfully! You will be able to login once Admin Approves."
-            );
-            // localStorage.setItem("token", res.data.token);
-          } else {
-            setAlt(true);
-            setAltMsg("Email already exists, please login");
+            setAltMsg(res.data.message);
           }
         })
         .catch((err) => {
           setAlt(true);
-          setAltMsg("Error While Sending the Data");
+          setAltMsg(err.response.data.message);
         })
         .finally(() => {
           setTimeout(() => {
@@ -117,7 +111,7 @@ export function handleSignup(
     setTimeout(() => {
       setAlt(false);
       setAltMsg("");
-    }, 5000);
+    }, 2000);
   }
 }
 
@@ -135,17 +129,11 @@ export function handleLogIn(email, password, setAlt, setAltMsg) {
     authAPI
       .login({ identifier: email, password: password })
       .then((res) => {
+        setAlt(true);
+        setAltMsg(res.data.message);
         if (res.status === 200) {
-          setAlt(true);
-          setAltMsg("Log In Success");
           //set the token and UserContext and navigate to main page
           localStorage.setItem("tru-scapes-token", res.data.token);
-        } else if (res.data.state === "doesNotExist") {
-          setAlt(true);
-          setAltMsg("Email doesn't exist in our record, plese register");
-        } else {
-          setAlt(true);
-          setAltMsg(res.data.message);
         }
       })
       .catch((err) => {
@@ -157,7 +145,7 @@ export function handleLogIn(email, password, setAlt, setAltMsg) {
         setTimeout(() => {
           setAlt(false);
           setAltMsg("");
-        }, 5000);
+        }, 2000);
       });
   } else {
     setAlt(true);
