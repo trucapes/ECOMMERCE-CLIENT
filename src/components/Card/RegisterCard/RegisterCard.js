@@ -188,9 +188,9 @@ const RegisterCard = () => {
               required=""
             >
               <option value={""}>Select Role</option>
-              <option value={"Distributor"}>Distributor</option>
-              <option value={"Dealer"}>Dealer</option>
-              <option value={"Contractor"}>Contractor</option>
+              <option value={"distributor"}>Distributor</option>
+              <option value={"dealer"}>Dealer</option>
+              <option value={"contractor"}>Contractor</option>
             </select>
           </div>
         </div>
@@ -259,7 +259,7 @@ const RegisterCard = () => {
           }}
           className=" w-full flex flex-row justify-start items-center"
         >
-          <FormControlLabel control={<Checkbox defaultChecked />} label="" />
+          <FormControlLabel control={<Checkbox checked={agree} />} label="" />
           <h1 className="text-sm font-normal">
             I agree to the{" "}
             <span className="text-blue-600 underline cursor-pointer">

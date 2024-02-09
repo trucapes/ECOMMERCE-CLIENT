@@ -1,6 +1,22 @@
-import axios from "axios";
+import authAPI from "../api/auth";
 
 var pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const convertToRequiredFormat = (data) => {
+  return {
+    firstName: data.fName,
+    lastName: data.lName,
+    email: data.email,
+    mobileNo: data.mobile,
+    country: data.enteredCountry,
+    city: data.city,
+    company: data.comName,
+    companyWebsite: data.comWeb,
+    userRole: data.role,
+    password: data.password,
+  };
+};
+
 export function handleSignup(
   fName,
   lName,
@@ -19,16 +35,16 @@ export function handleSignup(
   setAltMsg
 ) {
   if (
-    fName != "" &&
-    lName != "" &&
-    email != "" &&
-    mobile != "" &&
-    enteredCountry != "" &&
-    city != "" &&
-    role != "" &&
-    enterISDcode != "" &&
-    password != "" &&
-    cnfPassword != ""
+    fName !== "" &&
+    lName !== "" &&
+    email !== "" &&
+    mobile !== "" &&
+    enteredCountry !== "" &&
+    city !== "" &&
+    role !== "" &&
+    enterISDcode !== "" &&
+    password !== "" &&
+    cnfPassword !== ""
   ) {
     if (!pattern.test(email)) {
       setAlt(true);
@@ -48,25 +64,29 @@ export function handleSignup(
       }, 2000);
       return;
     }
-    if (password == cnfPassword) {
-      axios
-        .post("http://localhost:3000/signup", {
-          fName,
-          lName,
-          email,
-          mobile,
-          enteredCountry,
-          city,
-          comName,
-          comWeb,
-          role,
-          enterISDcode,
-          password,
-        })
+    if (password === cnfPassword) {
+      authAPI
+        .register(
+          convertToRequiredFormat({
+            fName,
+            lName,
+            email,
+            mobile,
+            enteredCountry,
+            city,
+            comName,
+            comWeb,
+            role,
+            enterISDcode,
+            password,
+          })
+        )
         .then((res) => {
-          if (res.data.state == "done") {
+          if (res.data.error === false) {
             setAlt(true);
-            setAltMsg("Signup Success");
+            setAltMsg(
+              "Register Successfully! You will be able to login once Admin Approves."
+            );
             // localStorage.setItem("token", res.data.token);
           } else {
             setAlt(true);
@@ -97,12 +117,12 @@ export function handleSignup(
     setTimeout(() => {
       setAlt(false);
       setAltMsg("");
-    }, 2000);
+    }, 5000);
   }
 }
 
 export function handleLogIn(email, password, setAlt, setAltMsg) {
-  if (email != "" && password != "") {
+  if (email !== "" && password !== "") {
     if (!pattern.test(email)) {
       setAlt(true);
       setAltMsg("Enter valid email address");
@@ -112,30 +132,32 @@ export function handleLogIn(email, password, setAlt, setAltMsg) {
       }, 2000);
       return;
     }
-    axios
-      .post("http://localhost:3000/login", { email, password })
+    authAPI
+      .login({ identifier: email, password: password })
       .then((res) => {
-        if (res.data.state == "exist") {
+        if (res.status === 200) {
           setAlt(true);
           setAltMsg("Log In Success");
           //set the token and UserContext and navigate to main page
-        } else if (res.data.state == "doesNotExist") {
+          localStorage.setItem("tru-scapes-token", res.data.token);
+        } else if (res.data.state === "doesNotExist") {
           setAlt(true);
           setAltMsg("Email doesn't exist in our record, plese register");
         } else {
           setAlt(true);
-          setAltMsg("Wrong Password");
+          setAltMsg(res.data.message);
         }
       })
       .catch((err) => {
         setAlt(true);
-        setAltMsg("Error while sending the data");
+        console.log(err);
+        setAltMsg(err.response.data.message);
       })
       .finally(() => {
         setTimeout(() => {
           setAlt(false);
           setAltMsg("");
-        }, 2000);
+        }, 5000);
       });
   } else {
     setAlt(true);
