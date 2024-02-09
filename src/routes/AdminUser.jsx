@@ -5,6 +5,7 @@ import { useTable, useSortBy, usePagination } from "react-table";
 import AdminScreen from "../components/AdminScreen/AdminScreen";
 import { userColumns } from "../components/AdminTable/TableColumns";
 import AdminLayout from "../components/Layouts/AdminLayout/AdminLayout";
+import { Select } from "@mui/material";
 //-------------------------<DATA SHOULD BE IN THIS ORDER ONLY-- id,name,customerName,date,smount,status------------>
 const data = [
   {
@@ -122,16 +123,10 @@ function AdminUsers() {
                               </div>
                             ) : (
                               <div className="w-full flex justify-start">
-                                <Link
-                                  to={`/products/edit/${row.cells[0].value}`}
-                                >
-                                  <button
-                                    type="submit"
-                                    className="Registration-button w-fit text-black hover:text-white bg-[#ffe26e] duration-300 hover:bg-black font-medium rounded-lg text-sm px-4 py-2.5 text-center"
-                                  >
-                                    Pending
-                                  </button>
-                                </Link>
+                                <button
+                                  type="submit"
+                                  className="Registration-button w-fit text-black hover:text-white bg-[#ffe26e] duration-300 hover:bg-black font-medium rounded-lg text-sm px-4 py-2.5 text-center"
+                                ></button>
                               </div>
                             )}
                           </td>

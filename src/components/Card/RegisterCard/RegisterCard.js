@@ -20,7 +20,7 @@ const RegisterCard = () => {
   const [comName, setComName] = useState(null);
   const [comWeb, setComWeb] = useState(null);
   const [role, setRole] = useState("");
-  const [agree, setAgree] = useState(true);
+  const [agree, setAgree] = useState(false);
   const [viewPassword, setViewPassword] = useState(false);
   const [viewCnfPassword, setViewCnfPassword] = useState(false);
   const [enteredISDcode, setEnteredISDcode] = useState("");
