@@ -1,3 +1,4 @@
+import React from "react";
 import "./MyAccount.css";
 import { Link } from "react-router-dom";
 import { FormControl, Input, TextField } from "@mui/material";
@@ -55,8 +56,8 @@ export function BasicTabs() {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <Tab label="Item One" {...a11yProps(0)} />
-          <Tab label="Item Two" {...a11yProps(1)} />
+          <Tab label="Basic Info" {...a11yProps(0)} />
+          <Tab label="My Orders" {...a11yProps(1)} />
           <Tab label="Item Three" {...a11yProps(2)} />
         </Tabs>
       </Box>
@@ -100,43 +101,25 @@ const MyAccount = (props) => {
           </div>
           <div className="detail-container px-2 sm:py-2 py-4 sm:px-4 flex sm:flex-row justify-between">
             <div className="detail-container px-2 sm:px-4 flex flex-col justify-between">
-              <div className="user-name font-bold w-fit">
-                <input
-                  className="bg-transparent cursor-pointer outline-none focus:border-b focus:border-b-black py-1 text-[34px] w-48"
-                  defaultValue={"John Deer"}
-                  // disabled
-                />
+              <div className="user-name font-extrabold w-fit">
+                <h1>{props.name}John Deer</h1>
               </div>
               <div className="user-role text-[16px] text-slate-700 font-bold">
-                Role :{" "}
-                <span>
-                  <input
-                    className="bg-transparent cursor-pointer outline-none focus:border-b focus:border-b-black py-1 w-40"
-                    defaultValue={"John Deer"}
-                    type="text"
-                  />
-                </span>
+                Role : <span>{props.role}</span>
               </div>
               <div className="user-email text-[16px] text-slate-700 font-bold">
-                Email :{" "}
-                <span>
-                  <input
-                    className="bg-transparent outline-none cursor-pointer focus:border-b focus:border-b-black py-1 w-40"
-                    defaultValue={"dsjkdsk@fffd.com"}
-                    type="text"
-                  />
-                </span>
+                Email : <span>{props.email}</span>
               </div>
               <div className="user-status text-[16px] text-slate-700 font-bold">
                 Status :{" "}
                 <span className="bg-[#d1b95a] px-2 rounded-full font-normal text-base">
-                  Active
+                  {props.isVerified ? "Active" : "Pending "}
                 </span>
               </div>
             </div>
           </div>
         </div>
-{/* Different Tabs */}
+        {/* Different Tabs */}
         <BasicTabs />
       </div>
     </>
