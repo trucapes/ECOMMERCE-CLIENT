@@ -13,10 +13,12 @@ const api = axios.create({
 export const setAuthToken = () => {
   const token = localStorage.getItem("tru-scapes-token");
   if (token) {
-    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    api.defaults.headers.common["authorization"] = `Bearer ${token}`;
   } else {
-    delete api.defaults.headers.common["Authorization"];
+    delete api.defaults.headers.common["authorization"];
   }
 };
+
+setAuthToken();
 
 export default api;

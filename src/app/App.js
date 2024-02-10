@@ -3,9 +3,8 @@ import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "react-toastify/dist/ReactToastify.css";
 import Home from "../routes/Home";
-import Header from "../components/Header/Header";
-import Footer from "../components/Footer/Footer";
 import ManageAccount from "../components/Account/ManageAccount/ManageAccount";
 import MyAccount from "../components/Account/MyAccount/MyAccount";
 import Shop from "../components/Shop/Shop";
@@ -24,8 +23,28 @@ import AdminProducts from "../routes/AdminProducts";
 import AdminUsers from "../routes/AdminUser";
 import ViewProduct from "../components/ProductPage/ViewProduct";
 import Layout from "../components/Layouts/Layout";
-
+import { useEffect, useState } from "react";
+import profileAPI from "../api/profileAPI";
+import { ToastContainer } from "react-toastify";
+import CategoryPage from "../routes/CategoryPage";
 function App() {
+  const [user, setUser] = useState(null);
+
+  const getProfile = async () => {
+    const response = await profileAPI.getProfile();
+
+    if (response.data.error === false) {
+      setUser(response.data.data);
+      console.log((await response).data.data);
+    } else {
+      localStorage.removeItem("tru-scapes-token");
+    }
+  };
+
+  useEffect(() => {
+    getProfile();
+  }, []);
+
   return (
     <CartItemsProvider>
       <WishItemsProvider>
@@ -35,7 +54,7 @@ function App() {
               <Routes>
                 <Route index element={<Home />} />
                 <Route path="/account">
-                  <Route path="me" element={<MyAccount />} />
+                  <Route path="me" element={<MyAccount user={user} />} />
                   <Route path="manage" element={<ManageAccount />} />
                   <Route path="login" element={<Login />} />
                   <Route path="register" element={<Register />} />
@@ -69,12 +88,16 @@ function App() {
 
                 <Route path="/admin">
                   <Route path="order" element={<AdminOrder />} />
+                  <Route path="categories" element={<CategoryPage />} />
                   <Route path="products" element={<AdminProducts />} />
-                  <Route path="users" element={<AdminUsers />} />
+                  <Route path="users">
+                    <Route path="" element={<AdminUsers />} />
+                  </Route>
                 </Route>
               </Routes>
             </Layout>
           </Router>
+          <ToastContainer />
         </SearchProvider>
       </WishItemsProvider>
     </CartItemsProvider>
