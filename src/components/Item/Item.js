@@ -9,13 +9,13 @@ const Item = (props) => {
         <div className="item__container">
             <div className="detail__and__carousel__container">
                 <ItemCarousel item={props.item}/>
-                <Detail item={props.item}/>
+                <Detail profile={props.profile} item={props.item}/>
             </div>
             <div className="item__description__container">
                 <Description item={props.item}/>
             </div>
             <div className="related__items__container">
-                <Related category={props.item.category}/>
+                <Related profile={props.profile} category={props.item.category}/>
             </div>
         </div>
      );

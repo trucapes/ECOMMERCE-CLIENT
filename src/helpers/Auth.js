@@ -134,6 +134,8 @@ export function handleLogIn(email, password, setAlt, setAltMsg) {
         if (res.status === 200) {
           //set the token and UserContext and navigate to main page
           localStorage.setItem("tru-scapes-token", res.data.token);
+
+          window.location.href = "/"
         }
       })
       .catch((err) => {

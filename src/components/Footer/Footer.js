@@ -7,12 +7,13 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import TelegramIcon from "@mui/icons-material/Telegram";
 import PinterestIcon from "@mui/icons-material/Pinterest";
+import { Container, Grid } from "@mui/material";
 
 const Footer = () => {
   return (
     <footer>
       <div className="footer__container">
-        <div className="footer__items__container">
+        {/* <div className="footer__items__container">
           <div className="footer__help__container">
             <div className="footer__help__header">
               <h1>Help</h1>
@@ -70,14 +71,26 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-        </div>
+        </div> */}
         <div className="fotter__copyright__container">
+          <div>Copyright © 2023 tru-scapes.com, All rights reserved.</div>
           <ul className="nav">
-            <li className="footer__copyright">©2022 Tru Scapes Ltd. |</li>
-            <li className="footer__terms__condition"> | Terms & Condition |</li>
+            <li className="footer__terms__condition"> Terms & Condition |</li>
             <li className="footer__privacy__policy">| Privacy Policy</li>
           </ul>
         </div>
+        {/* <Container maxWidth={"lg"}>
+          <Grid container spacing={2}>
+            <Grid xs={6}>
+              Copyright © 2023 tru-scapes.com, All rights reserved.
+            </Grid>
+            <Grid xs={6} sx={{display:"flex", justifyContent: "flex-end", }}>
+              Copyright © 2023 tru-scapes.com, All rights reserved.
+            </Grid>
+
+          </Grid>
+        </Container> */}
+
       </div>
     </footer>
   );

@@ -4,7 +4,7 @@ import axios from 'axios'
 import ReactLoading from 'react-loading';
 import Item from '../components/Item/Item';
 
-const ProductView = (props) => {
+const ProductView = ({profile}) => {
     const param = useParams()
     const [ item, setItem ] = useState()
     const [ loading, setLoading ] = useState(true)
@@ -23,7 +23,7 @@ const ProductView = (props) => {
     return (
             <div className="d-flex min-vh-100 w-100 justify-content-center align-items-center m-auto">
                 {loading && <ReactLoading type="balls" color='#FFE26E' height={100} width={100} className='m-auto'/>}
-                {item && <Item item={item[0]}/>}
+                {item && <Item profile={profile} item={item[0]}/>}
             </div>
      );
 }

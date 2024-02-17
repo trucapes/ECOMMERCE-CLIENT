@@ -12,7 +12,7 @@ import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import Form from '../Search-Bar/Form';
 import { Link } from 'react-router-dom';
 
-const DrawerNav = () => {
+const DrawerNav = ({profile}) => {
         const [state, setState] = useState({
           left: false,
         });

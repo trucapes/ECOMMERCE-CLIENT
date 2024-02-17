@@ -1,6 +1,6 @@
 import axios from "axios";
-
-const API_BASE_URL = "http://localhost:5000/api"; // Update with your API base URL
+export const SERVER_URL = "https://misty-hen-kimono.cyclic.app/"
+export const API_BASE_URL = "https://misty-hen-kimono.cyclic.app/api"; // Update with your API base URL
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -17,6 +17,11 @@ export const setAuthToken = () => {
   } else {
     delete api.defaults.headers.common["authorization"];
   }
+};
+
+// Function to set dynamic Content-Type header
+export const setDynamicContentType = (contentType) => {
+  api.defaults.headers["Content-Type"] = contentType;
 };
 
 setAuthToken();

@@ -4,7 +4,7 @@ import axios from 'axios'
 import ReactLoading from 'react-loading';
 import Category from '../components/Category/Category';
 
-const CategoryView = () => {
+const CategoryView = ({profile}) => {
     const param = useParams()
     const [ menItems, setMenItems ] = useState()
     const [ womenItems, setWomenItems ] = useState()
@@ -27,9 +27,9 @@ const CategoryView = () => {
     return ( 
         <div className='d-flex min-vh-100 w-100 justify-content-center align-items-center m-auto'>
             {loading && <ReactLoading type="balls" color='#FFE26E' height={100} width={100} className='m-auto'/>}
-            { menItems && param.id === 'men' && <Category name="Men's Fashion" items={menItems} category="men"/>}
-            { womenItems && param.id === 'kids' && <Category name="Kids Fashion" items={kidsItems} category="kids"/>}
-            { kidsItems && param.id === 'women' && <Category name="Women's Fashion" items={womenItems} category="women"/>}
+            { menItems && param.id === 'men' && <Category profile={profile}  name="Men's Fashion" items={menItems} category="men"/>}
+            { womenItems && param.id === 'kids' && <Category profile={profile}  name="Kids Fashion" items={kidsItems} category="kids"/>}
+            { kidsItems && param.id === 'women' && <Category profile={profile}  name="Women's Fashion" items={womenItems} category="women"/>}
         </div>
      );
 }

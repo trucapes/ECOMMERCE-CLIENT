@@ -4,7 +4,7 @@ import NavBrand from '../Nav-Brand/Navbrand';
 import Form from '../Search-Bar/Form';
 import './Container.css'
 
-const Navtop = () => {
+const Navtop = ({profile}) => {
     return ( 
             <div className="nav__top__container">
                 <div className="top__container">
@@ -13,10 +13,10 @@ const Navtop = () => {
                         <Form />
                     </div>
                     <div className="control__bar">
-                        <Control />
+                        <Control profile={profile} />
                     </div>
                     <div className="drawer">
-                        <DrawerNav />
+                        <DrawerNav profile={profile} />
                     </div>
                 </div>
             </div>

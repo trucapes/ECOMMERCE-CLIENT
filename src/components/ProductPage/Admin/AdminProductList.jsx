@@ -22,27 +22,28 @@ import {
   CheckCircleOutline,
   DeleteOutline,
   Close,
+  Edit,
 } from "@mui/icons-material";
-import AdminUserAPI from "../api/admin/adminUserAPI";
 import Modal from "@mui/material/Modal";
-import MyAccount from "../components/Account/MyAccount/MyAccount";
 import { toast } from "react-toastify";
+import AdminUserAPI from "../../../api/admin/adminUserAPI";
+import AdminProductAPI from "../../../api/admin/adminProductAPI";
+import AddProductPage from './AddProductPage'
+import { SERVER_URL } from "../../../api/apiwrapper";
 
-const AdminUsers = () => {
+const AdminProductList = () => {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [sortBy, setSortBy] = useState("createdAt"); // Default sorting by createdAt
-  const [isPending, setIsPending] = useState("all"); // Default no filter for isPending
-  const [userRole, setUserRole] = useState("all"); // Default no filter for userRole
   const [openModal, setOpenModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
     fetchData();
-  }, [search, page, sortBy, isPending, userRole]);
+  }, [search, page, sortBy, openModal]);
 
   const fetchData = async () => {
     try {
@@ -52,12 +53,7 @@ const AdminUsers = () => {
       if (search) {
         filter.search = search;
       }
-      if (isPending !== "all") {
-        filter.isPending = isPending;
-      }
-      if (userRole && userRole !== "all") {
-        filter.userRole = userRole;
-      }
+      
 
       if (page) {
         filter.page = page;
@@ -66,7 +62,7 @@ const AdminUsers = () => {
       if (sortBy) {
         filter.sortBy = sortBy;
       }
-      const response = await AdminUserAPI.getAllUsers(filter);
+      const response = await AdminProductAPI.getAllProducts(filter);
       setUsers(response.data.data);
       setTotalPages(response.data.totalPages);
       setLoading(false);
@@ -96,18 +92,18 @@ const AdminUsers = () => {
 
   const handleDeleteUser = async (userId) => {
     const confirmed = window.confirm(
-      "Are you sure you want to delete this user?"
+      "Are you sure you want to delete this Product?"
     );
     if (confirmed) {
       try {
         // Call API to delete user
-        await AdminUserAPI.deleteUserById(userId);
-        toast.success("User deleted successfully");
+        await AdminProductAPI.deleteProductById(userId);
+        toast.success("Product deleted successfully");
         // Optionally, you can also fetch updated user data after deletion
         fetchData();
       } catch (error) {
         console.error("Error deleting user:", error);
-        toast.error("Failed to delete user");
+        toast.error("Failed to delete product");
       }
     }
   };
@@ -149,7 +145,7 @@ const AdminUsers = () => {
   return (
     <div className="p-2 w-full">
       <div className="w-full flex flex-row justify-between items-center">
-        <h1 className="text-3xl mt-4 mb-4 text-gray-900">Users</h1>
+        <h1 className="text-3xl mt-4 mb-4 text-gray-900">Products</h1>
         <div className=" flex flex-row items-stretch justify-center">
           <input
             onChange={(e) => setSearch(e.target.value)}
@@ -170,31 +166,13 @@ const AdminUsers = () => {
       </div>
       <div className="flex flex-row items-center justify-between mt-4">
         <div>
-          <Select
-            value={userRole}
-            onChange={(e) => setUserRole(e.target.value)}
-            className="mr-4"
-          >
-            <MenuItem value="all">All Roles</MenuItem>
-            <MenuItem value="admin">Admin</MenuItem>
-            <MenuItem value="distributor">Distributor</MenuItem>
-            <MenuItem value="dealer">Dealer</MenuItem>
-            <MenuItem value="contractor">Contractor</MenuItem>
-          </Select>
-          <Select
-            value={isPending}
-            onChange={(e) => setIsPending(e.target.value)}
-          >
-            <MenuItem value={"all"}>All Status</MenuItem>
-            <MenuItem value={true}>Pending</MenuItem>
-            <MenuItem value={false}>Active</MenuItem>
-          </Select>
+          
         </div>
         <div>
           <Select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
             <MenuItem value="createdAt">Sort by Date</MenuItem>
-            <MenuItem value="firstName">Sort by First Name</MenuItem>
-            <MenuItem value="lastName">Sort by Last Name</MenuItem>
+            <MenuItem value="name">Sort by Name</MenuItem>
+            <MenuItem value="index">Sort by Index</MenuItem>
           </Select>
         </div>
       </div>
@@ -211,53 +189,68 @@ const AdminUsers = () => {
           <Skeleton variant="rectangular" height={40} animation="wave" />
         </>
       ) : users && users.length === 0 ? (
-        <div>No users found.</div>
+        <div>No Product found.</div>
       ) : (
         <TableContainer component={Paper}>
-          <Table aria-label="users table">
-            <TableHead>
-              <TableRow>
-                <TableCell>First Name</TableCell>
-                <TableCell>Last Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Mobile No</TableCell>
-                <TableCell>Country</TableCell>
-                <TableCell>City</TableCell>
-                <TableCell>User Role</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {users.map((user, index) => (
-                <TableRow key={index}>
-                  <TableCell>{user.firstName}</TableCell>
-                  <TableCell>{user.lastName}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.mobileNo}</TableCell>
-                  <TableCell>{user.country}</TableCell>
-                  <TableCell>{user.city}</TableCell>
-                  <TableCell>{user.userRole}</TableCell>
-                  <TableCell>
-                    <span className="bg-[#d1b95a] px-2 rounded-full font-normal text-base">
-                      {!user.isPending ? "Active" : "Pending "}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <IconButton onClick={() => handleOpenModal(user)}>
-                      <Visibility color="info" />
-                    </IconButton>
-                    {user.isPending && <IconButton onClick={() => handleApproveUser(user._id)}>
-                      <CheckCircleOutline color="success" />
-                    </IconButton>}
-                    <IconButton onClick={() => handleDeleteUser(user._id)}>
-                      <DeleteOutline color="error" />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <Table aria-label="products table">
+      <TableHead>
+        <TableRow>
+          <TableCell>Index</TableCell>
+          <TableCell>Name</TableCell>
+          <TableCell>Category</TableCell>
+          <TableCell>Price (Regular)</TableCell>
+          <TableCell>Price </TableCell>
+          <TableCell>Discount</TableCell>
+          <TableCell>Sales Tax </TableCell>
+          <TableCell>Shipping Cost</TableCell>
+          <TableCell>Stock Available</TableCell>
+          <TableCell>Hot Product</TableCell>
+          <TableCell>Actions</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {users.map((product, index) => (
+          <TableRow key={index}>
+          <TableCell>{product.index}</TableCell>
+            <TableCell>
+              {product.images[0] && (<a href={`${SERVER_URL + product.images[0].path.replace(/\\/g, "/")}`.replace('/public/', '/')} target="_blank" rel="noopener noreferrer">
+                <img src={`${SERVER_URL + product.images[0].path.replace(/\\/g, "/")}`.replace('/public/', '/')} alt={product.name} style={{ width: "50px", height: "50px" }} />
+              </a>)}
+              <br/>{product.name}</TableCell>
+            <TableCell>{product.category.name}</TableCell>
+            <TableCell>{product.price.regular}</TableCell>
+            <TableCell>Distributor: {product.price.distributor}<br/>Dealer: {product.price.dealer}<br/>Contractor{product.price.contractor}</TableCell>
+            <TableCell>
+              Distributor: {product.discount.distributor}<br/>
+              Dealer: {product.discount.dealer}<br/>
+              Contractor{product.discount.contractor}
+            </TableCell>
+            <TableCell>
+              Distributor: {product.salesTax.distributor}<br/>
+              Dealer: {product.salesTax.dealer}<br/>
+              Contractor{product.salesTax.contractor}
+            </TableCell>
+            <TableCell>{product.shippingCost}</TableCell>
+            <TableCell>{product.stockAvailable ? 'Yes' : 'No'}</TableCell>
+            <TableCell>{product.hotProduct ? 'Yes' : 'No'}</TableCell>
+            <TableCell>
+              <IconButton onClick={() => handleOpenModal(product)}>
+                <Edit color="info" />
+              </IconButton>
+              {/* Assuming you have similar functionality for product approval */}
+              {product.isPending && (
+                <IconButton onClick={() => handleApproveUser(product._id)}>
+                  <CheckCircleOutline color="success" />
+                </IconButton>
+              )}
+              <IconButton onClick={() => handleDeleteUser(product._id)}>
+                <DeleteOutline color="error" />
+              </IconButton>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
         </TableContainer>
       )}
       {totalPages > 0 && (
@@ -292,19 +285,19 @@ const AdminUsers = () => {
         </div>
       )}
 
-      <Modal open={openModal} onClose={handleCloseModal}>
-        <div style={{ background: "#fff", height: "100vh", overflowY: "auto" }}>
+      <Modal sx={{alignItems: "center"}} open={openModal} onClose={handleCloseModal}>
+        <div style={{ background: "#fff", padding: "30px", height: "90vh", marginTop: "5vh", width: "90%", marginLeft: "5%",overflowY: "auto" }}>
           <IconButton
             style={{ position: "absolute", top: "10px", right: "10px" }}
             onClick={handleCloseModal}
           >
             <Close color="error" />
           </IconButton>
-          {selectedUser && <MyAccount user={selectedUser} isAdmin={true} />}
+          {selectedUser && <AddProductPage product={selectedUser} />}
         </div>
       </Modal>
     </div>
   );
 };
 
-export default AdminUsers;
+export default AdminProductList;

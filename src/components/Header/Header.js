@@ -2,10 +2,10 @@ import Navbottom from '../Nav/Nav-Links/NavLinks';
 import Navtop from '../Nav/Container/Container';
 import './Header.css'
 
-const Header = () => {
+const Header = ({profile}) => {
     return ( 
         <div className='header__container'>
-            <Navtop />
+            <Navtop profile={profile}/>
             <Navbottom />
         </div>
      );

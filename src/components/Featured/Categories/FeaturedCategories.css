@@ -54,3 +54,11 @@
     padding: 50px 0;
     
 }
+
+.animate__pop{
+    transition: all 0.3s ease-in-out;
+}
+
+.animate__pop:hover {
+    transform: scale(1.1);
+}

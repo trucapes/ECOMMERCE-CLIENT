@@ -6,7 +6,7 @@ export function handleForgotPassword(
   setAlt,
   setAltMsg
 ) {
-  if (email != "") {
+  if (email !== "") {
     if (!pattern.test(email)) {
       setAlt(true);
       setAltMsg("Enter valid email address");
@@ -19,11 +19,11 @@ export function handleForgotPassword(
     axios
       .post("http://localhost:3000/forgot", { email })
       .then((res) => {
-        if (res.data.state == "done") {
+        if (res.data.state === "done") {
           setAlt(true);
           setAltMsg("Password changed, new password has been sent to your email");
           //set the new password and send it to email
-        } else if (res.data.state == "doesNotExist") {
+        } else if (res.data.state === "doesNotExist") {
           setAlt(true);
           setAltMsg("Email doesn't exist in our record, plese register");
         }

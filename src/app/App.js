@@ -26,7 +26,9 @@ import Layout from "../components/Layouts/Layout";
 import { useEffect, useState } from "react";
 import profileAPI from "../api/profileAPI";
 import { ToastContainer } from "react-toastify";
-import CategoryPage from "../routes/CategoryPage";
+import CategoryList from "../components/Category/CategoryList";
+import AddProductPage from "../components/ProductPage/Admin/AddProductPage";
+import AdminProductList from "../components/ProductPage/Admin/AdminProductList";
 function App() {
   const [user, setUser] = useState(null);
 
@@ -50,9 +52,9 @@ function App() {
       <WishItemsProvider>
         <SearchProvider>
           <Router>
-            <Layout>
+            <Layout profile={user}>
               <Routes>
-                <Route index element={<Home />} />
+                <Route index element={<Home profile={user} />} />
                 <Route path="/account">
                   <Route path="me" element={<MyAccount user={user} />} />
                   <Route path="manage" element={<ManageAccount />} />
@@ -67,20 +69,20 @@ function App() {
                 </Route>
                 <Route path="/shop" element={<Shop />} />
                 <Route path="/category">
-                  <Route path=":id" element={<CategoryView />} />
+                  <Route path=":id" element={<CategoryView profile={user} />} />
                 </Route>
                 <Route path="/item">
                   <Route path="/item/men">
-                    <Route path=":id" element={<ItemView />} />
+                    <Route path=":id" element={<ItemView profile={user}/>} />
                   </Route>
                   <Route path="/item/women">
-                    <Route path=":id" element={<ItemView />} />
+                    <Route path=":id" element={<ItemView profile={user}/>} />
                   </Route>
                   <Route path="/item/kids">
-                    <Route path=":id" element={<ItemView />} />
+                    <Route path=":id" element={<ItemView profile={user}/>} />
                   </Route>
                   <Route path="/item/featured">
-                    <Route path=":id" element={<ItemView />} />
+                    <Route path=":id" element={<ItemView profile={user}/>} />
                   </Route>
                 </Route>
                 <Route path="/wishlist" element={<Wishlist />} />
@@ -88,8 +90,11 @@ function App() {
 
                 <Route path="/admin">
                   <Route path="order" element={<AdminOrder />} />
-                  <Route path="categories" element={<CategoryPage />} />
-                  <Route path="products" element={<AdminProducts />} />
+                  <Route path="categories" element={<CategoryList />} />
+                  <Route path="products">
+                    <Route path="add" element={<AddProductPage />} />
+                    <Route path="" element={<AdminProductList />} />
+                  </Route>
                   <Route path="users">
                     <Route path="" element={<AdminUsers />} />
                   </Route>

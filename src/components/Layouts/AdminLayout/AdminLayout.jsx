@@ -17,12 +17,15 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import SportsCricketIcon from "@mui/icons-material/SportsCricket";
 import PeopleIcon from "@mui/icons-material/People";
-import { AddBox, Home, Money, Person, Settings } from "@mui/icons-material";
+import { Add, AttachMoney, Category,PieChart } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import SsidChartIcon from "@mui/icons-material/SsidChart";
 import CircularProgress from "@mui/material/CircularProgress";
+import Avatar from "@mui/material/Avatar";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { FaChevronDown } from "react-icons/fa6";
 
 export const mainListItems = (
   <React.Fragment>
@@ -42,44 +45,44 @@ export const mainListItems = (
         <ListItemText primary="Users" />
       </ListItemButton>
     </Link>
-    <Link style={{ color: "#000" }} legacyBehavior href="/admin/matches">
+    <Link style={{ color: "#000" }} legacyBehavior href="/admin/categories">
       <ListItemButton>
         <ListItemIcon>
-          <SportsCricketIcon />
+          <Category />
         </ListItemIcon>
-        <ListItemText primary="Matches" />
+        <ListItemText primary="Categories" />
       </ListItemButton>
     </Link>
-    <Link style={{ color: "#000" }} legacyBehavior href="/admin/pnlreport">
+    <Link style={{ color: "#000" }} legacyBehavior href="/admin/products/add">
       <ListItemButton>
         <ListItemIcon>
-          <SsidChartIcon />
+          <Add />
         </ListItemIcon>
-        <ListItemText primary="Profit & Loss" />
+        <ListItemText primary="Add Product" />
       </ListItemButton>
     </Link>
-    <Link style={{ color: "#000" }} legacyBehavior href="/admin/transactions">
+    <Link style={{ color: "#000" }} legacyBehavior href="/admin/products">
       <ListItemButton>
         <ListItemIcon>
-          <Money />
+          <Category />
         </ListItemIcon>
-        <ListItemText primary="Transactions" />
+        <ListItemText primary="Products" />
       </ListItemButton>
     </Link>
     <Link style={{ color: "#000" }} legacyBehavior href="/">
       <ListItemButton>
         <ListItemIcon>
-          <Home />
+          <PieChart />
         </ListItemIcon>
-        <ListItemText primary="Home Page" />
+        <ListItemText primary="Orders" />
       </ListItemButton>
     </Link>
     <Link style={{ color: "#000" }} legacyBehavior href="/profile">
       <ListItemButton>
         <ListItemIcon>
-          <Settings />
+          <AttachMoney />
         </ListItemIcon>
-        <ListItemText primary="Profile Page" />
+        <ListItemText primary="Payments" />
       </ListItemButton>
     </Link>
   </React.Fragment>
@@ -171,33 +174,49 @@ const defaultTheme = createTheme({
   },
 });
 
-const AdminLayout = ({ children }) => {
+const AdminLayout = ({ children, profile }) => {
   const [open, setOpen] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
-  const [loginUser, setLoginUser] = React.useState(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const nav = useNavigate();
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
-  //   const checkAdminUser = async () => {
-  //     const adminUser = await authService.getUser();
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-  //     if (
-  //       adminUser &&
-  //       adminUser.user &&
-  //       (adminUser.user.role === "admin" || adminUser.user.role === "master")
-  //     ) {
-  //       setLoading(false);
-  //       setLoginUser(adminUser);
-  //     } else {
-  //       nav("/");
-  //     }
-  //   };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    // Clear the token from local storage
+    localStorage.removeItem('tru-scapes-token');
+  
+    // Perform a hard refresh to the '/' URL
+    window.location.href = '/';
+  };
+  
+    const checkAdminUser = async () => {
+      // const adminUser = await profileAPI.getProfile();
+
+      if (
+        profile &&
+        (profile.userRole === "admin")
+      ) {
+        setLoading(false);
+      } else {
+        nav("/");
+      }
+    };
 
   React.useEffect(() => {
-    // checkAdminUser();
-  }, []);
+    if(profile)
+      checkAdminUser();
+  }, [profile]);
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -223,6 +242,39 @@ const AdminLayout = ({ children }) => {
               >
                 <MenuIcon />
               </IconButton>
+              
+              <div style={{ display: "flex", alignItems: "center" }}>
+                {profile && (
+                  <>
+                    <Avatar
+                      alt={profile.userName}
+                      src={profile.avatar} // Assuming there's an 'avatar' property in the profile
+                      sx={{ width: 32, height: 32, marginRight: 1 }}
+                    />
+                    <IconButton
+                      size="small"
+                      color="inherit"
+                      onClick={handleMenuClick}
+                    >
+                      <FaChevronDown />
+                    </IconButton>
+                  </>
+                )}
+              </div>
+
+              <Menu
+                id="profile-menu"
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+              >
+                <MenuItem onClick={handleLogout}>
+                  <ListItemIcon>
+                    <LogoutIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary="Logout" />
+                </MenuItem>
+              </Menu>
 
               {/* <Headers /> */}
             </Toolbar>

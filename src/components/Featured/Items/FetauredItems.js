@@ -17,14 +17,14 @@ const FeaturedItems = (props) => {
                     {!props.items && <ReactLoading type="balls" color='#FFE26E' height={100} width={100} className='m-auto'/>}
                 { props.items &&
                     <div className="featured__products__card__container">
-                        <ItemCard item={props.items[0]} category="featured"/>
-                        <ItemCard item={props.items[4]} category="featured"/>
-                        <ItemCard item={props.items[10]} category="featured"/>
-                        <ItemCard item={props.items[20]} category="featured"/>
-                        <ItemCard item={props.items[16]} category="featured"/>
-                        <ItemCard item={props.items[5]} category="featured"/>
-                        <ItemCard item={props.items[13]} category="featured"/>
-                        <ItemCard item={props.items[23]} category="featured"/>
+                        <ItemCard profile={props.profile} item={props.items[0]} category="featured"/>
+                        <ItemCard profile={props.profile} item={props.items[4]} category="featured"/>
+                        <ItemCard profile={props.profile} item={props.items[10]} category="featured"/>
+                        <ItemCard profile={props.profile} item={props.items[20]} category="featured"/>
+                        <ItemCard profile={props.profile} item={props.items[16]} category="featured"/>
+                        <ItemCard profile={props.profile} item={props.items[5]} category="featured"/>
+                        <ItemCard profile={props.profile} item={props.items[13]} category="featured"/>
+                        <ItemCard profile={props.profile} item={props.items[23]} category="featured"/>
                     </div>
                 }
                 </div>

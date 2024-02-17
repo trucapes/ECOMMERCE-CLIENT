@@ -53,9 +53,9 @@ const Detail = (props) => {
                         <div className="product-color-label">COLOR</div>
                         <div className="product-color" style={{backgroundColor: `${props.item.color}`}}></div>
                         </div>
-                    <div className="product__price__detail">${props.item.price}</div>
+                    <div className="product__price__detail">${props.profile ? props.item.price : "Login to see price"}</div>
                 </div>
-                <form onSubmit={handelAddToCart} className="product__form">
+                {props.profile && (<form onSubmit={handelAddToCart} className="product__form">
                 <div className="product__quantity__and__size">
                     <div className="product__quantity">
                         <IconButton onClick={handelQuantityIncrement}>
@@ -94,7 +94,7 @@ const Detail = (props) => {
                         </div>
                     </div>
                 </div>  
-                </form>
+                </form>)}
                 
             </div>
         </div>

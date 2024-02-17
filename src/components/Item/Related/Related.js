@@ -31,9 +31,9 @@ const Related = (props) => {
                 </div>
                 <div className="related__card__container">
                     <div className="related__product__card">
-                        { menItems && props.category === "men" && menItems.map((item) => <RelatedCard item={item}/>)}
-                        { womenItems && props.category === "women" && womenItems.map((item) => <RelatedCard item={item}/>)}
-                        { kidsItems && props.category === "kids" && kidsItems.map((item) => <RelatedCard item={item}/>)}
+                        { menItems && props.category === "men" && menItems.map((item) => <RelatedCard profile={props.profile} item={item}/>)}
+                        { womenItems && props.category === "women" && womenItems.map((item) => <RelatedCard profile={props.profile} item={item}/>)}
+                        { kidsItems && props.category === "kids" && kidsItems.map((item) => <RelatedCard profile={props.profile} item={item}/>)}
                         
                     </div>
                 </div>

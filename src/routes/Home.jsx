@@ -5,7 +5,7 @@ import FeaturedItems from "../components/Featured/Items/FetauredItems";
 import FeaturedCategories from "../components/Featured/Categories/FeaturedCategories";
 import { TabTitle } from "../utils/General";
 
-const Home = () => {
+const Home = ({profile}) => {
   const [featuredItems, setFeaturedItems] = useState();
   TabTitle("Home - Tru Scapes");
 
@@ -22,7 +22,7 @@ const Home = () => {
     <Fragment>
       <Landing />
       <FeaturedCategories />
-      <FeaturedItems items={featuredItems} />
+      <FeaturedItems profile={profile}  items={featuredItems} />
     </Fragment>
   );
 };
