@@ -7,11 +7,10 @@ const Description = (props) => {
                 <div className="description__header__line"></div>
                 <div className="description__header">Details</div>
             </div>
-            <div className="description__detail__container">
-                <div className="description__detail">
-                <p>{props.item.details}</p>
-                </div>
-            </div>
+                <p>lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something </p>
+                <p>lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something </p>
+                <p>lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something lorem epsum hai dawry</p>
+                
             <div className="description__specifics__container">
                 <div className="description__specifics">
                 <div className="description__header__line"></div>

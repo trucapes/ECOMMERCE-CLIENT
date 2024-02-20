@@ -12,6 +12,7 @@ import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import { CartItemsContext } from '../../../Context/CartItemsContext';
 import { WishItemsContext } from '../../../Context/WishItemsContext';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { Link } from 'react-router-dom';
 
 const Detail = (props) => {
     const [quantity, setQuantity] = useState(1);
@@ -47,13 +48,13 @@ const Detail = (props) => {
         <div className="product__detail__container">
             <div className="product__detail">
                 <div className="product__main__detail">
-                    <div className="product__name__main">{props.item.name}</div>
+                    {/* <div className="product__name__main">{props.item.name}</div> */}
                     <div className="product__detail__description">{props.item.description}</div>
                     <div className="product__color">
                         <div className="product-color-label">COLOR</div>
                         <div className="product-color" style={{backgroundColor: `${props.item.color}`}}></div>
                         </div>
-                    <div className="product__price__detail">${props.profile ? props.item.price : "Login to see price"}</div>
+                    <div className="product__price__detail">${props.profile ? props.item.price : <Link to="/account/login">Login to see price</Link>}</div>
                 </div>
                 {props.profile && (<form onSubmit={handelAddToCart} className="product__form">
                 <div className="product__quantity__and__size">

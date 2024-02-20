@@ -40,7 +40,7 @@ const ItemCard = (props) => {
                         lorem Ipsem description lorem Ipsem description lorem Ipsem description lorem Ipsem description 
                     </div>
                     <div className="product__price">
-                        {props.profile ? <span>${props.item.price}</span> : 'Login to see price'}
+                        {props.profile ? <span>${props.item.price}</span> : <Link to="/account/login">Login to see price</Link>}
                     </div>
                     <div className="product__card__action">
                         <IconButton onClick={handleAddToWishList} sx={ {borderRadius: '20px', width: '40px', height: '40px', /* borderWidth: '3px', borderStyle: 'solid', borderColor: '#FFE26E' */ }  }>

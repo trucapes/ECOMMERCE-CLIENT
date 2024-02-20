@@ -19,7 +19,7 @@ const RelatedCard = (props) => {
                         <span>{props.item.description}</span>
                     </div>
                     <div className="related__product__price">
-                        <span>${props.profile ? props.item.price: "Login to see price"}</span>
+                        <span>${props.profile ? props.item.price: <Link to="/account/login">Login to see price</Link>}</span>
                     </div>
                 </div>
             </div>

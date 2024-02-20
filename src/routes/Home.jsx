@@ -4,10 +4,28 @@ import Landing from "../components/Landing/Landing";
 import FeaturedItems from "../components/Featured/Items/FetauredItems";
 import FeaturedCategories from "../components/Featured/Categories/FeaturedCategories";
 import { TabTitle } from "../utils/General";
+import ShopCategory from "../components/Shop/Container/ShopCategory";
 
 const Home = ({profile}) => {
   const [featuredItems, setFeaturedItems] = useState();
-  TabTitle("Home - Tru Scapes");
+  TabTitle("Shop - Tru Scapes")
+  const [ menItems, setMenItems ] = useState()
+  const [ womenItems, setWomenItems ] = useState()
+  const [ kidsItems, setKidsItems ] = useState()
+  const [ loading , setLoading ] = useState(true) 
+
+  useEffect(() => {
+      axios.get("https://shema-backend.vercel.app/api/items")
+          .then(res => {
+              setMenItems(res.data.filter((item) => item.category === "men"))
+              setKidsItems(res.data.filter((item) => item.category === "kids" ))
+              setWomenItems(res.data.filter((item) => item.category === "women"))
+              setLoading(false)
+          })
+          .catch(err => console.log(err))
+      window.scrollTo(0, 0)
+  
+  }, [])
 
   useEffect(() => {
     axios
@@ -23,6 +41,9 @@ const Home = ({profile}) => {
       <Landing />
       <FeaturedCategories />
       <FeaturedItems profile={profile}  items={featuredItems} />
+      {menItems && <ShopCategory name="Hardscape" key="men" items={menItems}/>}
+      {womenItems && <ShopCategory name="Deck" key="women" items={womenItems}/>}
+      {kidsItems && <ShopCategory name="Landscape" key="kids" items={kidsItems}/>}
     </Fragment>
   );
 };
