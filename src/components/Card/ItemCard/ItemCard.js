@@ -22,6 +22,8 @@ const ItemCard = (props) => {
 
     return ( 
         <div className="product__card__card">
+            
+            <Link to={`/item/${props.item.category}/${props.item._id}`}>
             <div className="product__card">
                 <div className="product__image" 
                     onMouseEnter={() => setIsHovered(true)}
@@ -53,6 +55,7 @@ const ItemCard = (props) => {
                     </div>}
                 </div>
             </div>
+            </Link>
         </div>
      );
 }
