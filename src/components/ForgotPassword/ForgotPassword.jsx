@@ -10,14 +10,14 @@ function ForgotPassword() {
   const [alert, setAlert] = useState(false);
   const [msg, setMsg] = useState("This is an Error");
   return (
-    <div className="forgot_password_container w-full h-full p-[8%]">
+    <div className="forgot_password_container w-full h-full p-[5%]">
       <div className="w-full flex justify-center items-center">
         <Stack
           spacing={4}
-          className="shadow-md rounded-md w-[95%] sm:w-[70%] p-4 sm:p-8"
+          className="shadow-md rounded-md w-[95%] sm:w-[50%] p-4 sm:p-8"
         >
-          <h1 className="font-roboto font-bold">Reset Password</h1>
-          <div className="w-full flex gap-4 flex-col sm:flex-row">
+          <h4 className="font-roboto font-bold">Reset Password</h4>
+          <div className="w-full flex gap-2 flex-col sm:flex-row">
             <InputBox
               label={"Enter Your Email"}
               required={true}
@@ -27,9 +27,9 @@ function ForgotPassword() {
               setter={setEmail}
             />
           </div>
-          <div className="w-full flex justify-center">
-            {alert ? <AlertMsg message={msg} /> : null}
-          </div>
+          {alert &&<div className="w-full flex justify-center">
+             <AlertMsg message={msg} /> 
+          </div>}
           <div className="w-full flex justify-center">
             <button
               onClick={(e) => {

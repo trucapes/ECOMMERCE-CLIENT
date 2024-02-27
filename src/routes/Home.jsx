@@ -41,9 +41,9 @@ const Home = ({profile}) => {
       <Landing />
       <FeaturedCategories />
       <FeaturedItems profile={profile}  items={featuredItems} />
-      {menItems && <ShopCategory name="Hardscape" key="men" items={menItems}/>}
-      {womenItems && <ShopCategory name="Deck" key="women" items={womenItems}/>}
-      {kidsItems && <ShopCategory name="Landscape" key="kids" items={kidsItems}/>}
+      {menItems && <ShopCategory  profile={profile}  name="Hardscape" key="men" items={menItems}/>}
+      {womenItems && <ShopCategory  profile={profile}  name="Deck" key="women" items={womenItems}/>}
+      {kidsItems && <ShopCategory  profile={profile}  name="Landscape" key="kids" items={kidsItems}/>}
     </Fragment>
   );
 };

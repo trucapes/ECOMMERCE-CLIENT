@@ -26,6 +26,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { FaChevronDown } from "react-icons/fa6";
+import profileAPI from "../../../api/profileAPI";
 
 export const mainListItems = (
   <React.Fragment>
@@ -203,19 +204,23 @@ const AdminLayout = ({ children, profile }) => {
     const checkAdminUser = async () => {
       // const adminUser = await profileAPI.getProfile();
 
+      // console.log(adminUser)
+
       if (
         profile &&
         (profile.userRole === "admin")
       ) {
         setLoading(false);
       } else {
+        
         nav("/");
+        
       }
     };
 
   React.useEffect(() => {
-    if(profile)
-      checkAdminUser();
+    
+    checkAdminUser();
   }, [profile]);
 
   return (

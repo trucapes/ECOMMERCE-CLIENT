@@ -20,10 +20,10 @@ const RegisterCard = () => {
     <div className="register__card__container w-full flex justify-center items-center">
       <Stack
         spacing={4}
-        className="shadow-md rounded-md w-full sm:w-[90%] md:w-[80%] p-4 sm:p-8"
+        className="shadow-md rounded-md w-full sm:w-[90%] md:w-[50%] p-4 sm:p-8"
       >
-        <h1 className="font-roboto font-bold">Log In</h1>
-        <div className="w-full flex gap-4 flex-col sm:flex-row">
+        <h4 className="font-roboto font-bold">Log In</h4>
+        <div className="w-full flex gap-2 flex-col sm:flex-row">
           <InputBox
             label={"Enter Your Email"}
             required={true}
@@ -73,9 +73,9 @@ const RegisterCard = () => {
             </Link>
           </span>
         </div>
-        <div className="w-full flex justify-center">
-          {alert ? <AlertMsg message={msg} /> : null}
-        </div>
+        {alert && <div className="w-full flex justify-center">
+          <AlertMsg message={msg} />
+        </div>}
         <div className="w-full flex justify-center">
           <button
             onClick={(e) => {
