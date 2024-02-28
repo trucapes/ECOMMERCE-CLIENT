@@ -39,7 +39,7 @@ function App() {
       setUser(response.data.data);
       console.log((await response).data.data);
     } else {
-      setUser({})
+      setUser({userRole: "none"})
       localStorage.removeItem("tru-scapes-token");
     }
   };
