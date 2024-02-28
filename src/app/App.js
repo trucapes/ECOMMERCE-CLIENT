@@ -33,15 +33,20 @@ function App() {
   const [user, setUser] = useState(null);
 
   const getProfile = async () => {
-    const response = await profileAPI.getProfile();
+    try {
+      const response = await profileAPI.getProfile();
 
-    if (response.data.error === false) {
-      setUser(response.data.data);
-      console.log((await response).data.data);
-    } else {
+      if (response.data.error === false) {
+        setUser(response.data.data);
+      } else {
+        setUser({userRole: "none"})
+        localStorage.removeItem("tru-scapes-token");
+      }
+    } catch (error) {
       setUser({userRole: "none"})
       localStorage.removeItem("tru-scapes-token");
     }
+    
   };
 
   useEffect(() => {
