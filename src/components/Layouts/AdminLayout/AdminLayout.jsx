@@ -18,7 +18,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
-import { Add, AttachMoney, Category,PieChart } from "@mui/icons-material";
+import { Add, AttachMoney, Category, PieChart } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import Avatar from "@mui/material/Avatar";
@@ -195,31 +195,26 @@ const AdminLayout = ({ children, profile }) => {
 
   const handleLogout = () => {
     // Clear the token from local storage
-    localStorage.removeItem('tru-scapes-token');
-  
+    localStorage.removeItem("tru-scapes-token");
+
     // Perform a hard refresh to the '/' URL
-    window.location.href = '/';
+    window.location.href = "/";
   };
-  
-    const checkAdminUser = async () => {
-      // const adminUser = await profileAPI.getProfile();
 
-      // console.log(adminUser)
+  const checkAdminUser = async () => {
+    // const adminUser = await profileAPI.getProfile();
 
-      if (
-        profile &&
-        (profile.userRole === "admin")
-      ) {
-        setLoading(false);
-      } else {
-        
-        nav("/");
-        
-      }
-    };
+    // console.log(adminUser)
+
+    if (profile && profile.userRole === "admin") {
+      setLoading(false);
+    } else {
+      // setLoading(true);
+      nav("/");
+    }
+  };
 
   React.useEffect(() => {
-    
     checkAdminUser();
   }, [profile]);
 
@@ -247,7 +242,7 @@ const AdminLayout = ({ children, profile }) => {
               >
                 <MenuIcon />
               </IconButton>
-              
+
               <div style={{ display: "flex", alignItems: "center" }}>
                 {profile && (
                   <>

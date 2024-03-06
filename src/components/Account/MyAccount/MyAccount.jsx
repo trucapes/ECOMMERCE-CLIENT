@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./MyAccount.css";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
@@ -8,6 +8,7 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import BasicInfoTab from "./BasicInfoTabb";
+import { useNavigate } from "react-router";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -75,7 +76,14 @@ export function BasicTabs({ user, isAdmin }) {
   );
 }
 
-const MyAccount = ({ user, isAdmin }) => {
+const MyAccount = ({ user, isAdmin, isAuthenticated }) => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/account/login");
+    }
+  });
+
   return (
     <>
       {user && (

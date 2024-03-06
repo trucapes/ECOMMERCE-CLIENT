@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import AdminLayout from "./AdminLayout/AdminLayout";
 import UserLayout from "./UserLayout/UserLayout";
 
-const Layout = ({ children, profile }) => {
+const Layout = ({ children, profile, isAuthenticated }) => {
   const [isAdmin, setIsAdmin] = useState(null);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const Layout = ({ children, profile }) => {
   return isAdmin !== null && (isAdmin ? (
     <AdminLayout profile={profile}>{children}</AdminLayout>
   ) : (
-    <UserLayout profile={profile}>{children}</UserLayout>
+    <UserLayout profile={profile} isAuthenticated={isAuthenticated}>{children}</UserLayout>
   ));
 };
 

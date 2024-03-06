@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Footer from "../../Footer/Footer";
 import Header from "../../Header/Header";
 
-const UserLayout = ({ children, profile }) => {
+const UserLayout = ({ children, profile, isAuthenticated }) => {
   useEffect(()=> {
     const handleValid = () => {
       if(window.location.pathname.includes("/admin")){
@@ -13,7 +13,7 @@ const UserLayout = ({ children, profile }) => {
   }, [children])
   return (
     <>
-      <Header profile={profile} />
+      <Header profile={profile} isAuthenticated={isAuthenticated} />
       <div className="page-wrapper">{children}</div>
       <Footer />
     </>

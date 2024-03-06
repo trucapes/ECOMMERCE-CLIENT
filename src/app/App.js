@@ -31,6 +31,7 @@ import AddProductPage from "../components/ProductPage/Admin/AddProductPage";
 import AdminProductList from "../components/ProductPage/Admin/AdminProductList";
 function App() {
   const [user, setUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const getProfile = async () => {
     try {
@@ -38,15 +39,17 @@ function App() {
 
       if (response.data.error === false) {
         setUser(response.data.data);
+        setIsAuthenticated(true);
       } else {
-        setUser({userRole: "none"})
+        setUser({ userRole: "none" });
+        setIsAuthenticated(false);
         localStorage.removeItem("tru-scapes-token");
       }
     } catch (error) {
-      setUser({userRole: "none"})
+      setUser({ userRole: "none" });
+      setIsAuthenticated(false);
       localStorage.removeItem("tru-scapes-token");
     }
-    
   };
 
   useEffect(() => {
@@ -58,11 +61,11 @@ function App() {
       <WishItemsProvider>
         <SearchProvider>
           <Router>
-            <Layout profile={user}>
+            <Layout profile={user} isAuthrnticated={isAuthenticated}>
               <Routes>
                 <Route index element={<Home profile={user} />} />
                 <Route path="/account">
-                  <Route path="me" element={<MyAccount user={user} />} />
+                  <Route path="me" element={<MyAccount user={user} isAuthenticated={isAuthenticated} />} />
                   <Route path="manage" element={<ManageAccount />} />
                   <Route path="login" element={<Login />} />
                   <Route path="register" element={<Register />} />
@@ -79,16 +82,16 @@ function App() {
                 </Route>
                 <Route path="/item">
                   <Route path="/item/men">
-                    <Route path=":id" element={<ItemView profile={user}/>} />
+                    <Route path=":id" element={<ItemView profile={user} />} />
                   </Route>
                   <Route path="/item/women">
-                    <Route path=":id" element={<ItemView profile={user}/>} />
+                    <Route path=":id" element={<ItemView profile={user} />} />
                   </Route>
                   <Route path="/item/kids">
-                    <Route path=":id" element={<ItemView profile={user}/>} />
+                    <Route path=":id" element={<ItemView profile={user} />} />
                   </Route>
                   <Route path="/item/featured">
-                    <Route path=":id" element={<ItemView profile={user}/>} />
+                    <Route path=":id" element={<ItemView profile={user} />} />
                   </Route>
                 </Route>
                 <Route path="/wishlist" element={<Wishlist />} />
