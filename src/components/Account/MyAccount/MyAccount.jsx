@@ -60,7 +60,7 @@ export function BasicTabs({ user, isAdmin }) {
         >
           <Tab label="Basic Info" {...a11yProps(0)} />
           <Tab label="My Orders" {...a11yProps(1)} />
-          <Tab label="Item Three" {...a11yProps(2)} />
+          <Tab label="Transactions" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>

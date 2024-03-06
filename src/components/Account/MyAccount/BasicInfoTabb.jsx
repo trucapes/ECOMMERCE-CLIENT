@@ -152,6 +152,12 @@ const BasicInfoTab = ({ userData, isAdmin }) => {
               </TableCell>
             </TableRow>
             <TableRow>
+              <StyledTableCell>Wallet Balance:</StyledTableCell>
+              <TableCell>{`$${
+                userData.walletBalance ? userData.walletBalance : 0
+              }`}</TableCell>
+            </TableRow>
+            <TableRow>
               <StyledTableCell>Country:</StyledTableCell>
               <TableCell>
                 {isEditing ? (
