@@ -8,6 +8,14 @@ import userTransactionAPI from "../../api/userTransactionAPI";
 
 // Generate Order Data
 
+function DateToString(date) {
+  const d = new Date(date);
+  // console.log(date);
+  const performedOn =
+    d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
+  return performedOn;
+}
+
 export default function Orders() {
   const [data, setData] = React.useState([]);
 
@@ -16,6 +24,7 @@ export default function Orders() {
       const response = await userTransactionAPI.getTransactions();
 
       if (response.data.error === false) {
+        // console.log(response.data.data);
         setData(response.data.data);
       } else {
       }
@@ -26,7 +35,7 @@ export default function Orders() {
 
   useEffect(() => {
     getTransactions();
-  }, [data]);
+  }, []);
 
   return (
     <React.Fragment>
@@ -41,7 +50,7 @@ export default function Orders() {
             <TableRow>
               <TableCell>Transaction ID</TableCell>
               <TableCell>Amount</TableCell>
-              <TableCell>Note</TableCell>
+              <TableCell>Type</TableCell>
               <TableCell>Date</TableCell>
               <TableCell align="right">Remaining</TableCell>
             </TableRow>
@@ -49,11 +58,11 @@ export default function Orders() {
           <TableBody>
             {data.map((row, index) => (
               <TableRow key={index}>
-                <TableCell>{row.id}</TableCell>
-                <TableCell>{row.amount}</TableCell>
+                <TableCell>{row._id}</TableCell>
+                <TableCell>{Math.abs(row.amount)}</TableCell>
                 <TableCell>{row.description}</TableCell>
-                <TableCell>{row.performedOn}</TableCell>
-                <TableCell align="right">{`$${row.amount}`}</TableCell>
+                <TableCell>{DateToString(row.createdAt)}</TableCell>
+                <TableCell align="right">{`$${row.balanceRemaining}`}</TableCell>
               </TableRow>
             ))}
           </TableBody>

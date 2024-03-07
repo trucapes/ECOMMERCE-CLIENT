@@ -102,7 +102,7 @@ const MyAccount = ({ user, isAdmin, isAuthenticated }) => {
                   <h1>{user.name}</h1>
                 </div>
                 <div className="user-role text-[16px] text-slate-700 font-bold">
-                  Role : <span>{user.userRole}</span>
+                  Role : <span className="capitalize">{user.userRole}</span>
                 </div>
                 <div className="user-email text-[16px] text-slate-700 font-bold">
                   Email : <span>{user.email}</span>

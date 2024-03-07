@@ -8,24 +8,34 @@ const Layout = ({ children, profile, isAuthenticated }) => {
   useEffect(() => {
     const checkAdminRoute = () => {
       // Function to check if the current URL contains '/admin'
-      setIsAdmin(window.location.pathname.includes("/admin") && profile && profile.userRole === "admin");
+      setIsAdmin(
+        window.location.pathname.includes("/admin") &&
+          profile &&
+          profile.userRole === "admin"
+      );
     };
 
     // Add event listener to check for changes in URL
     // window.addEventListener("popstate", checkAdminRoute);
-    if(profile)
-      checkAdminRoute(); // Check initially when component mounts
+    if (profile) checkAdminRoute(); // Check initially when component mounts
     // return () => {
     //   // Clean up: Remove event listener when component unmounts
     //   window.removeEventListener("popstate", checkAdminRoute);
     // };
   }, [profile]); // Empty dependency array ensures useEffect runs only on mount and unmount
 
-  return isAdmin !== null && (isAdmin ? (
-    <AdminLayout profile={profile}>{children}</AdminLayout>
-  ) : (
-    <UserLayout profile={profile} isAuthenticated={isAuthenticated}>{children}</UserLayout>
-  ));
+  // console.log(isAdmin, profile);
+
+  return (
+    isAdmin !== null &&
+    (isAdmin ? (
+      <AdminLayout profile={profile}>{children}</AdminLayout>
+    ) : (
+      <UserLayout profile={profile} isAuthenticated={isAuthenticated}>
+        {children}
+      </UserLayout>
+    ))
+  );
 };
 
 export default Layout;

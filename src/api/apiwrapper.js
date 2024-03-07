@@ -1,7 +1,8 @@
 import axios from "axios";
-export const SERVER_URL = "https://misty-hen-kimono.cyclic.app/"
+export const SERVER_URL = "https://misty-hen-kimono.cyclic.app/";
 export const API_BASE_URL = "https://misty-hen-kimono.cyclic.app/api"; // Update with your API base URL
-
+//https://misty-hen-kimono.cyclic.app/api
+//http://localhost:5000/api
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
