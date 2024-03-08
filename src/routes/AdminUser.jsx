@@ -22,13 +22,15 @@ import {
   CheckCircleOutline,
   DeleteOutline,
   Close,
+  LocalAtm,
 } from "@mui/icons-material";
 import AdminUserAPI from "../api/admin/adminUserAPI";
 import Modal from "@mui/material/Modal";
 import MyAccount from "../components/Account/MyAccount/MyAccount";
 import { toast } from "react-toastify";
+import TransactionPopUp from "../components/TransactionPopUp/TransactionPopUp";
 
-const AdminUsers = () => {
+const AdminUsers = ({ profile }) => {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
@@ -39,6 +41,11 @@ const AdminUsers = () => {
   const [userRole, setUserRole] = useState("all"); // Default no filter for userRole
   const [openModal, setOpenModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [popUp, setPopUp] = useState(false);
+  const [userForTransaction, setUserForTransaction] = useState(null);
+  const [userName, setUserName] = useState("");
+
+  console.log(profile);
 
   useEffect(() => {
     fetchData();
@@ -75,6 +82,12 @@ const AdminUsers = () => {
       setLoading(false);
     }
   };
+
+  function handleTransactions(id, name) {
+    setUserForTransaction(id);
+    setUserName(name);
+    setPopUp(true);
+  }
 
   const handleApproveUser = async (userId) => {
     const confirmed = window.confirm(
@@ -145,6 +158,8 @@ const AdminUsers = () => {
     setOpenModal(false);
     setSelectedUser(null);
   };
+
+  console.log(users);
 
   return (
     <div className="p-2 w-full">
@@ -217,12 +232,12 @@ const AdminUsers = () => {
           <Table aria-label="users table">
             <TableHead>
               <TableRow>
-                <TableCell>First Name</TableCell>
-                <TableCell>Last Name</TableCell>
+                <TableCell>Name</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Mobile No</TableCell>
                 <TableCell>Country</TableCell>
                 <TableCell>City</TableCell>
+                <TableCell>Balance</TableCell>
                 <TableCell>User Role</TableCell>
                 <TableCell>Status</TableCell>
                 <TableCell>Actions</TableCell>
@@ -231,12 +246,12 @@ const AdminUsers = () => {
             <TableBody>
               {users.map((user, index) => (
                 <TableRow key={index}>
-                  <TableCell>{user.firstName}</TableCell>
-                  <TableCell>{user.lastName}</TableCell>
+                  <TableCell>{user.firstName + " " + user.lastName}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>{user.mobileNo}</TableCell>
                   <TableCell>{user.country}</TableCell>
                   <TableCell>{user.city}</TableCell>
+                  <TableCell>{`$${user.wallet.balance}`}</TableCell>
                   <TableCell>{user.userRole}</TableCell>
                   <TableCell>
                     <span className="bg-[#d1b95a] px-2 rounded-full font-normal text-base">
@@ -247,11 +262,20 @@ const AdminUsers = () => {
                     <IconButton onClick={() => handleOpenModal(user)}>
                       <Visibility color="info" />
                     </IconButton>
-                    {user.isPending && <IconButton onClick={() => handleApproveUser(user._id)}>
-                      <CheckCircleOutline color="success" />
-                    </IconButton>}
+                    {user.isPending && (
+                      <IconButton onClick={() => handleApproveUser(user._id)}>
+                        <CheckCircleOutline color="success" />
+                      </IconButton>
+                    )}
                     <IconButton onClick={() => handleDeleteUser(user._id)}>
                       <DeleteOutline color="error" />
+                    </IconButton>
+                    <IconButton
+                      onClick={() =>
+                        handleTransactions(user._id, user.firstName)
+                      }
+                    >
+                      <LocalAtm />
                     </IconButton>
                   </TableCell>
                 </TableRow>
@@ -303,6 +327,13 @@ const AdminUsers = () => {
           {selectedUser && <MyAccount user={selectedUser} isAdmin={true} />}
         </div>
       </Modal>
+      <TransactionPopUp
+        id={userForTransaction}
+        setIsPopped={setPopUp}
+        userName={userName}
+        isPopped={popUp}
+        adminId={profile}
+      />
     </div>
   );
 };

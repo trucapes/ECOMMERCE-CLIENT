@@ -80,7 +80,7 @@ export function BasicTabs({ user, isAdmin }) {
 const MyAccount = ({ user, isAdmin, isAuthenticated }) => {
   const navigate = useNavigate();
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (isAuthenticated === false) {
       navigate("/account/login");
     }
   });

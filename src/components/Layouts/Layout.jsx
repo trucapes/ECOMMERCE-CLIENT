@@ -17,7 +17,7 @@ const Layout = ({ children, profile, isAuthenticated }) => {
 
     // Add event listener to check for changes in URL
     // window.addEventListener("popstate", checkAdminRoute);
-    if (profile) checkAdminRoute(); // Check initially when component mounts
+    if (isAuthenticated !== null) checkAdminRoute(); // Check initially when component mounts
     // return () => {
     //   // Clean up: Remove event listener when component unmounts
     //   window.removeEventListener("popstate", checkAdminRoute);

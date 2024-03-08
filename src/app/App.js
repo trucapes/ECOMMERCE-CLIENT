@@ -31,7 +31,7 @@ import AddProductPage from "../components/ProductPage/Admin/AddProductPage";
 import AdminProductList from "../components/ProductPage/Admin/AdminProductList";
 function App() {
   const [user, setUser] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   const getProfile = async () => {
     try {
@@ -41,12 +41,10 @@ function App() {
         setUser(response.data.data);
         setIsAuthenticated(true);
       } else {
-        setUser({ userRole: "none" });
         setIsAuthenticated(false);
         localStorage.removeItem("tru-scapes-token");
       }
     } catch (error) {
-      setUser({ userRole: "none" });
       setIsAuthenticated(false);
       localStorage.removeItem("tru-scapes-token");
     }
@@ -65,7 +63,15 @@ function App() {
               <Routes>
                 <Route index element={<Home profile={user} />} />
                 <Route path="/account">
-                  <Route path="me" element={<MyAccount user={user} isAuthenticated={isAuthenticated} />} />
+                  <Route
+                    path="me"
+                    element={
+                      <MyAccount
+                        user={user}
+                        isAuthenticated={isAuthenticated}
+                      />
+                    }
+                  />
                   <Route path="manage" element={<ManageAccount />} />
                   <Route path="login" element={<Login />} />
                   <Route path="register" element={<Register />} />
@@ -105,7 +111,7 @@ function App() {
                     <Route path="" element={<AdminProductList />} />
                   </Route>
                   <Route path="users">
-                    <Route path="" element={<AdminUsers />} />
+                    <Route path="" element={<AdminUsers profile={user} />} />
                   </Route>
                 </Route>
               </Routes>
