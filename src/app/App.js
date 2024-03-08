@@ -29,6 +29,8 @@ import { ToastContainer } from "react-toastify";
 import CategoryList from "../components/Category/CategoryList";
 import AddProductPage from "../components/ProductPage/Admin/AddProductPage";
 import AdminProductList from "../components/ProductPage/Admin/AdminProductList";
+import { Check } from "@mui/icons-material";
+import Checkout from "../components/Checkout/Checkout";
 function App() {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -78,7 +80,7 @@ function App() {
                   <Route path="forgot" element={<ForgotPassword />} />
                   <Route path="*" element={<Login />} />
                 </Route>
-
+                <Route path="/order/checkout" element={<Checkout />} />
                 <Route path={"/product"}>
                   <Route path=":id" element={<ViewProduct />} />
                 </Route>

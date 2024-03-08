@@ -23,6 +23,8 @@ import {
   DeleteOutline,
   Close,
   LocalAtm,
+  AddCircle,
+  RemoveCircle,
 } from "@mui/icons-material";
 import AdminUserAPI from "../api/admin/adminUserAPI";
 import Modal from "@mui/material/Modal";
@@ -44,6 +46,7 @@ const AdminUsers = ({ profile }) => {
   const [popUp, setPopUp] = useState(false);
   const [userForTransaction, setUserForTransaction] = useState(null);
   const [userName, setUserName] = useState("");
+  const [transactionType, setTransactionType] = useState("");
 
   console.log(profile);
 
@@ -83,7 +86,8 @@ const AdminUsers = ({ profile }) => {
     }
   };
 
-  function handleTransactions(id, name) {
+  function handleTransactions(id, name, type) {
+    setTransactionType(type);
     setUserForTransaction(id);
     setUserName(name);
     setPopUp(true);
@@ -272,10 +276,17 @@ const AdminUsers = ({ profile }) => {
                     </IconButton>
                     <IconButton
                       onClick={() =>
-                        handleTransactions(user._id, user.firstName)
+                        handleTransactions(user._id, user.firstName, "credit")
                       }
                     >
-                      <LocalAtm />
+                      <AddCircle />
+                    </IconButton>
+                    <IconButton
+                      onClick={() =>
+                        handleTransactions(user._id, user.firstName, "debit")
+                      }
+                    >
+                      <RemoveCircle />
                     </IconButton>
                   </TableCell>
                 </TableRow>
@@ -333,6 +344,7 @@ const AdminUsers = ({ profile }) => {
         userName={userName}
         isPopped={popUp}
         adminId={profile}
+        type={transactionType}
       />
     </div>
   );

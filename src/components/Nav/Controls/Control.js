@@ -22,7 +22,7 @@ const Control = ({ profile, isAuthenticated }) => {
     <div className="control__bar__container">
       <div className="controls__container">
         <div className="control">
-          <Link to={`/account/${profile && isAuthenticated ? "me" : "login"}`}>
+          <Link to={`/account/${profile ? "me" : "login"}`}>
             <PersonOutlineIcon
               color="black"
               size="large"
@@ -40,7 +40,7 @@ const Control = ({ profile, isAuthenticated }) => {
               </Link>
             </div>
             <div className="control">
-              <Cart />
+              <Cart profile={profile} />
             </div>
             <div className="control">
               <ExitToAppIcon

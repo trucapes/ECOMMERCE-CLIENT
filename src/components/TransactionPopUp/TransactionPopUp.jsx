@@ -4,13 +4,23 @@ import { transactionAPI } from "../../api/admin/transactionAPI";
 import AlertMsg from "../Alert/AlertMsg";
 import { Cancel } from "@mui/icons-material";
 
-function TransactionPopUp({ id, isPopped, setIsPopped, userName, adminId }) {
-  const [amount, setAmount] = useState(0);
+function TransactionPopUp({
+  id,
+  isPopped,
+  setIsPopped,
+  userName,
+  adminId,
+  type,
+}) {
+  let [amount, setAmount] = useState(0);
   const [alert, setAlert] = useState(false);
   const [msg, setMsg] = useState("");
 
   const performTransaction = async () => {
-    console.log(Number(amount), typeof amount);
+    if (type === "debit") {
+      amount = "-" + amount;
+    }
+    console.log(amount, typeof amount);
     try {
       const response = await transactionAPI.performTransaction({
         from: adminId,
@@ -32,12 +42,10 @@ function TransactionPopUp({ id, isPopped, setIsPopped, userName, adminId }) {
     } catch (error) {
       console.log(error);
     } finally {
-      // () => {
       setTimeout(() => {
         setAlert(false);
         setMsg("");
       }, 2000);
-      // };
     }
   };
 
@@ -66,7 +74,7 @@ function TransactionPopUp({ id, isPopped, setIsPopped, userName, adminId }) {
         </h2>
         <div className="transaction-body-container py-4 ">
           <InputBox
-            label={"Enter Amount (enter negative value for debit)"}
+            label={"Enter Amount"}
             required={true}
             id={"amount"}
             setter={setAmount}
