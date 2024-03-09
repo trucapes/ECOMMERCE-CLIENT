@@ -1,42 +1,79 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaArrowDownShortWide, FaArrowUpWideShort } from "react-icons/fa6";
 import { useTable, useSortBy, usePagination } from "react-table";
 import AdminScreen from "../components/AdminScreen/AdminScreen";
 import InputBox from "../components/InputBox/InputBox";
 import { orederColumns } from "../components/AdminTable/TableColumns";
+import { OrderAPI } from "../api/paymentAPI";
+import AdminOrderPopUp from "../components/AdminOrderPopUp/AdminOrderPopUp";
+
+function DateToString(date) {
+  const d = new Date(date);
+  // console.log(date);
+  const performedOn =
+    d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
+  return performedOn;
+}
+
 //-------------------------<DATA SHOULD BE IN THIS ORDER ONLY-- id,name,customerName,date,smount,status------------>
-const data = [
-  {
-    id: "Order#1",
-    name: "Item 1",
-    customerName: "John Deer",
-    date: "22/02/2024",
-    amount: 1000,
-    status: "Shipped",
-  },
-  {
-    id: "Order#3",
-    name: "Item 1",
-    customerName: "John Deer",
-    date: "22/02/2024",
-    amount: 1500,
-    status: "Shipped",
-  },
-  {
-    id: "Order#3",
-    name: "Item 1",
-    customerName: "John Deer",
-    date: "22/02/2024",
-    amount: 1500,
-    status: "Shipped",
-  },
-];
+
+// let data = [
+//   {
+//     id: "Order#1",
+//     customerName: "John Deer",
+//     date: "22/02/2024",
+//     amount: 1000,
+//     status: "Shipped",
+//   },
+//   {
+//     id: "Order#3",
+//     customerName: "John Deer",
+//     date: "22/02/2024",
+//     amount: 1500,
+//     status: "Shipped",
+//   },
+//   {
+//     id: "Order#3",
+//     customerName: "John Deer",
+//     date: "22/02/2024",
+//     amount: 1500,
+//     status: "Shipped",
+//   },
+// ];
 
 const columns = orederColumns;
 
 function AdminOrder() {
   const [search, setSearch] = useState("");
+  const [orders, setOrders] = useState(null);
+  const [data, setData] = useState([]);
+  const [isPopped, setIsPopped] = useState(false);
+  const [itemforPopUp, setItemforPopUp] = useState(null);
+
+  function ItemPopUp(item) {
+    setItemforPopUp(item);
+    setIsPopped(true);
+  }
+
+  async function getOrders() {
+    const response = await OrderAPI.getOrders();
+
+    const responseData = response.data.data.map((item) => {
+      return {
+        userId: item.userId._id,
+        address: item.shippingAddress,
+        id: item._id,
+        customerName: item.userId.firstName + " " + item.userId.lastName,
+        date: DateToString(item.createdAt),
+        amount: item.price,
+        status: item.status.charAt(0).toUpperCase() + item.status.slice(1),
+        products: [...item.products],
+      };
+    });
+
+    setData([...responseData]);
+  }
 
   const {
     getTableProps,
@@ -49,10 +86,19 @@ function AdminOrder() {
     previousPage,
     prepareRow,
   } = useTable({ columns, data }, useSortBy, usePagination);
+
+  useEffect(() => {
+    getOrders();
+  }, []);
+
   return (
     <>
-      {/* <AdminScreen> */}
       <div className="bg-slate-100 p-2 w-full">
+        <AdminOrderPopUp
+          isPopped={isPopped}
+          setIsPopped={setIsPopped}
+          itemForPupUp={itemforPopUp}
+        />
         <div className="w-full flex flex-row justify-between items-center">
           <h1 className="text-3xl mt-4 mb-4 text-gray-900">Orders</h1>
           <div className=" flex flex-row items-stretch justify-center">
@@ -131,14 +177,19 @@ function AdminOrder() {
                       ) : (
                         <td className="px-4 py-2 whitespace-nowrap overflow-hidden">
                           <div className="w-full flex justify-start">
-                            <Link to={`/orders/view/${row.cells[0].value}`}>
+                            <div
+                              onClick={() => {
+                                ItemPopUp(row.original);
+                                console.log(itemforPopUp);
+                              }}
+                            >
                               <button
                                 type="submit"
                                 className="Registration-button w-fit text-black hover:text-white bg-[#ffe26e] duration-300 hover:bg-black font-medium rounded-lg text-sm px-4 py-2.5 text-center"
                               >
                                 View Order
                               </button>
-                            </Link>
+                            </div>
                           </div>
                         </td>
                       )
@@ -173,7 +224,6 @@ function AdminOrder() {
           </div>
         </div>
       </div>
-      {/* </AdminScreen> */}
     </>
   );
 }

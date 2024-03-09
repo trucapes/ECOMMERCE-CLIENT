@@ -31,6 +31,7 @@ import AddProductPage from "../components/ProductPage/Admin/AddProductPage";
 import AdminProductList from "../components/ProductPage/Admin/AdminProductList";
 import { Check } from "@mui/icons-material";
 import Checkout from "../components/Checkout/Checkout";
+import AdminDashboard from "../routes/AdminDashboard";
 function App() {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -106,6 +107,7 @@ function App() {
                 <Route path="/search/*" element={<SearchView />} />
 
                 <Route path="/admin">
+                  <Route path="" element={<AdminDashboard  />} />
                   <Route path="order" element={<AdminOrder />} />
                   <Route path="categories" element={<CategoryList />} />
                   <Route path="products">

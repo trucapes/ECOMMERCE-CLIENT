@@ -25,7 +25,6 @@ function OrderItemPopUp({
     };
   }, [isPopped]);
   if (!isPopped) return null;
-  console.log(isPopped, itemIndex, itemForPupUp);
   return (
     <div className="fixed top-1/2 left-1/2 w-[600px] border border-r-slate-500 -translate-x-1/2 overflow-hidden py-4 -translate-y-1/2 h-[400px] z-[100000000] bg-white rounded-lg shadow-lg p-8">
       <div className="relative w-full h-full">

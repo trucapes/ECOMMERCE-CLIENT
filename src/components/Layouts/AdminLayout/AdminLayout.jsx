@@ -70,7 +70,7 @@ export const mainListItems = (
         <ListItemText primary="Products" />
       </ListItemButton>
     </Link>
-    <Link style={{ color: "#000" }} legacyBehavior href="/">
+    <Link style={{ color: "#000" }} legacyBehavior href="/admin/order">
       <ListItemButton>
         <ListItemIcon>
           <PieChart />

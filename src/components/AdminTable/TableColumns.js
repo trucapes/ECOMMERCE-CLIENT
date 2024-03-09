@@ -4,23 +4,19 @@ export const orederColumns = [
     accessor: "id",
   },
   {
-    Header: "Name",
-    accessor: "name",
-  },
-  {
     Header: "Customer Name",
     accessor: "customerName",
   },
   {
-    Header: "Date",
+    Header: "Order Date",
     accessor: "date",
   },
   {
-    Header: "Amount(USD)",
+    Header: "Price (USD)",
     accessor: "amount",
   },
   {
-    Header: "Order ID",
+    Header: "Status",
     accessor: "status",
   },
   {
