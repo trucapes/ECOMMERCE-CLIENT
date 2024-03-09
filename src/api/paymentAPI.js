@@ -5,4 +5,8 @@ export const OrderAPI = {
     const response = await api.post("/payment", credentials);
     return response;
   },
+  getOrders: async () => {
+    const response = await api.get("/order");
+    return response;
+  },
 };

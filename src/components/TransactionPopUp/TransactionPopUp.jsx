@@ -3,6 +3,7 @@ import InputBox from "../InputBox/InputBox";
 import { transactionAPI } from "../../api/admin/transactionAPI";
 import AlertMsg from "../Alert/AlertMsg";
 import { Cancel } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 function TransactionPopUp({
   id,
@@ -11,10 +12,12 @@ function TransactionPopUp({
   userName,
   adminId,
   type,
+  setBalance,
 }) {
   let [amount, setAmount] = useState(0);
   const [alert, setAlert] = useState(false);
   const [msg, setMsg] = useState("");
+  const navigate = useNavigate();
 
   const performTransaction = async () => {
     if (type === "debit") {
@@ -56,7 +59,7 @@ function TransactionPopUp({
     return () => {
       document.body.style.overflow = "unset";
     };
-  });
+  },[]);
   if (!isPopped) return null;
   //   alert(id);
   return (
@@ -64,7 +67,10 @@ function TransactionPopUp({
       <div className="relative w-full h-full">
         <div
           className="-top-7 -right-7 absolute cursor-pointer"
-          onClick={() => setIsPopped(false)}
+          onClick={() => {
+            setIsPopped(false);
+            window.location.reload();
+          }}
         >
           <Cancel />
         </div>

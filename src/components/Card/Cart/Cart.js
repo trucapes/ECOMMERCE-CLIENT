@@ -42,8 +42,13 @@ const Cart = ({ profile }) => {
 
   const handleCheckout = async () => {
     if (cartItems.totalAmount > 0) {
+
+      //Storing the items which are in cart, in local storage to be accessed on checkout
+
       const itemsObj = cartItems.items.map((item) => {
+        console.log(item);
         return {
+          name:item.name,
           product: item._id,
           quantity: item.itemQuantity,
           price: item.price,
@@ -58,9 +63,13 @@ const Cart = ({ profile }) => {
       };
       console.log(config.items);
 
+      //Checking if there is any previous checkout in local storage
+
       if (localStorage.getItem("checkoutConfig")) {
         localStorage.removeItem("checkoutConfig");
       }
+
+      //Storing the config in local storage
 
       localStorage.setItem("checkoutConfig", JSON.stringify(config));
       console.log(localStorage.getItem("checkoutConfig"));

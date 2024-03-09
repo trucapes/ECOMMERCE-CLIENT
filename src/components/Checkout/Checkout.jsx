@@ -40,6 +40,8 @@ function Checkout() {
     setAlert(true);
     if (response.status === 201) {
       setMsg("Order Placed Successfully");
+    } else if (response.status === 200) {
+      setMsg("Insufficient Balance");
     } else {
       setMsg("Internal Server Error");
     }
