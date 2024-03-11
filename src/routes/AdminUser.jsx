@@ -31,6 +31,7 @@ import Modal from "@mui/material/Modal";
 import MyAccount from "../components/Account/MyAccount/MyAccount";
 import { toast } from "react-toastify";
 import TransactionPopUp from "../components/TransactionPopUp/TransactionPopUp";
+import NoDataFound from "../components/NoDataFound/NoDataFound";
 
 const AdminUsers = ({ profile }) => {
   const [users, setUsers] = useState([]);
@@ -169,54 +170,58 @@ const AdminUsers = ({ profile }) => {
     <div className="p-2 w-full">
       <div className="w-full flex flex-row justify-between items-center">
         <h1 className="text-3xl mt-4 mb-4 text-gray-900">Users</h1>
-        <div className=" flex flex-row items-stretch justify-center">
-          <input
-            onChange={(e) => setSearch(e.target.value)}
-            value={search}
-            type="text"
-            placeholder="Search in Users"
-            className="bg-gray-50 border outline-none text-gray-900 rounded-l-lg focus:border-[#ffe26e] block w-full px-3"
-          />
-          <div className="w-fit flex justify-start">
-            <button
-              type="submit"
-              className="Registration-button w-fit text-black hover:text-white bg-[#ffe26e] duration-300 hover:bg-black font-medium rounded-r-lg text-sm px-4 py-2.5 text-center"
+        {users && users.length > 0 && (
+          <div className=" flex flex-row items-stretch justify-center">
+            <input
+              onChange={(e) => setSearch(e.target.value)}
+              value={search}
+              type="text"
+              placeholder="Search in Users"
+              className="bg-gray-50 border outline-none text-gray-900 rounded-l-lg focus:border-[#ffe26e] block w-full px-3"
+            />
+            <div className="w-fit flex justify-start">
+              <button
+                type="submit"
+                className="Registration-button w-fit text-black hover:text-white bg-[#ffe26e] duration-300 hover:bg-black font-medium rounded-r-lg text-sm px-4 py-2.5 text-center"
+              >
+                Search
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+      {users && users.length > 0 && (
+        <div className="flex flex-row items-center justify-between mt-4">
+          <div>
+            <Select
+              value={userRole}
+              onChange={(e) => setUserRole(e.target.value)}
+              className="mr-4"
             >
-              Search
-            </button>
+              <MenuItem value="all">All Roles</MenuItem>
+              <MenuItem value="admin">Admin</MenuItem>
+              <MenuItem value="distributor">Distributor</MenuItem>
+              <MenuItem value="dealer">Dealer</MenuItem>
+              <MenuItem value="contractor">Contractor</MenuItem>
+            </Select>
+            <Select
+              value={isPending}
+              onChange={(e) => setIsPending(e.target.value)}
+            >
+              <MenuItem value={"all"}>All Status</MenuItem>
+              <MenuItem value={true}>Pending</MenuItem>
+              <MenuItem value={false}>Active</MenuItem>
+            </Select>
+          </div>
+          <div>
+            <Select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+              <MenuItem value="createdAt">Sort by Date</MenuItem>
+              <MenuItem value="firstName">Sort by First Name</MenuItem>
+              <MenuItem value="lastName">Sort by Last Name</MenuItem>
+            </Select>
           </div>
         </div>
-      </div>
-      <div className="flex flex-row items-center justify-between mt-4">
-        <div>
-          <Select
-            value={userRole}
-            onChange={(e) => setUserRole(e.target.value)}
-            className="mr-4"
-          >
-            <MenuItem value="all">All Roles</MenuItem>
-            <MenuItem value="admin">Admin</MenuItem>
-            <MenuItem value="distributor">Distributor</MenuItem>
-            <MenuItem value="dealer">Dealer</MenuItem>
-            <MenuItem value="contractor">Contractor</MenuItem>
-          </Select>
-          <Select
-            value={isPending}
-            onChange={(e) => setIsPending(e.target.value)}
-          >
-            <MenuItem value={"all"}>All Status</MenuItem>
-            <MenuItem value={true}>Pending</MenuItem>
-            <MenuItem value={false}>Active</MenuItem>
-          </Select>
-        </div>
-        <div>
-          <Select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-            <MenuItem value="createdAt">Sort by Date</MenuItem>
-            <MenuItem value="firstName">Sort by First Name</MenuItem>
-            <MenuItem value="lastName">Sort by Last Name</MenuItem>
-          </Select>
-        </div>
-      </div>
+      )}
       {loading ? (
         <>
           <Skeleton variant="rectangular" height={40} animation="wave" />
@@ -230,7 +235,7 @@ const AdminUsers = ({ profile }) => {
           <Skeleton variant="rectangular" height={40} animation="wave" />
         </>
       ) : users && users.length === 0 ? (
-        <div>No users found.</div>
+        <NoDataFound TryingToFind={"Users"} />
       ) : (
         <TableContainer component={Paper}>
           <Table aria-label="users table">

@@ -14,7 +14,7 @@ function OrderItemPopUp({
   useEffect(() => {
     if (isPopped) {
       document.body.style.overflow = "hidden";
-      console.log("runni");
+      // console.log("runni");
     }
 
     //Resquest to the server to get product images by the id

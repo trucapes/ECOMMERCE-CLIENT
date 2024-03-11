@@ -19,7 +19,6 @@ import WishItemsProvider from "../Context/WishItemsProvider";
 import SearchProvider from "../Context/SearchProvider";
 import ForgotPassword from "../components/ForgotPassword/ForgotPassword";
 import AdminOrder from "../routes/AdminOrder";
-import AdminProducts from "../routes/AdminProducts";
 import AdminUsers from "../routes/AdminUser";
 import ViewProduct from "../components/ProductPage/ViewProduct";
 import Layout from "../components/Layouts/Layout";

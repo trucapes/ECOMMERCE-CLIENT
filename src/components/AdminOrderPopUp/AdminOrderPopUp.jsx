@@ -3,8 +3,7 @@ import React, { useEffect, useState } from "react";
 import "./Scroll.css";
 import { OrderAPI } from "../../api/paymentAPI";
 import AlertMsg from "../Alert/AlertMsg";
-import { Toast } from "bootstrap";
-import SnackbarVariants from "../Tosat/Toast";
+import { toast } from "react-toastify";
 
 function AdminOrderPopUp({
   isPopped,
@@ -32,22 +31,16 @@ function AdminOrderPopUp({
 
       if (response.data.error === false) {
         setNewStatus(null);
-        setAlert(true);
-        setMsg(response.data.message);
+        toast.success(response.data.message);
         setTimeout(() => {
-          setAlert(false);
           setIsPopped(false);
-          window.location.reload();
-        }, 3000);
+        }, 1000);
       } else {
         setNewStatus(null);
-        setAlert(true);
-        setMsg(response.data.message);
+        toast.success(response.data.message);
         setTimeout(() => {
-          setAlert(false);
           setIsPopped(false);
-          window.location.reload();
-        }, 3000);
+        }, 1000);
       }
     } catch (error) {
       console.log(error);
@@ -75,13 +68,12 @@ function AdminOrderPopUp({
           className="-top-5 -right-5 absolute cursor-pointer"
           onClick={() => {
             setIsPopped(false);
-            window.location.reload();
           }}
         >
           <Cancel fontSize="large" />
         </div>
         <h1 className="text-center">Order Items</h1>
-        <div className="order-item-body-container w-full h-full py-7 overflow-y-scroll">
+        <div className="order-item-body-container w-full h-full pt-7 pb-14 overflow-y-scroll">
           {itemForPupUp.products.map((item) => {
             return (
               <div className="item-details-container bg-[#fff1b8] w-full h-32 flex my-4 flex-row gap-2 hover:bg-[#ffeca0] duration-200 p-4 rounded-xl">

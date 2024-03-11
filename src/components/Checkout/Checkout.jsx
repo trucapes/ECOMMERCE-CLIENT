@@ -1,11 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import InputBox from "../InputBox/InputBox";
 import { OrderAPI } from "../../api/paymentAPI";
 import { Alert } from "bootstrap";
 import AlertMsg from "../Alert/AlertMsg";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { ClipLoader } from "react-spinners";
+import { CartItemsContext } from "../../Context/CartItemsContext";
 
 function Checkout() {
+  let cartItems = useContext(CartItemsContext);
+
   const [checkOutConfig, setCheckOutConfig] = useState({});
   const [addressLine1, setAddressLine1] = useState("");
   const [addressLine2, setAddressLine2] = useState("");
@@ -13,6 +18,7 @@ function Checkout() {
   const [pincode, setPincode] = useState("");
   const [alert, setAlert] = useState(false);
   const [msg, setMsg] = useState("");
+  const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
 
   async function confirmOrder() {
@@ -35,15 +41,17 @@ function Checkout() {
     address = { ...address, ...checkOutConfig };
 
     console.log(address);
+    setLoader(true);
     const response = await OrderAPI.placeOrder(address);
+    setLoader(false);
     console.log(response);
-    setAlert(true);
     if (response.status === 201) {
-      setMsg("Order Placed Successfully");
+      toast.success("Order Placed Successfully");
+      cartItems.removeItem({});
     } else if (response.status === 200) {
-      setMsg("Insufficient Balance");
+      toast.warn("Insufficient Balance");
     } else {
-      setMsg("Internal Server Error");
+      toast.error("Internal Server Error");
     }
     setTimeout(() => {
       setAlert(false);
@@ -93,16 +101,20 @@ function Checkout() {
           {alert && <AlertMsg message={msg} />}
         </div>
         <div className="w-full my-8 flex justify-center">
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              confirmOrder();
-            }}
-            type="submit"
-            className="Registration-button w-fit text-black hover:text-white bg-[#ffe26e] duration-300 hover:bg-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-            Confirm Order
-          </button>
+          {loader ? (
+            <ClipLoader loading={loader} />
+          ) : (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                confirmOrder();
+              }}
+              type="submit"
+              className="Registration-button w-fit text-black hover:text-white bg-[#ffe26e] duration-300 hover:bg-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            >
+              Confirm Order
+            </button>
+          )}
         </div>
       </div>
     </div>

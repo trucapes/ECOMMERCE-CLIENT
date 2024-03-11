@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { OrderAPI } from "../api/paymentAPI";
 import AdminUserAPI from "../api/admin/adminUserAPI";
 import AdminProductAPI from "../api/admin/adminProductAPI";
+import NoDataFound from "../components/NoDataFound/NoDataFound";
 
 function AdminDashboard() {
   const [noOfOrders, setNoOfOrders] = useState(0);
@@ -11,16 +12,18 @@ function AdminDashboard() {
   const [recentOrders, setRecentOrders] = useState(null);
   const [products, setProducts] = useState(0);
 
-  async function getOrders() {
-    const response = await OrderAPI.getOrders();
-    console.log(response.data.data);
-    setNoOfOrders(response.data.data.length);
-
+  async function getProducts() {
     const productResponse = await AdminProductAPI.getAllProducts({
       page: 1,
     });
 
     setProducts(productResponse.data.totalCount);
+  }
+
+  async function getOrders() {
+    const response = await OrderAPI.getOrders();
+    console.log(response.data.data);
+    setNoOfOrders(response.data.data.length);
 
     const responseData = response.data.data.map((item) => {
       return {
@@ -30,6 +33,7 @@ function AdminDashboard() {
         id: item._id,
         customerName: item.userId.firstName + " " + item.userId.lastName,
         date: DateToString(item.createdAt),
+        updatedAt: DateToString(item.updatedAt),
         amount: item.price,
         status: item.status,
         products: [...item.products],
@@ -65,6 +69,7 @@ function AdminDashboard() {
 
   useEffect(() => {
     getOrders();
+    getProducts();
     getUsers();
   }, []);
 
@@ -109,7 +114,7 @@ function AdminDashboard() {
                     </div>
                     <div className="order-date my-auto">
                       <span className="font-bold">Ordered On</span> -{" "}
-                      {DateToString(item.date)}
+                      {item.date}
                     </div>
                   </div>
                   <div className="flex flex-col ">
@@ -129,7 +134,7 @@ function AdminDashboard() {
                   {item.isDelivered && (
                     <div className="delivered-date">
                       <span className="font-bold">Delivered On</span> -{" "}
-                      {DateToString(item.updatedAt)}
+                      {item.updatedAt}
                     </div>
                   )}
                 </div>
@@ -138,14 +143,7 @@ function AdminDashboard() {
             </div>
           ))}
         {recentOrders && recentOrders.length === 0 && (
-          <div className="w-full flex flex-col justify-center items-center text-center">
-            <img
-              className="w-[40%]"
-              src="https://cdni.iconscout.com/illustration/premium/thumb/not-found-7621845-6166999.png"
-              alt=""
-            />
-            <h1 className="text-center text-lg sl">No Orders Found</h1>
-          </div>
+          <NoDataFound TryingToFind="Orders" />
         )}
       </div>
     </div>

@@ -37,22 +37,20 @@ function TransactionPopUp({
 
       if (response.data.error === false) {
         {
-          response.status === 201
-            ? setMsg(response.data.message)
-            : setMsg(response.data.message);
+          toast.success(response.data.message);
         }
       } else {
-        setMsg("Internal Server Error");
+        toast.error("Internal Server Error");
       }
     } catch (error) {
       console.log(error);
     } finally {
       setLoader(false);
       setIsPopped(false);
-      toast.success("Transaction Successfull");
+      // toast.success("Transaction Successfull");
     }
   };
-  
+
   useEffect(() => {
     if (isPopped) {
       document.body.style.overflow = "hidden";
@@ -74,7 +72,7 @@ function TransactionPopUp({
         >
           <Cancel />
         </div>
-        <h1 className="text-center">Debit/Credit Balance</h1>
+        <h1 className="text-center text-xl capitalize">{type} Balance</h1>
         <h2 className="text-start text-[14px] my-2">
           Processing Transaction for {userName}
         </h2>
