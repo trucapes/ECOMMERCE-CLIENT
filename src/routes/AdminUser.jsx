@@ -52,7 +52,7 @@ const AdminUsers = ({ profile }) => {
 
   useEffect(() => {
     fetchData();
-  }, [search, page, sortBy, isPending, userRole]);
+  }, [search, page, sortBy, isPending, userRole, popUp]);
 
   const fetchData = async () => {
     try {

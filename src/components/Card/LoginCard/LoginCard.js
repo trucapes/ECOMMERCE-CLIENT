@@ -6,6 +6,7 @@ import InputBox from "../../InputBox/InputBox";
 import AlertMsg from "../../Alert/AlertMsg";
 import { handleLogIn } from "../../../helpers/Auth";
 import handleToggle from "../../../helpers/VisibilityToggler";
+import { ClipLoader } from "react-spinners";
 
 const RegisterCard = () => {
   const [email, setEmail] = useState("");
@@ -14,7 +15,7 @@ const RegisterCard = () => {
 
   const [alert, setAlert] = useState(false);
   const [msg, setMsg] = useState("");
-
+  const [loader, setLoader] = useState(false);
 
   return (
     <div className="register__card__container w-full flex justify-center items-center">
@@ -73,20 +74,26 @@ const RegisterCard = () => {
             </Link>
           </span>
         </div>
-        {alert && <div className="w-full flex justify-center">
-          <AlertMsg message={msg} />
-        </div>}
+        {alert && (
+          <div className="w-full flex justify-center">
+            <AlertMsg message={msg} />
+          </div>
+        )}
         <div className="w-full flex justify-center">
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              handleLogIn(email, password, setAlert, setMsg);
-            }}
-            type="submit"
-            className="Registration-button w-fit text-black hover:text-white bg-[#ffe26e] duration-300 hover:bg-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-            Log In
-          </button>
+          {loader ? (
+            <ClipLoader loading={loader} />
+          ) : (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                handleLogIn(email, password, setAlert, setMsg,setLoader);
+              }}
+              type="submit"
+              className="Registration-button w-fit text-black hover:text-white bg-[#ffe26e] duration-300 hover:bg-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            >
+              Log In
+            </button>
+          )}
         </div>
         <div className="text-sm">
           Don't have an account?{" "}

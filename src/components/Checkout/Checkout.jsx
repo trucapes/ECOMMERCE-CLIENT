@@ -47,7 +47,7 @@ function Checkout() {
     }
     setTimeout(() => {
       setAlert(false);
-      navigate("/");
+      navigate("/account/me");
     }, 3000);
 
     //   await axios

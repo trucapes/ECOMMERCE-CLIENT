@@ -4,6 +4,8 @@ import { transactionAPI } from "../../api/admin/transactionAPI";
 import AlertMsg from "../Alert/AlertMsg";
 import { Cancel } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { ClipLoader } from "react-spinners";
+import { toast } from "react-toastify";
 
 function TransactionPopUp({
   id,
@@ -18,6 +20,7 @@ function TransactionPopUp({
   const [alert, setAlert] = useState(false);
   const [msg, setMsg] = useState("");
   const navigate = useNavigate();
+  const [loader, setLoader] = useState(false);
 
   const performTransaction = async () => {
     if (type === "debit") {
@@ -25,13 +28,12 @@ function TransactionPopUp({
     }
     console.log(amount, typeof amount);
     try {
+      setLoader(true);
       const response = await transactionAPI.performTransaction({
         from: adminId,
         to: id,
         amount,
       });
-
-      setAlert(true);
 
       if (response.data.error === false) {
         {
@@ -45,13 +47,12 @@ function TransactionPopUp({
     } catch (error) {
       console.log(error);
     } finally {
-      setTimeout(() => {
-        setAlert(false);
-        setMsg("");
-      }, 2000);
+      setLoader(false);
+      setIsPopped(false);
+      toast.success("Transaction Successfull");
     }
   };
-
+  
   useEffect(() => {
     if (isPopped) {
       document.body.style.overflow = "hidden";
@@ -59,7 +60,7 @@ function TransactionPopUp({
     return () => {
       document.body.style.overflow = "unset";
     };
-  },[]);
+  }, []);
   if (!isPopped) return null;
   //   alert(id);
   return (
@@ -69,7 +70,6 @@ function TransactionPopUp({
           className="-top-7 -right-7 absolute cursor-pointer"
           onClick={() => {
             setIsPopped(false);
-            window.location.reload();
           }}
         >
           <Cancel />
@@ -88,16 +88,20 @@ function TransactionPopUp({
             placeholder={"Enter Amount"}
           />
           <div className="w-full my-8 flex justify-center">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                performTransaction();
-              }}
-              type="submit"
-              className="Registration-button w-fit text-black hover:text-white bg-[#ffe26e] duration-300 hover:bg-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-            >
-              Process Transaction
-            </button>
+            {loader ? (
+              <ClipLoader loading={loader} />
+            ) : (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  performTransaction();
+                }}
+                type="submit"
+                className="Registration-button w-fit text-black hover:text-white bg-[#ffe26e] duration-300 hover:bg-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+              >
+                Process Transaction
+              </button>
+            )}
           </div>
           {alert && (
             <div className="w-full flex justify-center">

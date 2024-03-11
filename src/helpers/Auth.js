@@ -32,7 +32,8 @@ export function handleSignup(
   password,
   cnfPassword,
   setAlt,
-  setAltMsg
+  setAltMsg,
+  setLoader
 ) {
   if (
     fName !== "" &&
@@ -65,6 +66,7 @@ export function handleSignup(
       return;
     }
     if (password === cnfPassword) {
+      setLoader(true);
       authAPI
         .register(
           convertToRequiredFormat({
@@ -85,6 +87,12 @@ export function handleSignup(
           if (res.data.error === false) {
             setAlt(true);
             setAltMsg(res.data.message);
+            let success = window.confirm(
+              "Your Account has been created successfully, you can login once you are verified"
+            );
+            if (success) {
+              window.location.href = "/";
+            }
           }
         })
         .catch((err) => {
@@ -92,10 +100,11 @@ export function handleSignup(
           setAltMsg(err.response.data.message);
         })
         .finally(() => {
+          setLoader(false);
           setTimeout(() => {
             setAlt(false);
             setAltMsg("");
-          }, 2000);
+          }, 1000);
         });
     } else {
       setAlt(true);
@@ -115,7 +124,7 @@ export function handleSignup(
   }
 }
 
-export function handleLogIn(email, password, setAlt, setAltMsg) {
+export function handleLogIn(email, password, setAlt, setAltMsg, setLoader) {
   if (email !== "" && password !== "") {
     if (!pattern.test(email)) {
       setAlt(true);
@@ -126,16 +135,21 @@ export function handleLogIn(email, password, setAlt, setAltMsg) {
       }, 2000);
       return;
     }
+    setLoader(true);
     authAPI
       .login({ identifier: email, password: password })
       .then((res) => {
         setAlt(true);
         setAltMsg(res.data.message);
         if (res.status === 200) {
+          console.log(res.data)
           //set the token and UserContext and navigate to main page
           localStorage.setItem("tru-scapes-token", res.data.token);
-
-          window.location.href = "/"
+          if (res.data.user.userRole === "admin") {
+            window.location.href = "/admin";
+          } else {
+            window.location.href = "/";
+          }
         }
       })
       .catch((err) => {
@@ -144,10 +158,11 @@ export function handleLogIn(email, password, setAlt, setAltMsg) {
         setAltMsg(err.response.data.message);
       })
       .finally(() => {
+        setLoader(false);
         setTimeout(() => {
           setAlt(false);
           setAltMsg("");
-        }, 2000);
+        }, 1000);
       });
   } else {
     setAlt(true);

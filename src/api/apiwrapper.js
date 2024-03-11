@@ -1,6 +1,6 @@
 import axios from "axios";
-export const SERVER_URL = "https://giant-swimsuit-fox.cyclic.app/";
-export const API_BASE_URL = "https://giant-swimsuit-fox.cyclic.app/api"; // Update with your API base URL
+export const SERVER_URL = "https://truscapes-server.onrender.com/";
+export const API_BASE_URL = "https://truscapes-server.onrender.com/api"; // Update with your API base URL
 //https://misty-hen-kimono.cyclic.app/api
 //http://localhost:5000/api
 const api = axios.create({

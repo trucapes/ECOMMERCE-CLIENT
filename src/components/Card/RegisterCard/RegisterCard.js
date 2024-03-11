@@ -7,6 +7,7 @@ import InputBox from "../../InputBox/InputBox";
 import AlertMsg from "../../Alert/AlertMsg";
 import { handleSignup } from "../../../helpers/Auth";
 import handleToggle from "../../../helpers/VisibilityToggler";
+import { ClipLoader } from "react-spinners";
 
 const RegisterCard = () => {
   const [ISDcodes, setISDcodes] = useState([]);
@@ -26,6 +27,7 @@ const RegisterCard = () => {
   const [enteredISDcode, setEnteredISDcode] = useState("");
   const [cnfPassword, setCnfPassword] = useState("");
   const [password, setPassword] = useState("");
+  const [loader, setLoader] = useState(false);
 
   const [alert, setAlert] = useState(false);
   const [msg, setMsg] = useState("");
@@ -268,36 +270,43 @@ const RegisterCard = () => {
             of Tru Scapes
           </h1>
         </div>
-        {alert && <div className="w-full flex justify-center">
-          <AlertMsg message={msg} />
-        </div>}
+        {alert && (
+          <div className="w-full flex justify-center">
+            <AlertMsg message={msg} />
+          </div>
+        )}
         <div className="w-full flex justify-center">
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              handleSignup(
-                fName,
-                lName,
-                email,
-                mobile,
-                enteredCountry,
-                city,
-                comName,
-                comWeb,
-                role,
-                agree,
-                enteredISDcode,
-                password,
-                cnfPassword,
-                setAlert,
-                setMsg
-              );
-            }}
-            type="submit"
-            className="Registration-button w-fit text-black hover:text-white bg-[#ffe26e] duration-300 hover:bg-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-          >
-            Create Account
-          </button>
+          {loader ? (
+            <ClipLoader loading={loader} />
+          ) : (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                handleSignup(
+                  fName,
+                  lName,
+                  email,
+                  mobile,
+                  enteredCountry,
+                  city,
+                  comName,
+                  comWeb,
+                  role,
+                  agree,
+                  enteredISDcode,
+                  password,
+                  cnfPassword,
+                  setAlert,
+                  setMsg,
+                  setLoader
+                );
+              }}
+              type="submit"
+              className="Registration-button w-fit text-black hover:text-white bg-[#ffe26e] duration-300 hover:bg-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            >
+              Create Account
+            </button>
+          )}
         </div>
         <div className="text-sm">
           Already have an account?{" "}
