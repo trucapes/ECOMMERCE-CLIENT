@@ -5,6 +5,8 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import userTransactionAPI from "../../api/userTransactionAPI";
+import NoDataFound from "../NoDataFound/NoDataFound";
+import { Skeleton } from "@mui/material";
 
 // Generate Order Data
 
@@ -18,11 +20,13 @@ function DateToString(date) {
 
 export default function Orders() {
   const [data, setData] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
 
   const getTransactions = async () => {
+    setLoading(true);
     try {
       const response = await userTransactionAPI.getTransactions();
-
+      setLoading(false);
       if (response.data.error === false) {
         // console.log(response.data.data);
         setData(response.data.data);
@@ -39,11 +43,21 @@ export default function Orders() {
 
   return (
     <React.Fragment>
-      <h1>Your Transactions</h1>
-      {data.length === 0 ? (
-        <div className="w-full h-full flex justify-center items-center">
-          You don't have any transactions
-        </div>
+      <h1 className="my-4 text-2xl">My Transactions</h1>
+      {loading ? (
+        <>
+          <Skeleton variant="rectangular" height={40} animation="wave" />
+          <br />
+          <Skeleton variant="rectangular" height={40} animation="wave" />
+          <br />
+          <Skeleton variant="rectangular" height={40} animation="wave" />
+          <br />
+          <Skeleton variant="rectangular" height={40} animation="wave" />
+          <br />
+          <Skeleton variant="rectangular" height={40} animation="wave" />
+        </>
+      ) : data.length === 0 ? (
+        <NoDataFound TryingToFind={"Transactions"} />
       ) : (
         <Table size="small">
           <TableHead>

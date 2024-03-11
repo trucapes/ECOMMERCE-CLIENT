@@ -1,14 +1,16 @@
 import { Check, ChevronRight, PriorityHigh } from "@mui/icons-material";
-import { Button } from "@mui/material";
+import { Button, Skeleton } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import OrderItemPopUp from "./OrderItemPopUp";
 import { OrderAPI } from "../../api/paymentAPI";
+import NoDataFound from "../NoDataFound/NoDataFound";
 
 function MyOrders({ profile }) {
   const [isPopped, setIsPopped] = useState(false);
   const [order, setOrder] = useState(null);
   const [itemIndex, setItemIndex] = useState(null);
   const [itemforPopUp, setItemforPopUp] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   function DateToString(date) {
     const d = new Date(date);
@@ -26,13 +28,16 @@ function MyOrders({ profile }) {
 
   const getOrders = async () => {
     try {
+      setLoading(true);
       const response = await OrderAPI.getOrders();
+      setLoading(false);
       if (response.data.error === false) {
         setOrder(response.data.data);
       } else {
         setOrder(null);
       }
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -43,6 +48,7 @@ function MyOrders({ profile }) {
 
   return (
     <div className=" w-full h-full">
+      <h1 className="my-4 text-2xl">My Orders</h1>
       <OrderItemPopUp
         isPopped={isPopped}
         itemForPupUp={itemforPopUp}
@@ -50,10 +56,20 @@ function MyOrders({ profile }) {
         setIsPopped={setIsPopped}
       />
       <div className="w-full flex gap-3 flex-col">
-        {order === null ? (
-          <div className="w-full h-full flex justify-center items-center">
-            You don't have any orders
-          </div>
+        {loading ? (
+          <>
+            <Skeleton variant="rectangular" height={80} animation="wave" />
+            <br />
+            <Skeleton variant="rectangular" height={80} animation="wave" />
+            <br />
+            <Skeleton variant="rectangular" height={80} animation="wave" />
+            <br />
+            <Skeleton variant="rectangular" height={80} animation="wave" />
+            <br />
+            <Skeleton variant="rectangular" height={80} animation="wave" />
+          </>
+        ) : order === null ? (
+          <NoDataFound TryingToFind={"Orders"} />
         ) : (
           order.map((item, index) => (
             <div className="order-container flex flex-col bg-[#fff1b8] hover:bg-[#ffeca0] duration-200 p-8 rounded-xl">
