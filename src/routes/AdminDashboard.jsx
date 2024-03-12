@@ -4,6 +4,9 @@ import { OrderAPI } from "../api/paymentAPI";
 import AdminUserAPI from "../api/admin/adminUserAPI";
 import AdminProductAPI from "../api/admin/adminProductAPI";
 import NoDataFound from "../components/NoDataFound/NoDataFound";
+import { DashboardAPI } from "../api/admin/adminDashboard";
+import { ClipLoader } from "react-spinners";
+import { Skeleton } from "@mui/material";
 
 function AdminDashboard() {
   const [noOfOrders, setNoOfOrders] = useState(0);
@@ -11,93 +14,79 @@ function AdminDashboard() {
   const [noOfUsers, setNoOfUsers] = useState(0);
   const [recentOrders, setRecentOrders] = useState(null);
   const [products, setProducts] = useState(0);
+  const [data, setData] = useState(null);
+  const [tilesLoader, setTilesLoader] = useState(false);
 
-  async function getProducts() {
-    const productResponse = await AdminProductAPI.getAllProducts({
-      page: 1,
-    });
-
-    setProducts(productResponse.data.totalCount);
-  }
-
-  async function getOrders() {
-    const response = await OrderAPI.getOrders();
-    console.log(response.data.data);
-    setNoOfOrders(response.data.data.length);
-
-    const responseData = response.data.data.map((item) => {
-      return {
-        isDelivered: item.isDelivered,
-        userId: item.userId._id,
-        address: item.shippingAddress,
-        id: item._id,
-        customerName: item.userId.firstName + " " + item.userId.lastName,
-        date: DateToString(item.createdAt),
-        updatedAt: DateToString(item.updatedAt),
-        amount: item.price,
-        status: item.status,
-        products: [...item.products],
-      };
-    });
-
-    const pendingOrders = responseData.filter(
-      (order) => order.status === "pending"
-    );
-    setNoOfPendingOrders(pendingOrders.length);
-
-    const recentOrders = responseData.slice(0, 5);
-
-    setRecentOrders(recentOrders);
-    console.log(recentOrders);
-  }
-  async function getUsers() {
-    const response = await AdminUserAPI.getAllUsers();
-
-    const Users = response.data.data.filter(
-      (item) => item.userRole !== "admin"
-    );
-    setNoOfUsers(Users.length);
-  }
-
-  function DateToString(date) {
-    const d = new Date(date);
-    // console.log(date);
-    const performedOn =
-      d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
-    return performedOn;
-  }
+  const getData = async () => {
+    setTilesLoader(true);
+    // console.log("first");
+    const response = await DashboardAPI.getDashboardData();
+    console.log("This", response);
+    setData({ ...response });
+    setTilesLoader(false);
+  };
 
   useEffect(() => {
-    getOrders();
-    getProducts();
-    getUsers();
+    getData();
+    // console.log("first");
   }, []);
 
   return (
     <div className="">
-      <div className="dashboard-header w-full grid grid-cols-4 gap-4">
-        <div className="border p-2 bg-slate-200 border-slate-600 w-full rounded-xl ">
-          <h1 className="text-lg">Total Orders:</h1>
-          <h1 className="sm:text-2xl text-xl">{noOfOrders}</h1>
+      {data === null ? (
+        <div className="grid grid-cols-4 gap-2">
+          <Skeleton
+            variant="rounded"
+            sx={{ width: "80%" }}
+            height={90}
+            animation="wave"
+          />
+          <Skeleton
+            variant="rounded"
+            sx={{ width: "80%" }}
+            height={90}
+            animation="wave"
+          />
+          <Skeleton
+            variant="rounded"
+            sx={{ width: "80%" }}
+            height={90}
+            animation="wave"
+          />
+          <Skeleton
+            variant="rounded"
+            sx={{ width: "80%" }}
+            height={90}
+            animation="wave"
+          />
         </div>
-        <div className="border p-2 bg-slate-200 border-slate-600 w-full rounded-xl ">
-          <h1 className="text-lg">Total Customers:</h1>
-          <h1 className="sm:text-2xl text-xl">{noOfUsers}</h1>
+      ) : (
+        <div className="dashboard-header w-full grid grid-cols-4 gap-4">
+          {data.tiles.map((item, index) => (
+            <div className="border p-2 bg-slate-200 border-slate-600 w-full rounded-xl ">
+              <h1 className="text-lg">{item.Title}</h1>
+              <h1 className="sm:text-2xl text-xl">{item.Value}</h1>
+            </div>
+          ))}
         </div>
-        <div className="border p-2 bg-slate-200 border-slate-600 w-full rounded-xl ">
-          <h1 className="text-lg">Pending Orders:</h1>
-          <h1 className="sm:text-2xl text-xl">{noOfPendingOrders}</h1>
-        </div>
-        <div className="border p-2 bg-slate-200 border-slate-600 w-full rounded-xl ">
-          <h1 className="text-lg">Total Products:</h1>
-          <h1 className="sm:text-2xl text-xl">{products}</h1>
-        </div>
-      </div>
+      )}
       <h1 className="text-2xl my-12">Recent Orders</h1>
       <div className="w-full">
-        {recentOrders &&
-          recentOrders.length > 0 &&
-          recentOrders.map((item, index) => (
+        {data === null ? (
+          <>
+            <Skeleton variant="rectangular" height={80} animation="wave" />
+            <br />
+            <Skeleton variant="rectangular" height={80} animation="wave" />
+            <br />
+            <Skeleton variant="rectangular" height={80} animation="wave" />
+            <br />
+            <Skeleton variant="rectangular" height={80} animation="wave" />
+            <br />
+            <Skeleton variant="rectangular" height={80} animation="wave" />
+          </>
+        ) : (
+          data.Orders.length > 0 &&
+          data.Orders.map((item, index) => (
             <div className="order-container flex flex-col my-4 bg-[#fff1b8] hover:bg-[#ffeca0] duration-200 p-8 rounded-xl">
               <div className="orders-header flex flex-row justify-between">
                 <div className="icon-id-date-container gap-4 flex flex-row justify-start">
@@ -141,7 +130,8 @@ function AdminDashboard() {
               </div>
               <div className="order-footer"></div>
             </div>
-          ))}
+          ))
+        )}
         {recentOrders && recentOrders.length === 0 && (
           <NoDataFound TryingToFind="Orders" />
         )}
