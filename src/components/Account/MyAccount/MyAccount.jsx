@@ -10,6 +10,7 @@ import Box from "@mui/material/Box";
 import BasicInfoTab from "./BasicInfoTabb";
 import { useNavigate } from "react-router";
 import UserTransaction from "../../Transactions/UserTransaction";
+import WalletPage from "../../WalletPage/WalletPage";
 import MyOrders from "../../MyOrders/MyOrders";
 
 function CustomTabPanel(props) {
@@ -63,6 +64,7 @@ export function BasicTabs({ user, isAdmin }) {
           <Tab label="Basic Info" {...a11yProps(0)} />
           <Tab label="My Orders" {...a11yProps(1)} />
           <Tab label="Transactions" {...a11yProps(2)} />
+          <Tab label="Wallet" {...a11yProps(3)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
@@ -73,6 +75,9 @@ export function BasicTabs({ user, isAdmin }) {
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         <UserTransaction />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={3}>
+        <WalletPage />
       </CustomTabPanel>
     </Box>
   );

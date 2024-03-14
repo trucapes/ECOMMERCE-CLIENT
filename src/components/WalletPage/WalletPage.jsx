@@ -67,6 +67,7 @@ export default function Orders() {
               <TableCell>Type</TableCell>
               <TableCell>Date</TableCell>
               <TableCell align="right">Remaining</TableCell>
+              <TableCell align="right">Repayment</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -76,7 +77,20 @@ export default function Orders() {
                 <TableCell>{Math.abs(row.amount)}</TableCell>
                 <TableCell>{row.description}</TableCell>
                 <TableCell>{DateToString(row.createdAt)}</TableCell>
-                <TableCell align="right">{`$${parseFloat(row.balanceRemaining).toFixed(2)}`}</TableCell>
+                <TableCell align="right">{`$${parseFloat(
+                  row.balanceRemaining
+                ).toFixed(2)}`}</TableCell>
+                <TableCell align="right">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                    }}
+                    type="submit"
+                    className="Registration-button w-fit text-black hover:text-white bg-[#ffe26e] duration-300 hover:bg-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                  >
+                    Repay
+                  </button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

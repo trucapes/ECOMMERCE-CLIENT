@@ -33,6 +33,7 @@ import Checkout from "../components/Checkout/Checkout";
 import AdminDashboard from "../routes/AdminDashboard";
 import UserDataProvider from "../Context/userDataProvider";
 import { userDataContext } from "../Context/UserDataContext";
+import AdminPayments from "../routes/AdminPayments";
 function App() {
   const [user, setUser] = useState(null);
   const userData = useContext(userDataContext);
@@ -121,6 +122,7 @@ function App() {
                     <Route path="" element={<AdminDashboard />} />
                     <Route path="order" element={<AdminOrder />} />
                     <Route path="categories" element={<CategoryList />} />
+                    <Route path="payments" element={<AdminPayments profile={user} />} />
                     <Route path="products">
                       <Route path="add" element={<AddProductPage />} />
                       <Route path="" element={<AdminProductList />} />
