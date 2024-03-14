@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Landing from "../components/Landing/Landing";
 import FeaturedItems from "../components/Featured/Items/FetauredItems";
@@ -6,14 +6,17 @@ import FeaturedCategories from "../components/Featured/Categories/FeaturedCatego
 import { TabTitle } from "../utils/General";
 import ShopCategory from "../components/Shop/Container/ShopCategory";
 import { userProductsAPI } from "../api/userProductsAPI";
+import { CartItemsContext } from "../Context/CartItemsContext";
 
 const Home = ({ profile }) => {
-  const [featuredItems, setFeaturedItems] = useState();
+  const [categoryFeaturedItems, setCategoryFeaturedItems] = useState([]);
   TabTitle("Shop - Tru Scapes");
   const [menItems, setMenItems] = useState();
   const [womenItems, setWomenItems] = useState();
   const [kidsItems, setKidsItems] = useState();
   const [loading, setLoading] = useState(true);
+  const cartItems = useContext(CartItemsContext);
+  console.log(cartItems.items, cartItems.totalAmount);
 
   useEffect(() => {
     axios
@@ -32,17 +35,18 @@ const Home = ({ profile }) => {
     const getHomeItems = async () => {
       try {
         const response = await userProductsAPI.getFeaturedProducts();
-        console.log(response.data);
+        console.log(response.data.data);
+        setCategoryFeaturedItems(response.data.data);
       } catch (error) {
         console.log(error);
       }
     };
-    
+
     getHomeItems();
-    axios
-      .get("https://shema-backend.vercel.app/api/items")
-      .then((res) => setFeaturedItems(res.data))
-      .catch((err) => console.log(err));
+    // axios
+    //   .get("https://shema-backend.vercel.app/api/items")
+    //   .then((res) => setCategoryFeaturedItems(res.data))
+    //   .catch((err) => console.log(err));
 
     window.scrollTo(0, 0);
   }, []);
@@ -51,31 +55,17 @@ const Home = ({ profile }) => {
     <Fragment>
       <Landing />
       <FeaturedCategories />
-      <FeaturedItems profile={profile} items={featuredItems} />
-      {menItems && (
-        <ShopCategory
-          profile={profile}
-          name="Hardscape"
-          key="men"
-          items={menItems}
-        />
-      )}
-      {womenItems && (
-        <ShopCategory
-          profile={profile}
-          name="Deck"
-          key="women"
-          items={womenItems}
-        />
-      )}
-      {kidsItems && (
-        <ShopCategory
-          profile={profile}
-          name="Landscape"
-          key="kids"
-          items={kidsItems}
-        />
-      )}
+      <FeaturedItems profile={profile} />
+      {categoryFeaturedItems &&
+        categoryFeaturedItems.length > 0 &&
+        categoryFeaturedItems.map((item) => (
+          <ShopCategory
+            profile={profile}
+            name="Hardscape"
+            key="men"
+            items={item}
+          />
+        ))}
     </Fragment>
   );
 };

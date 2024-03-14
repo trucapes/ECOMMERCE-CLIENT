@@ -11,15 +11,15 @@ const Description = (props) => {
                 <p>lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something </p>
                 <p>lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something lorem epsum hai dawry text to read something lorem epsum hai dawry</p>
                 
-            <div className="description__specifics__container">
+            {/* <div className="description__specifics__container">
                 <div className="description__specifics">
                 <div className="description__header__line"></div>
                 <div className="description__highlights__header">Highlights</div>
                     <ul>
-                        {props.item.highlights.map((highlight) => <li>{highlight}</li>)}
+                        {"{props.item.highlights.map((highlight) => <li>{highlight}</li>)}"}
                     </ul>
                 </div>
-            </div>
+            </div> */}
         </div>
      );
 }

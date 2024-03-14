@@ -9,10 +9,13 @@ import { WishItemsContext } from "../../../Context/WishItemsContext";
 import { SERVER_URL } from "../../../api/apiwrapper";
 
 const ItemCard = (props) => {
+  console.log(props);
   const [isHovered, setIsHovered] = useState(false);
   const cartItemsContext = useContext(CartItemsContext);
   const wishItemsContext = useContext(WishItemsContext);
-  console.log(props.item);
+
+//   console.log(props.item);
+
   const handleAddToWishList = () => {
     wishItemsContext.addItem(props.item);
   };
@@ -23,7 +26,7 @@ const ItemCard = (props) => {
 
   return (
     <div className="product__card__card">
-      <Link to={"/item/${props.item.category}/${props.item._id}"}>
+      <Link to={`/item/${props.category}/${props.item._id}`}>
         <div className="product__card">
           <div
             className="product__image"
@@ -32,13 +35,17 @@ const ItemCard = (props) => {
           >
             {isHovered ? (
               <img
-                src={SERVER_URL + props.item.images[0].path.replace(/\\/g, "/")}
+                src={`${
+                  SERVER_URL + props.item.images[1].path.replace(/\\/g, "/")
+                }`.replace("/public/", "/")}
                 alt="item"
                 className="product__img"
               />
             ) : (
               <img
-                src={SERVER_URL + props.item.images[1].path.replace(/\\/g, "/")}
+                src={`${
+                  SERVER_URL + props.item.images[0].path.replace(/\\/g, "/")
+                }`.replace("/public/", "/")}
                 alt="item"
                 className="product__img"
               />
@@ -46,7 +53,7 @@ const ItemCard = (props) => {
           </div>
           <div className="product__card__detail">
             <div className="product__name">
-              <Link to={"/item/${props.item.category}/${props.item._id}"}>
+              <Link to={`/item/${props.item.category.name}/${props.item._id}`}>
                 {props.item.name}
               </Link>
             </div>
@@ -65,7 +72,10 @@ const ItemCard = (props) => {
             {props.profile && (
               <div className="product__card__action">
                 <IconButton
-                  onClick={handleAddToWishList}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAddToWishList();
+                  }}
                   sx={{
                     borderRadius: "20px",
                     width: "40px",
@@ -78,7 +88,10 @@ const ItemCard = (props) => {
                   />
                 </IconButton>
                 <IconButton
-                  onClick={handleAddToCart}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAddToCart();
+                  }}
                   sx={{
                     borderRadius: "20px",
                     width: "40px",

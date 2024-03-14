@@ -10,12 +10,12 @@ const CartItemsProvider = (props) => {
     removeFromCartHandler(item);
     setCartItems((prevItems) => [
       ...prevItems,
-      { _id, name, price, image, category, itemQuantity: quantity, size },
+      { ...item, itemQuantity: quantity },
     ]);
   };
 
   const removeFromCartHandler = (item) => {
-    console.log(Object.keys(item).length)
+    console.log(Object.keys(item).length);
     if (Object.keys(item).length === 0) {
       setCartItems([]);
       return;
@@ -26,7 +26,7 @@ const CartItemsProvider = (props) => {
   const calculateTotalAmount = (currentCartItems) => {
     let total = 0;
     currentCartItems.forEach((item) => {
-      total = total + item.price * item.itemQuantity;
+      total = total + item.price.regular * item.itemQuantity;
     });
 
     setTotalAmountOfItems(total);

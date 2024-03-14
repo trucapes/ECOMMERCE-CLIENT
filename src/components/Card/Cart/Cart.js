@@ -51,7 +51,7 @@ const Cart = ({ profile }) => {
           name:item.name,
           product: item._id,
           quantity: item.itemQuantity,
-          price: item.price,
+          price: item.price.regular,
         };
       });
 

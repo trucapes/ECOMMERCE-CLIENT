@@ -13,8 +13,8 @@ const FeaturedItems = (props) => {
     const getFeaturedItems = async () => {
       try {
         const response = await userProductsAPI.getHomeProducts();
-        console.log(response.data);
-        setFeaturedItems(response.data);
+        console.log(response.data.data);
+        setFeaturedItems([...response.data.data]);
       } catch (error) {
         console.log(error);
       }
@@ -27,14 +27,10 @@ const FeaturedItems = (props) => {
       <div className="featured__products">
         <div className="featured__products__header">
           <h3 className="featured__items__header__big">Featured Items </h3>
-          <Link to="/shop" className="featured__header__small">
-            Show all
-            <ArrowRightAltIcon />
-          </Link>
         </div>
         <div className="featured__products__header__line"></div>
         <div className="d-flex min-vh-100 w-100 justify-content-center align-items-center m-auto">
-          {!props.items && (
+          {featuredItems && featuredItems.length === 0 && (
             <ReactLoading
               type="balls"
               color="#FFE26E"
@@ -45,48 +41,13 @@ const FeaturedItems = (props) => {
           )}
           {featuredItems && featuredItems.length > 0 && (
             <div className="featured__products__card__container">
-              {featuredItems.map((item) => {
+              {featuredItems.map((item) => (
                 <ItemCard
                   profile={props.profile}
                   item={item}
-                  category="featured"
-                />;
-              })}
-              <ItemCard
-                profile={props.profile}
-                item={props.items[4]}
-                category="featured"
-              />
-              <ItemCard
-                profile={props.profile}
-                item={props.items[10]}
-                category="featured"
-              />
-              <ItemCard
-                profile={props.profile}
-                item={props.items[20]}
-                category="featured"
-              />
-              <ItemCard
-                profile={props.profile}
-                item={props.items[16]}
-                category="featured"
-              />
-              <ItemCard
-                profile={props.profile}
-                item={props.items[5]}
-                category="featured"
-              />
-              <ItemCard
-                profile={props.profile}
-                item={props.items[13]}
-                category="featured"
-              />
-              <ItemCard
-                profile={props.profile}
-                item={props.items[23]}
-                category="featured"
-              />
+                  category={item.category.name}
+                />
+              ))}
             </div>
           )}
         </div>

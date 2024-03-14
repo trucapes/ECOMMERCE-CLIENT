@@ -31,6 +31,7 @@ function MyOrders({ profile }) {
       setLoading(true);
       const response = await OrderAPI.getOrders();
       setLoading(false);
+      console.log(response.data.data)
       if (response.data.error === false) {
         setOrder(response.data.data);
       } else {
