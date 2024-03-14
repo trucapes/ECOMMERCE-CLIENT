@@ -1,6 +1,6 @@
 import axios from "axios";
 export const SERVER_URL = "https://truscapes-server.onrender.com/";
-export const API_BASE_URL = "http://localhost:5000/api"; // Update with your API base URL
+export const API_BASE_URL = "https://truscapes-server.onrender.com/api"; // Update with your API base URL
 //https://truscapes-server.onrender.com/api
 //http://localhost:5000/api
 const api = axios.create({
