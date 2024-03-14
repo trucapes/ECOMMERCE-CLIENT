@@ -17,14 +17,14 @@ const ProductView = ({ profile }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
     console.log(param);
-    console.log(cartItems.items);
-    console.log(user.userData);
-    console.log(profile)
+    // console.log(cartItems.items);
+    // console.log(user.userData);
+    // console.log(profile)
     const getItem = async () => {
       try {
         const response = await userProductsAPI.getProductById(param.id);
-        // console.log(response.data.data);
-        setItem(response.data.data);
+        console.log(response.data.data);
+        setItem({ ...response.data.data, categoryName: param.category });
         setLoading(false);
       } catch (error) {
         console.log(error);

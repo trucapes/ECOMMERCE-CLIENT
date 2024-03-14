@@ -55,7 +55,7 @@ function Checkout() {
     }
     setTimeout(() => {
       setAlert(false);
-      navigate("/account/me");
+      // navigate("/account/me");
     }, 3000);
 
     //   await axios
@@ -80,7 +80,7 @@ function Checkout() {
 
   return (
     <div className="w-full h-full flex p-8 justify-center">
-      <div className="checkout-container py-8 w-[80%]">
+      <div className="checkout-container py-8 w-[60%]">
         <div className="">
           <h1 className="my-4">Shipping Address</h1>
           <div className="">

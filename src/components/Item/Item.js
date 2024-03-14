@@ -6,6 +6,7 @@ import './Item.css';
 import Related from './Related/Related';
 
 const Item = (props) => {
+    console.log(props)
     return ( 
         <div className="item__container">
             <Container sx={{mt: 10, mb: 10}}>

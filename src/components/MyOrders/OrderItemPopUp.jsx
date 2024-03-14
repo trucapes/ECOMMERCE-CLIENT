@@ -1,6 +1,8 @@
 import { Cancel } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
 import "./Scroll.css";
+import { SERVER_URL } from "../../api/apiwrapper";
+import { Link } from "react-router-dom";
 
 function OrderItemPopUp({
   isPopped,
@@ -14,11 +16,7 @@ function OrderItemPopUp({
   useEffect(() => {
     if (isPopped) {
       document.body.style.overflow = "hidden";
-      // console.log("runni");
     }
-
-    //Resquest to the server to get product images by the id
-    // const response = await ProductAPI.getProductById(itemForPupUp.products);
 
     return () => {
       document.body.style.overflow = "unset";
@@ -41,12 +39,21 @@ function OrderItemPopUp({
         <div className="order-item-body-container w-full h-full py-7 overflow-y-scroll">
           {itemForPupUp.products.map((item) => {
             return (
-              <div className="item-details-container bg-[#fff1b8] w-full h-32 flex my-4 flex-row gap-2 hover:bg-[#ffeca0] duration-200 p-4 rounded-xl">
+              <Link
+                to={`/item/${item.category}/${item.product}`}
+                className="item-details-container bg-[#fff1b8] w-full h-32 flex my-4 flex-row gap-2 hover:bg-[#ffeca0] duration-200 p-4 rounded-xl"
+              >
                 <div className="h-full aspect-square object-contain grid place-items-center">
                   <img
                     className=" "
-                    src="https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTExL3BmLXMxMDgtcG0tNDExMy1tb2NrdXAuanBn.jpg"
-                    alt=""
+                    src={
+                      item.imagePath
+                        ? `${
+                            SERVER_URL + item.imagePath.replace(/\\/g, "/")
+                          }`.replace("/public/", "/")
+                        : ""
+                    }
+                    alt={`${item.name}_Img`}
                   />
                 </div>
                 <div className="details-container flex flex-col">
@@ -60,7 +67,7 @@ function OrderItemPopUp({
                     <span className="font-medium">Qty.: {item.quantity}</span>
                   </div>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>

@@ -29,7 +29,6 @@ const style = {
 // const
 
 const Cart = ({ profile }) => {
-  console.log(profile);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -39,16 +38,18 @@ const Cart = ({ profile }) => {
   const handleCheckoutClose = () => setOpenCheckoutModal(false);
 
   const cartItems = useContext(CartItemsContext);
+  console.log(cartItems.items);
 
   const handleCheckout = async () => {
     if (cartItems.totalAmount > 0) {
-
       //Storing the items which are in cart, in local storage to be accessed on checkout
 
       const itemsObj = cartItems.items.map((item) => {
         console.log(item);
         return {
-          name:item.name,
+          name: item.name,
+          category: item.categoryName,
+          image:item.images[0].path,
           product: item._id,
           quantity: item.itemQuantity,
           price: item.price.regular,
