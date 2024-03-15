@@ -2,8 +2,10 @@ import api from "./apiwrapper";
 
 const publicAPI = {
   // Get user profile
-  getCategories: async () => {
-    const response = await api.get("/public/categories");
+  getCategories: async (reqType) => {
+    const response = await api.get("/public/categories", {
+      headers: { for: reqType },
+    });
     return response;
   },
 

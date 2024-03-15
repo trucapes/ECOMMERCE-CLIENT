@@ -10,7 +10,7 @@ const Categories = () => {
   // const featuredCategories = useContext(FeatureCategoryContext)
   const [categories, setCategories] = useState([]);
   const fetchCategories = async () => {
-    const res = await publicAPI.getCategories();
+    const res = await publicAPI.getCategories("categories");
 
     if (res.data.error === false) {
       setCategories(res.data.data);

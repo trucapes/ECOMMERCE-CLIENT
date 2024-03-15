@@ -14,7 +14,7 @@ const ItemCard = (props) => {
   const cartItemsContext = useContext(CartItemsContext);
   const wishItemsContext = useContext(WishItemsContext);
 
-//   console.log(props.item);
+  //   console.log(props.item);
 
   const handleAddToWishList = () => {
     wishItemsContext.addItem(props.item);
@@ -63,8 +63,16 @@ const ItemCard = (props) => {
               Ipsem description
             </div>
             <div className="product__price">
-              {props.profile ? (
-                <span>${props.item.price.regular}</span>
+              {props.profile !== null ? (
+                <span>
+                  {props.profile.userRole === "dealer"
+                    ? props.item.price.dealer
+                    : props.profile.userRole === "distributor"
+                    ? props.item.price.distributor
+                    : props.profile.userRole === "contractor"
+                    ? props.item.price.contractor
+                    : props.item.price.regular}
+                </span>
               ) : (
                 <Link to="/account/login">Login to see price</Link>
               )}

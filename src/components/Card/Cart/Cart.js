@@ -49,10 +49,10 @@ const Cart = ({ profile }) => {
         return {
           name: item.name,
           category: item.categoryName,
-          image:item.images[0].path,
+          image: item.images[0].path,
           product: item._id,
           quantity: item.itemQuantity,
-          price: item.price.regular,
+          price: item.price,
         };
       });
 
@@ -111,7 +111,7 @@ const Cart = ({ profile }) => {
               ) : (
                 <div className="shop__cart__items">
                   {cartItems.items.map((item) => (
-                    <CartCard key={item._id} item={item} />
+                    <CartCard key={item._id} item={item} profile={profile} />
                   ))}
                 </div>
               )}

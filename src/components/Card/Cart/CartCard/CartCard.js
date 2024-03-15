@@ -14,7 +14,7 @@ import { SERVER_URL } from "../../../../api/apiwrapper";
 
 const CartCard = (props) => {
   let cartItems = useContext(CartItemsContext);
-//   const [size, setSize] = useState(props.item.size[0]);
+  //   const [size, setSize] = useState(props.item.size[0]);
 
   const handelQuantityIncrement = (event) => {
     cartItems.quantity(props.item.id, "INC");
@@ -30,9 +30,9 @@ const CartCard = (props) => {
     cartItems.removeItem(props.item);
   };
 
-//   const handleSizeChange = (event) => {
-//     setSize(event.target.value);
-//   };
+  //   const handleSizeChange = (event) => {
+  //     setSize(event.target.value);
+  //   };
 
   return (
     <div className="cart__item__card">
@@ -71,7 +71,7 @@ const CartCard = (props) => {
           </FormControl>
         </Box>
       </div>
-      <div className="cart__item__price">${props.item.price.regular}</div>
+      <div className="cart__item__price">${props.item.price} </div>
       <div className="remove__item__icon">
         <IconButton>
           <HighlightOffIcon onClick={handelRemoveItem} />

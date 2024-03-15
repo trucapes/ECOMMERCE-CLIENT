@@ -26,7 +26,7 @@ const CartItemsProvider = (props) => {
   const calculateTotalAmount = (currentCartItems) => {
     let total = 0;
     currentCartItems.forEach((item) => {
-      total = total + item.price.regular * item.itemQuantity;
+      total = total + item.price * item.itemQuantity;
     });
 
     setTotalAmountOfItems(total);

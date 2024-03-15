@@ -22,10 +22,6 @@ const Detail = (props) => {
   const cartItems = useContext(CartItemsContext);
   const wishItems = useContext(WishItemsContext);
 
-  const handleSizeChange = (event) => {
-    setSize(event.target.value);
-  };
-
   const handelQuantityIncrement = (event) => {
     setQuantity((prev) => (prev += 1));
   };
@@ -37,12 +33,31 @@ const Detail = (props) => {
   };
 
   const handelAddToCart = () => {
-    cartItems.addItem(props.item, quantity, size);
+    const itemForCart = { ...props.item };
+    itemForCart.price =
+      props.profile.userRole === "dealer"
+        ? props.item.price.dealer
+        : props.profile.userRole === "distributor"
+        ? props.item.price.distributor
+        : props.profile.userRole === "contractor"
+        ? props.item.price.contractor
+        : props.item.pricer.regular;
+    cartItems.addItem(itemForCart, quantity, size);
     console.log(cartItems.items);
   };
 
   const handelAddToWish = () => {
-    wishItems.addItem(props.item);
+    console.log(props.item)
+    const itemForWish = { ...props.item };
+    itemForWish.price =
+      props.profile.userRole === "dealer"
+        ? props.item.price.dealer
+        : props.profile.userRole === "distributor"
+        ? props.item.price.distributor
+        : props.profile.userRole === "contractor"
+        ? props.item.price.contractor
+        : props.item.pricer.regular;
+    wishItems.addItem(itemForWish);
   };
 
   return (
@@ -75,7 +90,15 @@ const Detail = (props) => {
           <div className="product__price__detail">
             $
             {props.profile ? (
-              props.item.price.regular
+              props.profile.userRole === "dealer" ? (
+                props.item.price.dealer
+              ) : props.profile.userRole === "distributor" ? (
+                props.item.price.distributor
+              ) : props.profile.userRole === "contractor" ? (
+                props.item.price.contractor
+              ) : (
+                props.item.pricer.regular
+              )
             ) : (
               <Link to="/account/login">Login to see price</Link>
             )}
