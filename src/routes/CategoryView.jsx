@@ -11,9 +11,6 @@ const CategoryView = ({ profile }) => {
 
   const param = useParams();
   console.log(param);
-  const [menItems, setMenItems] = useState();
-  const [womenItems, setWomenItems] = useState();
-  const [kidsItems, setKidsItems] = useState();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 
@@ -22,23 +19,13 @@ const CategoryView = ({ profile }) => {
   }
 
   useEffect(() => {
-    axios
-      .get("https://shema-backend.vercel.app/api/items")
-      .then((res) => {
-        setMenItems(res.data.filter((item) => item.category === "men"));
-        setKidsItems(res.data.filter((item) => item.category === "kids"));
-        setWomenItems(res.data.filter((item) => item.category === "women"));
-        setLoading(false);
-      })
-      .catch((err) => console.log(err));
-
     const fetchData = async () => {
       const response = await CategoryAPI.getCategoryByName({
-        name: param.id,
+        category: param.id,
         page: page,
       });
-      console.log(response.data.data);
-      setData([...data, ...response.data.data]);
+      console.log(response.data.data.products);
+      setData([...response.data.data.products]);
       setLoading(false);
       console.log(data);
     };

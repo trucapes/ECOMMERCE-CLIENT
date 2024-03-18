@@ -7,7 +7,7 @@ import NoDataFound from "../NoDataFound/NoDataFound";
 
 function MyOrders({ profile }) {
   const [isPopped, setIsPopped] = useState(false);
-  const [order, setOrder] = useState(null);
+  const [order, setOrder] = useState([]);
   const [itemIndex, setItemIndex] = useState(null);
   const [itemforPopUp, setItemforPopUp] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -69,7 +69,7 @@ function MyOrders({ profile }) {
             <br />
             <Skeleton variant="rectangular" height={80} animation="wave" />
           </>
-        ) : order === null ? (
+        ) : order && order.length === 0 ? (
           <NoDataFound TryingToFind={"Orders"} />
         ) : (
           order.map((item, index) => (

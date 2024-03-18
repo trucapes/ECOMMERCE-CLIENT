@@ -11,25 +11,9 @@ import { CartItemsContext } from "../Context/CartItemsContext";
 const Home = ({ profile }) => {
   const [categoryFeaturedItems, setCategoryFeaturedItems] = useState([]);
   TabTitle("Shop - Tru Scapes");
-  const [menItems, setMenItems] = useState();
-  const [womenItems, setWomenItems] = useState();
-  const [kidsItems, setKidsItems] = useState();
   const [loading, setLoading] = useState(true);
   const cartItems = useContext(CartItemsContext);
   console.log(cartItems.items, cartItems.totalAmount);
-
-  useEffect(() => {
-    axios
-      .get("https://shema-backend.vercel.app/api/items")
-      .then((res) => {
-        setMenItems(res.data.filter((item) => item.category === "men"));
-        setKidsItems(res.data.filter((item) => item.category === "kids"));
-        setWomenItems(res.data.filter((item) => item.category === "women"));
-        setLoading(false);
-      })
-      .catch((err) => console.log(err));
-    window.scrollTo(0, 0);
-  }, []);
 
   useEffect(() => {
     const getHomeItems = async () => {

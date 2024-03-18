@@ -77,7 +77,7 @@ export function BasicTabs({ user, isAdmin }) {
         <UserTransaction />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
-        <WalletPage />
+        <WalletPage profile={user} />
       </CustomTabPanel>
     </Box>
   );

@@ -8,7 +8,7 @@ export const CategoryAPI = {
     return response;
   },
   getCategoryByName: async (name) => {
-    const response = await api.get(`/public/categories`, {
+    const response = await api.get(`/products`, {
       params: name,
       headers: { for: "product" },
     });

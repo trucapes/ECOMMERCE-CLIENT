@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -7,6 +7,8 @@ import TableRow from "@mui/material/TableRow";
 import userTransactionAPI from "../../api/userTransactionAPI";
 import NoDataFound from "../NoDataFound/NoDataFound";
 import { Skeleton } from "@mui/material";
+import { userDataContext } from "../../Context/UserDataContext";
+import { creditAPI } from "../../api/creditAPI";
 
 // Generate Order Data
 
@@ -18,13 +20,16 @@ function DateToString(date) {
   return performedOn;
 }
 
-export default function Orders() {
+export default function Orders({ profile }) {
   const [data, setData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  console.log(profile);
 
   const getTransactions = async () => {
     setLoading(true);
     try {
+      const credit = await creditAPI.getCreditByUserId(profile._id);
+      console.log(credit.data)
       const response = await userTransactionAPI.getTransactions();
       setLoading(false);
       if (response.data.error === false) {

@@ -74,6 +74,7 @@ const AdminUsers = ({ profile }) => {
         filter.sortBy = sortBy;
       }
       const response = await AdminUserAPI.getAllUsers(filter);
+      console.log(response.data.data);
       setUsers(response.data.data);
       setTotalPages(response.data.totalPages);
       setLoading(false);
@@ -193,6 +194,7 @@ const AdminUsers = ({ profile }) => {
                 <TableCell>Country</TableCell>
                 <TableCell>Balance</TableCell>
                 <TableCell>User Role</TableCell>
+                <TableCell>Credit</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -207,6 +209,9 @@ const AdminUsers = ({ profile }) => {
                   )}`}</TableCell>
                   <TableCell sx={{ textTransform: "capitalize" }}>
                     {user.userRole}
+                  </TableCell>
+                  <TableCell sx={{ textTransform: "capitalize" }}>
+                    {user.credit !== null ? user.credit.credit : 0}
                   </TableCell>
                   <TableCell>
                     <IconButton
