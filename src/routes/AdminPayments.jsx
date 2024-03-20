@@ -32,6 +32,7 @@ import MyAccount from "../components/Account/MyAccount/MyAccount";
 import { toast } from "react-toastify";
 import TransactionPopUp from "../components/TransactionPopUp/TransactionPopUp";
 import NoDataFound from "../components/NoDataFound/NoDataFound";
+import { RepaymentAPI } from "../api/admin/repaymentAPI";
 
 const AdminUsers = ({ profile }) => {
   const [users, setUsers] = useState([]);
@@ -53,6 +54,25 @@ const AdminUsers = ({ profile }) => {
   useEffect(() => {
     fetchData();
   }, [search, page, sortBy, userRole, popUp]);
+
+  const handleRequestSent = async (id) => {
+    try {
+      const response = await RepaymentAPI.sendRepaymentRequest({
+        userId: id,
+      });
+      if (response.status === 201) {
+        toast.success("Request Sent Successfully");
+      } else if (response.status === 404) {
+        toast.error("User does not exist");
+      } else if (response.status === 200) {
+        toast.success("Error while sending request");
+      } else {
+        toast.error("Something went wrong");
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+  };
 
   const fetchData = async () => {
     try {
@@ -191,9 +211,9 @@ const AdminUsers = ({ profile }) => {
               <TableRow>
                 <TableCell>ID</TableCell>
                 <TableCell>Name</TableCell>
-                <TableCell>Country</TableCell>
-                <TableCell>Balance</TableCell>
+                <TableCell>Email</TableCell>
                 <TableCell>User Role</TableCell>
+                <TableCell>Balance</TableCell>
                 <TableCell>Credit</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
@@ -203,18 +223,19 @@ const AdminUsers = ({ profile }) => {
                 <TableRow key={index}>
                   <TableCell>{user._id}</TableCell>
                   <TableCell>{user.firstName + " " + user.lastName}</TableCell>
-                  <TableCell>{user.country}</TableCell>
-                  <TableCell>{`$${parseFloat(user.wallet.balance).toFixed(
-                    2
-                  )}`}</TableCell>
+                  <TableCell>{user.email}</TableCell>
                   <TableCell sx={{ textTransform: "capitalize" }}>
                     {user.userRole}
                   </TableCell>
+                  <TableCell>{`$${parseFloat(user.wallet.balance).toFixed(
+                    2
+                  )}`}</TableCell>
                   <TableCell sx={{ textTransform: "capitalize" }}>
                     {user.credit !== null ? user.credit.credit : 0}
                   </TableCell>
                   <TableCell>
                     <IconButton
+                      title="Credit Balance"
                       onClick={() =>
                         handleTransactions(user._id, user.firstName, "credit")
                       }
@@ -222,6 +243,7 @@ const AdminUsers = ({ profile }) => {
                       <AddCircle />
                     </IconButton>
                     <IconButton
+                      title="Debit Balance"
                       onClick={() =>
                         handleTransactions(user._id, user.firstName, "debit")
                       }
@@ -229,11 +251,17 @@ const AdminUsers = ({ profile }) => {
                       <RemoveCircle />
                     </IconButton>
                     <button
+                      disabled={
+                        user.credit === null || user.credit.credit === 0
+                          ? true
+                          : false
+                      }
                       onClick={(e) => {
                         e.preventDefault();
+                        handleRequestSent(user._id);
                       }}
                       type="submit"
-                      className="Registration-button w-fit text-black hover:text-white bg-[#ffe26e] duration-300 hover:bg-black font-medium rounded-lg text-sm px-4 py-2.5 text-center"
+                      className=" disabled:bg-slate-300 w-fit hover:text-[#ffe26e] bg-[#ffe26e] duration-300 hover:bg-black font-medium rounded-lg disabled:hover:text-black text-sm px-4 py-2.5 text-center"
                     >
                       Request Repayment
                     </button>

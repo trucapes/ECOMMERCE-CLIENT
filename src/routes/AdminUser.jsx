@@ -44,16 +44,12 @@ const AdminUsers = ({ profile }) => {
   const [userRole, setUserRole] = useState("all"); // Default no filter for userRole
   const [openModal, setOpenModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [popUp, setPopUp] = useState(false);
-  const [userForTransaction, setUserForTransaction] = useState(null);
-  const [userName, setUserName] = useState("");
-  const [transactionType, setTransactionType] = useState("");
 
   console.log(profile);
 
   useEffect(() => {
     fetchData();
-  }, [search, page, sortBy, isPending, userRole, popUp]);
+  }, [search, page, sortBy, isPending, userRole]);
 
   const fetchData = async () => {
     try {
@@ -86,13 +82,6 @@ const AdminUsers = ({ profile }) => {
       setLoading(false);
     }
   };
-
-  function handleTransactions(id, name, type) {
-    setTransactionType(type);
-    setUserForTransaction(id);
-    setUserName(name);
-    setPopUp(true);
-  }
 
   const handleApproveUser = async (userId) => {
     const confirmed = window.confirm(
@@ -279,20 +268,6 @@ const AdminUsers = ({ profile }) => {
                     <IconButton onClick={() => handleDeleteUser(user._id)}>
                       <DeleteOutline color="error" />
                     </IconButton>
-                    <IconButton
-                      onClick={() =>
-                        handleTransactions(user._id, user.firstName, "credit")
-                      }
-                    >
-                      <AddCircle />
-                    </IconButton>
-                    <IconButton
-                      onClick={() =>
-                        handleTransactions(user._id, user.firstName, "debit")
-                      }
-                    >
-                      <RemoveCircle />
-                    </IconButton>
                   </TableCell>
                 </TableRow>
               ))}
@@ -343,14 +318,6 @@ const AdminUsers = ({ profile }) => {
           {selectedUser && <MyAccount user={selectedUser} isAdmin={true} />}
         </div>
       </Modal>
-      <TransactionPopUp
-        id={userForTransaction}
-        setIsPopped={setPopUp}
-        userName={userName}
-        isPopped={popUp}
-        adminId={profile}
-        type={transactionType}
-      />
     </div>
   );
 };
