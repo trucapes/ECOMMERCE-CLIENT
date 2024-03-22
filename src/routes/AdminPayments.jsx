@@ -231,7 +231,7 @@ const AdminUsers = ({ profile }) => {
                     2
                   )}`}</TableCell>
                   <TableCell sx={{ textTransform: "capitalize" }}>
-                    {user.credit !== null ? user.credit.credit : 0}
+                    ${user.credit !== null ? parseFloat(user.credit.credit).toFixed(2) : 0}
                   </TableCell>
                   <TableCell>
                     <IconButton

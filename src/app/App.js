@@ -105,15 +105,6 @@ function App() {
                         element={<ItemView profile={user} />}
                       />
                     </Route>
-                    {/* <Route path="/item/women">
-                      <Route path=":id" element={<ItemView profile={user} />} />
-                    </Route>
-                    <Route path="/item/kids">
-                      <Route path=":id" element={<ItemView profile={user} />} />
-                    </Route>
-                    <Route path="/item/featured">
-                      <Route path=":id" element={<ItemView profile={user} />} />
-                    </Route> */}
                   </Route>
                   <Route path="/wishlist" element={<Wishlist />} />
                   <Route path="/search/*" element={<SearchView />} />
@@ -122,7 +113,10 @@ function App() {
                     <Route path="" element={<AdminDashboard />} />
                     <Route path="order" element={<AdminOrder />} />
                     <Route path="categories" element={<CategoryList />} />
-                    <Route path="payments" element={<AdminPayments profile={user} />} />
+                    <Route
+                      path="payments"
+                      element={<AdminPayments profile={user} />}
+                    />
                     <Route path="products">
                       <Route path="add" element={<AddProductPage />} />
                       <Route path="" element={<AdminProductList />} />

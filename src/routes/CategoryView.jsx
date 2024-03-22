@@ -5,6 +5,7 @@ import ReactLoading from "react-loading";
 import Category from "../components/Category/Category";
 import { CategoryAPI } from "../api/categoryAPI";
 import ItemCard from "../components/Card/ItemCard/ItemCard";
+import NoDataFound from "../components/NoDataFound/NoDataFound";
 
 const CategoryView = ({ profile }) => {
   const [page, setPage] = useState(1);
@@ -45,13 +46,17 @@ const CategoryView = ({ profile }) => {
             className="m-auto"
           />
         )}
-        {data.map((item) => (
-          <ItemCard
-            profile={profile}
-            item={item}
-            category={item.category.name}
-          />
-        ))}
+        {data && data.length > 0 ? (
+          data.map((item) => (
+            <ItemCard
+              profile={profile}
+              item={item}
+              category={item.category.name}
+            />
+          ))
+        ) : (
+          <NoDataFound TryingToFind={"Products"} />
+        )}
       </div>
       <div className="w-full flex justify-center">
         <button

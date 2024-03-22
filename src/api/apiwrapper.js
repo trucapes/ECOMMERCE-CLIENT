@@ -1,7 +1,7 @@
 import axios from "axios";
-export const SERVER_URL = "https://truscapes-server.onrender.com/";
-export const API_BASE_URL = "https://truscapes-server.onrender.com/api"; // Update with your API base URL
-//https://truscapes-server.onrender.com/api
+export const SERVER_URL = "https://starfish-app-5ajoy.ondigitalocean.app/";
+export const API_BASE_URL = "https://starfish-app-5ajoy.ondigitalocean.app/api"; // Update with your API base URL
+//https://starfish-app-5ajoy.ondigitalocean.app/
 //http://localhost:5000/api
 const api = axios.create({
   baseURL: API_BASE_URL,

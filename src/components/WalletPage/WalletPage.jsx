@@ -71,13 +71,18 @@ export default function Orders({ profile }) {
         <div className="w-full flex flex-row gap-2 justify-between">
           <div className="border p-2 bg-slate-200 border-slate-600 w-full rounded-xl ">
             <h1 className="text-lg">Wallet Balance</h1>
-            <h1 className="sm:text-2xl text-xl">${profile.walletBalance}</h1>
+            <h1 className="sm:text-2xl text-xl">
+              ${parseFloat(profile.walletBalance).toFixed(2)}
+            </h1>
           </div>
           <div className="border p-2 flex flex-row justify-between bg-slate-200 border-slate-600 w-full rounded-xl">
             <div>
               <h1 className="text-lg">Due Credit</h1>
               <h1 className="sm:text-2xl text-xl">
-                ${profile.credit !== null ? profile.credit.credit : 0}
+                $
+                {profile.credit !== null
+                  ? parseFloat(profile.credit.credit).toFixed(2)
+                  : 0}
               </h1>
             </div>
             <div>

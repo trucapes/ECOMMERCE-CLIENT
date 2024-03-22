@@ -94,7 +94,7 @@ const MyAccount = ({ user, isAdmin, isAuthenticated }) => {
   return (
     <>
       {user && (
-        <div className="account-container p-3 ">
+        <div className="account-container py-10 px-72">
           <div className="account-header bg-[#ffe26e] flex flex-col sm:flex-row rounded-t-lg p-[25px]">
             <div className="profile-container rounded-2xl overflow-hidden w-full sm:w-52 aspect-square">
               <img

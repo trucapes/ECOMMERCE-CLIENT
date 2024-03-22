@@ -154,7 +154,9 @@ const BasicInfoTab = ({ userData, isAdmin }) => {
             <TableRow>
               <StyledTableCell>Wallet Balance:</StyledTableCell>
               <TableCell>{`$${
-                userData.walletBalance ? userData.walletBalance : 0
+                userData.walletBalance
+                  ? parseFloat(userData.walletBalance).toFixed(2)
+                  : 0
               }`}</TableCell>
             </TableRow>
             <TableRow>
