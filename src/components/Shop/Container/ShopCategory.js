@@ -1,24 +1,27 @@
 import ItemCard from "../../Card/ItemCard/ItemCard";
-import './ShopCategory.css'
+import "./ShopCategory.css";
 
 const ShopCategory = (props) => {
-    return ( 
-        <div className="shop__category__container">
-            <div className="shop__category__header">
-                <div className="shop__category__header__big">
-                    <div className="shop__category__head">
-                        <h2>{props.name} Lights</h2>
-                    </div> 
-                    <div className="shop__category__header__line"></div>
-                </div>
-                </div>
-                <div className="shop__category__card__container">
-                    <div className="shop__category__product__card">
-                        {props.items.map((data) => <ItemCard  profile={props.profile}  item={data} category={props.category}/>)}
-                    </div>
-            </div>
+    console.log(props.items)
+  return (
+    <div className="shop__category__container">
+      <div className="shop__category__header">
+        <div className="shop__category__header__big">
+          <div className="shop__category__head">
+            <h2 className="font-semibold">{props.items.title} Items</h2>
+          </div>
+          <div className="shop__category__header__line"></div>
         </div>
-     );
-}
- 
+      </div>
+      <div className="shop__category__card__container">
+        <div className="shop__category__product__card">
+          {props.items.value.map((data) => (
+            <ItemCard profile={props.profile} item={data} category={data.categoryDetails.name}  />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default ShopCategory;

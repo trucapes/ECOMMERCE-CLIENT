@@ -14,7 +14,7 @@ const WishItemsProvider = (props) => {
     const addToWishHnadler = (item) => {
         const { _id, name, price, image, category, size } = item;
         removeFromWishHandler(item)
-        setWishItems((prevItems) => [...prevItems, {_id, name, price, image, category, size, itemQuantity: 1}])
+        setWishItems((prevItems) => [...prevItems, {...item, itemQuantity: 1}])
     }
 
     const removeFromWishHandler = (item) => {

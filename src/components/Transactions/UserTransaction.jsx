@@ -73,10 +73,14 @@ export default function Orders() {
             {data.map((row, index) => (
               <TableRow key={index}>
                 <TableCell>{row._id}</TableCell>
-                <TableCell>{Math.abs(row.amount)}</TableCell>
+                <TableCell sx={{ color: row.amount > 0 ? "green" : "red", fontWeight: "bold" }}>
+                  {parseFloat(row.amount).toFixed(2)}
+                </TableCell>
                 <TableCell>{row.description}</TableCell>
                 <TableCell>{DateToString(row.createdAt)}</TableCell>
-                <TableCell align="right">{`$${row.balanceRemaining}`}</TableCell>
+                <TableCell align="right">{`$${parseFloat(
+                  row.balanceRemaining
+                ).toFixed(2)}`}</TableCell>
               </TableRow>
             ))}
           </TableBody>

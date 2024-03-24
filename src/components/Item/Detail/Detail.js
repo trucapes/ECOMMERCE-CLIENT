@@ -5,7 +5,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Button } from "@mui/material";
+import { Button, Chip } from "@mui/material";
 import { IconButton } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
@@ -15,15 +15,12 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Link } from "react-router-dom";
 
 const Detail = (props) => {
+  console.log(props);
   const [quantity, setQuantity] = useState(1);
-  const [size, setSize] = useState(props.item.size[0]);
+  const [size, setSize] = useState();
 
   const cartItems = useContext(CartItemsContext);
   const wishItems = useContext(WishItemsContext);
-
-  const handleSizeChange = (event) => {
-    setSize(event.target.value);
-  };
 
   const handelQuantityIncrement = (event) => {
     setQuantity((prev) => (prev += 1));
@@ -36,12 +33,31 @@ const Detail = (props) => {
   };
 
   const handelAddToCart = () => {
-    cartItems.addItem(props.item, quantity, size);
+    const itemForCart = { ...props.item };
+    itemForCart.price =
+      props.profile.userRole === "dealer"
+        ? props.item.price.dealer
+        : props.profile.userRole === "distributor"
+        ? props.item.price.distributor
+        : props.profile.userRole === "contractor"
+        ? props.item.price.contractor
+        : props.item.pricer.regular;
+    cartItems.addItem(itemForCart, quantity, size);
     console.log(cartItems.items);
   };
 
   const handelAddToWish = () => {
-    wishItems.addItem(props.item);
+    console.log(props.item);
+    const itemForWish = { ...props.item };
+    itemForWish.price =
+      props.profile.userRole === "dealer"
+        ? props.item.price.dealer
+        : props.profile.userRole === "distributor"
+        ? props.item.price.distributor
+        : props.profile.userRole === "contractor"
+        ? props.item.price.contractor
+        : props.item.pricer.regular;
+    wishItems.addItem(itemForWish);
   };
 
   return (
@@ -50,19 +66,39 @@ const Detail = (props) => {
         <div className="product__main__detail">
           {/* <div className="product__name__main">{props.item.name}</div> */}
           <div className="product__detail__description">
-            {props.item.description}
+            {props.item.description.trim().split(".").slice(0, 1).join(".")}
           </div>
-          <div className="product__color">
-            <div className="product-color-label">COLOR</div>
-            <div
-              className="product-color"
-              style={{ backgroundColor: `${props.item.color}` }}
-            ></div>
+          <div className="product__color flex flex-row gap-3">
+            {props.item.hotProduct && (
+              <Chip
+                label={"Hot Product"}
+                sx={{ color: "black", backgroundColor: "#FFE26E" }}
+              />
+            )}
+            {props.item.stockAvailable ? (
+              <Chip
+                label={"In Stock"}
+                sx={{ color: "black", backgroundColor: "#FFE26E" }}
+              />
+            ) : (
+              <Chip
+                label={"Out of stock"}
+                sx={{ color: "black", backgroundColor: "#FFE26E" }}
+              />
+            )}
           </div>
           <div className="product__price__detail">
             $
             {props.profile ? (
-              props.item.price
+              props.profile.userRole === "dealer" ? (
+                props.item.price.dealer
+              ) : props.profile.userRole === "distributor" ? (
+                props.item.price.distributor
+              ) : props.profile.userRole === "contractor" ? (
+                props.item.price.contractor
+              ) : (
+                props.item.pricer.regular
+              )
             ) : (
               <Link to="/account/login">Login to see price</Link>
             )}
@@ -81,23 +117,6 @@ const Detail = (props) => {
                 <IconButton onClick={handelQuantityDecrement}>
                   <RemoveCircleIcon fontSize="medium" />
                 </IconButton>
-              </div>
-
-              <div className="product size">
-                <Box sx={{ minWidth: 100 }}>
-                  <FormControl fullWidth size="small">
-                    <InputLabel>Size</InputLabel>
-                    <Select
-                      value={size}
-                      label="size"
-                      onChange={handleSizeChange}
-                    >
-                      {props.item.size.map((size) => (
-                        <MenuItem value={size}>{size}</MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Box>
               </div>
             </div>
             <div className="collect__item__actions">

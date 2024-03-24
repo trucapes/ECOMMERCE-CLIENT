@@ -32,6 +32,7 @@ import MyAccount from "../components/Account/MyAccount/MyAccount";
 import { toast } from "react-toastify";
 import TransactionPopUp from "../components/TransactionPopUp/TransactionPopUp";
 import NoDataFound from "../components/NoDataFound/NoDataFound";
+import { RepaymentAPI } from "../api/admin/repaymentAPI";
 
 const AdminUsers = ({ profile }) => {
   const [users, setUsers] = useState([]);
@@ -40,16 +41,38 @@ const AdminUsers = ({ profile }) => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [sortBy, setSortBy] = useState("createdAt"); // Default sorting by createdAt
-  const [isPending, setIsPending] = useState("all"); // Default no filter for isPending
   const [userRole, setUserRole] = useState("all"); // Default no filter for userRole
   const [openModal, setOpenModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [popUp, setPopUp] = useState(false);
+  const [userForTransaction, setUserForTransaction] = useState(null);
+  const [userName, setUserName] = useState("");
+  const [transactionType, setTransactionType] = useState("");
 
   console.log(profile);
 
   useEffect(() => {
     fetchData();
-  }, [search, page, sortBy, isPending, userRole]);
+  }, [search, page, sortBy, userRole, popUp]);
+
+  const handleRequestSent = async (id) => {
+    try {
+      const response = await RepaymentAPI.sendRepaymentRequest({
+        userId: id,
+      });
+      if (response.status === 201) {
+        toast.success("Request Sent Successfully");
+      } else if (response.status === 404) {
+        toast.error("User does not exist");
+      } else if (response.status === 200) {
+        toast.success("Error while sending request");
+      } else {
+        toast.error("Something went wrong");
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+  };
 
   const fetchData = async () => {
     try {
@@ -58,9 +81,6 @@ const AdminUsers = ({ profile }) => {
 
       if (search) {
         filter.search = search;
-      }
-      if (isPending !== "all") {
-        filter.isPending = isPending;
       }
       if (userRole && userRole !== "all") {
         filter.userRole = userRole;
@@ -74,6 +94,7 @@ const AdminUsers = ({ profile }) => {
         filter.sortBy = sortBy;
       }
       const response = await AdminUserAPI.getAllUsers(filter);
+      console.log(response.data.data);
       setUsers(response.data.data);
       setTotalPages(response.data.totalPages);
       setLoading(false);
@@ -83,41 +104,12 @@ const AdminUsers = ({ profile }) => {
     }
   };
 
-  const handleApproveUser = async (userId) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to approve this user?"
-    );
-    if (confirmed) {
-      try {
-        // Call API to approve user
-        await AdminUserAPI.verifyUserById(userId);
-        toast.success("User approved successfully");
-        // Optionally, you can also fetch updated user data after approval
-        fetchData();
-      } catch (error) {
-        console.error("Error approving user:", error);
-        toast.error("Failed to approve user");
-      }
-    }
-  };
-
-  const handleDeleteUser = async (userId) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this user?"
-    );
-    if (confirmed) {
-      try {
-        // Call API to delete user
-        await AdminUserAPI.deleteUserById(userId);
-        toast.success("User deleted successfully");
-        // Optionally, you can also fetch updated user data after deletion
-        fetchData();
-      } catch (error) {
-        console.error("Error deleting user:", error);
-        toast.error("Failed to delete user");
-      }
-    }
-  };
+  function handleTransactions(id, name, type) {
+    setTransactionType(type);
+    setUserForTransaction(id);
+    setUserName(name);
+    setPopUp(true);
+  }
 
   // const handlePageChange = (newPage) => {
   //   setPage(newPage);
@@ -143,11 +135,6 @@ const AdminUsers = ({ profile }) => {
     }
   };
 
-  const handleOpenModal = (user) => {
-    setSelectedUser(user);
-    setOpenModal(true);
-  };
-
   const handleCloseModal = () => {
     setOpenModal(false);
     setSelectedUser(null);
@@ -158,7 +145,7 @@ const AdminUsers = ({ profile }) => {
   return (
     <div className="p-2 w-full">
       <div className="w-full flex flex-row justify-between items-center">
-        <h1 className="text-3xl mt-4 mb-4 text-gray-900">Users</h1>
+        <h1 className="text-3xl mt-4 mb-4 text-gray-900">Payments</h1>
         {users && users.length > 0 && (
           <div className=" flex flex-row items-stretch justify-center">
             <input
@@ -193,14 +180,6 @@ const AdminUsers = ({ profile }) => {
               <MenuItem value="dealer">Dealer</MenuItem>
               <MenuItem value="contractor">Contractor</MenuItem>
             </Select>
-            <Select
-              value={isPending}
-              onChange={(e) => setIsPending(e.target.value)}
-            >
-              <MenuItem value={"all"}>All Status</MenuItem>
-              <MenuItem value={true}>Pending</MenuItem>
-              <MenuItem value={false}>Active</MenuItem>
-            </Select>
           </div>
           <div>
             <Select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
@@ -230,44 +209,62 @@ const AdminUsers = ({ profile }) => {
           <Table aria-label="users table">
             <TableHead>
               <TableRow>
+                <TableCell>ID</TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Email</TableCell>
-                <TableCell>Mobile No</TableCell>
-                <TableCell>Country</TableCell>
-                <TableCell>City</TableCell>
-                <TableCell>Balance</TableCell>
                 <TableCell>User Role</TableCell>
-                <TableCell>Status</TableCell>
+                <TableCell>Balance</TableCell>
+                <TableCell>Credit</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {users.map((user, index) => (
                 <TableRow key={index}>
+                  <TableCell>{user._id}</TableCell>
                   <TableCell>{user.firstName + " " + user.lastName}</TableCell>
                   <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.mobileNo}</TableCell>
-                  <TableCell>{user.country}</TableCell>
-                  <TableCell>{user.city}</TableCell>
-                  <TableCell>{`$${user.wallet.balance}`}</TableCell>
-                  <TableCell>{user.userRole}</TableCell>
-                  <TableCell>
-                    <span className="bg-[#d1b95a] px-2 rounded-full font-normal text-base">
-                      {!user.isPending ? "Active" : "Pending "}
-                    </span>
+                  <TableCell sx={{ textTransform: "capitalize" }}>
+                    {user.userRole}
+                  </TableCell>
+                  <TableCell>{`$${parseFloat(user.wallet.balance).toFixed(
+                    2
+                  )}`}</TableCell>
+                  <TableCell sx={{ textTransform: "capitalize" }}>
+                    ${user.credit !== null ? parseFloat(user.credit.credit).toFixed(2) : 0}
                   </TableCell>
                   <TableCell>
-                    <IconButton onClick={() => handleOpenModal(user)}>
-                      <Visibility color="info" />
+                    <IconButton
+                      title="Credit Balance"
+                      onClick={() =>
+                        handleTransactions(user._id, user.firstName, "credit")
+                      }
+                    >
+                      <AddCircle />
                     </IconButton>
-                    {user.isPending && (
-                      <IconButton onClick={() => handleApproveUser(user._id)}>
-                        <CheckCircleOutline color="success" />
-                      </IconButton>
-                    )}
-                    <IconButton onClick={() => handleDeleteUser(user._id)}>
-                      <DeleteOutline color="error" />
+                    <IconButton
+                      title="Debit Balance"
+                      onClick={() =>
+                        handleTransactions(user._id, user.firstName, "debit")
+                      }
+                    >
+                      <RemoveCircle />
                     </IconButton>
+                    <button
+                      disabled={
+                        user.credit === null || user.credit.credit === 0
+                          ? true
+                          : false
+                      }
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleRequestSent(user._id);
+                      }}
+                      type="submit"
+                      className=" disabled:bg-slate-300 w-fit hover:text-[#ffe26e] bg-[#ffe26e] duration-300 hover:bg-black font-medium rounded-lg disabled:hover:text-black text-sm px-4 py-2.5 text-center"
+                    >
+                      Request Repayment
+                    </button>
                   </TableCell>
                 </TableRow>
               ))}
@@ -318,6 +315,14 @@ const AdminUsers = ({ profile }) => {
           {selectedUser && <MyAccount user={selectedUser} isAdmin={true} />}
         </div>
       </Modal>
+      <TransactionPopUp
+        id={userForTransaction}
+        setIsPopped={setPopUp}
+        userName={userName}
+        isPopped={popUp}
+        adminId={profile}
+        type={transactionType}
+      />
     </div>
   );
 };

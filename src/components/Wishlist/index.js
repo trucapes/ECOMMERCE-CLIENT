@@ -5,6 +5,7 @@ import './index.css'
 
 const Wishlist = () => {
     const wishItems = useContext(WishItemsContext)
+    console.log(wishItems.items)
 
     return ( 
         <div className="wishlist">

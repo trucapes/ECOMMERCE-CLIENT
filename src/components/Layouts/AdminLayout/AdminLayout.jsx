@@ -78,7 +78,7 @@ export const mainListItems = (
         <ListItemText primary="Orders" />
       </ListItemButton>
     </Link>
-    <Link style={{ color: "#000" }} legacyBehavior href="/profile">
+    <Link style={{ color: "#000" }} legacyBehavior href="/admin/payments">
       <ListItemButton>
         <ListItemIcon>
           <AttachMoney />
