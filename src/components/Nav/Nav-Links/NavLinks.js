@@ -19,10 +19,12 @@ const NavLinks = () => {
       <div className="bottom__container">
         <ul className="nav">
           <li className="nav-link">
-            <Link to="/">Home</Link>
+            <a href="https://tru-scapes.com/" target="_blank">
+              Home
+            </a>
           </li>
           <li className="nav-link">
-            <Link to="/shop">Shop</Link>{" "}
+            <Link to="/">Shop</Link>{" "}
           </li>
           {categories.length > 0 &&
             categories.map((category) => (
