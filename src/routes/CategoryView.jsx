@@ -9,6 +9,7 @@ import NoDataFound from "../components/NoDataFound/NoDataFound";
 
 const CategoryView = ({ profile }) => {
   const [page, setPage] = useState(1);
+  const [categoryName, setCategoryName] = useState("");
 
   const param = useParams();
   console.log(param);
@@ -25,6 +26,7 @@ const CategoryView = ({ profile }) => {
         category: param.id,
         page: page,
       });
+      setCategoryName(param.id);
       console.log(response.data.data.products);
       setData([...response.data.data.products]);
       setLoading(false);
@@ -36,27 +38,31 @@ const CategoryView = ({ profile }) => {
 
   return (
     <>
-      <div className="d-flex min-vh-100 w-100 justify-content-center align-items-center m-auto">
-        {loading && (
-          <ReactLoading
-            type="balls"
-            color="#FFE26E"
-            height={100}
-            width={100}
-            className="m-auto"
-          />
-        )}
-        {data && data.length > 0 ? (
-          data.map((item) => (
-            <ItemCard
-              profile={profile}
-              item={item}
-              category={item.category.name}
+      <div className="d-flex flex-col min-vh-100 w-100 justify-content-center align-items-center m-auto">
+        <div className="w-full px-7">
+          <h2 className="font-semibold">{categoryName} Items</h2>
+        </div>
+        <div className="w-full flex justify-center">
+          {loading ? (
+            <ReactLoading
+              type="balls"
+              color="#FFE26E"
+              height={100}
+              width={100}
+              className="m-auto"
             />
-          ))
-        ) : (
-          <NoDataFound TryingToFind={"Products"} />
-        )}
+          ) : data && data.length > 0 ? (
+            data.map((item) => (
+              <ItemCard
+                profile={profile}
+                item={item}
+                category={item.category.name}
+              />
+            ))
+          ) : (
+            <NoDataFound TryingToFind={"Products"} />
+          )}
+        </div>
       </div>
       <div className="w-full flex justify-center">
         <button
