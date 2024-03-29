@@ -8,10 +8,7 @@ import ItemCard from "../../Card/ItemCard/ItemCard";
 
 const Related = (props) => {
   console.log(props);
-  const [menItems, setMenItems] = useState();
   const [relatedItems, setRelatedItems] = useState([]);
-  const [womenItems, setWomenItems] = useState();
-  const [kidsItems, setKidsItems] = useState();
 
   useEffect(() => {
     const getRelatedItems = async () => {
@@ -27,14 +24,6 @@ const Related = (props) => {
       }
     };
     getRelatedItems();
-    axios
-      .get("https://shema-backend.vercel.app/api/items")
-      .then((res) => {
-        setMenItems(res.data.filter((item) => item.category === "men"));
-        setKidsItems(res.data.filter((item) => item.category === "kids"));
-        setWomenItems(res.data.filter((item) => item.category === "women"));
-      })
-      .catch((err) => console.log(err));
   }, []);
 
   return (
@@ -45,7 +34,7 @@ const Related = (props) => {
         </div>
         <div className="related__header__line"></div>
       </div>
-      <div className="related__card__container">
+      <div className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 xl:grid-cols-4">
         {relatedItems &&
           relatedItems.length > 0 &&
           relatedItems.map((item) => (

@@ -15,7 +15,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Link } from "react-router-dom";
 
 const Detail = (props) => {
-  console.log(props);
+  console.log(props.item);
   const [quantity, setQuantity] = useState(1);
   const [size, setSize] = useState();
 
@@ -41,7 +41,7 @@ const Detail = (props) => {
         ? props.item.price.distributor
         : props.profile.userRole === "contractor"
         ? props.item.price.contractor
-        : props.item.pricer.regular;
+        : props.item.price.regular;
     cartItems.addItem(itemForCart, quantity, size);
     console.log(cartItems.items);
   };
@@ -56,7 +56,7 @@ const Detail = (props) => {
         ? props.item.price.distributor
         : props.profile.userRole === "contractor"
         ? props.item.price.contractor
-        : props.item.pricer.regular;
+        : props.item.price.regular;
     wishItems.addItem(itemForWish);
   };
 
@@ -89,7 +89,7 @@ const Detail = (props) => {
           </div>
           <div className="product__price__detail">
             $
-            {props.profile ? (
+            {props.profile && props.item ? (
               props.profile.userRole === "dealer" ? (
                 props.item.price.dealer
               ) : props.profile.userRole === "distributor" ? (
@@ -97,7 +97,7 @@ const Detail = (props) => {
               ) : props.profile.userRole === "contractor" ? (
                 props.item.price.contractor
               ) : (
-                props.item.pricer.regular
+                props.item.price.regular
               )
             ) : (
               <Link to="/account/login">Login to see price</Link>

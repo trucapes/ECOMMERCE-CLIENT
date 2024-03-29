@@ -25,31 +25,17 @@ const ItemCard = (props) => {
   };
 
   return (
-    <div className="product__card__card">
+    <div className="product__card__card hover:scale-105 duration-150">
       <Link to={`/item/${props.category}/${props.item._id}`}>
         <div className="product__card">
-          <div
-            className="product__image"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-          >
-            {isHovered ? (
-              <img
-                src={`${
-                  SERVER_URL + props.item.images[1].path.replace(/\\/g, "/")
-                }`.replace("/public/", "/")}
-                alt="item"
-                className="product__img"
-              />
-            ) : (
-              <img
-                src={`${
-                  SERVER_URL + props.item.images[0].path.replace(/\\/g, "/")
-                }`.replace("/public/", "/")}
-                alt="item"
-                className="product__img"
-              />
-            )}
+          <div className="product__image">
+            <img
+              src={`${
+                SERVER_URL + props.item.images[0].path.replace(/\\/g, "/")
+              }`.replace("/public/", "/")}
+              alt="item"
+              className="product__img"
+            />
           </div>
           <div className="product__card__detail">
             <div className="product__name">
@@ -66,12 +52,12 @@ const ItemCard = (props) => {
               {props.profile !== null ? (
                 <span>
                   {props.profile.userRole === "dealer"
-                    ? props.item.price.dealer
+                    ? "$" + props.item.price.dealer
                     : props.profile.userRole === "distributor"
-                    ? props.item.price.distributor
+                    ? "$" + props.item.price.distributor
                     : props.profile.userRole === "contractor"
-                    ? props.item.price.contractor
-                    : props.item.price.regular}
+                    ? "$" + props.item.price.contractor
+                    : "$" + props.item.price.regular}
                 </span>
               ) : (
                 <Link to="/account/login">Login to see price</Link>

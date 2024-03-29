@@ -5,6 +5,7 @@ import "./FeaturedCategories.css";
 import publicAPI from "../../../api/publicAPI";
 import { Grid, Container } from "@mui/material";
 import { SERVER_URL } from "../../../api/apiwrapper";
+import { Link } from "react-router-dom";
 
 const Categories = () => {
   // const featuredCategories = useContext(FeatureCategoryContext)
@@ -31,18 +32,30 @@ const Categories = () => {
                 </div> */}
 
         <Container>
-          <Grid container spacing={2} sx={{ mt: 4, mb: 4 }}>
+          <Grid
+            container
+            justifyContent={"center"}
+            spacing={2}
+            sx={{ mt: 4, mb: 4 }}
+          >
             {categories.map((category, index) => {
               return (
                 <Grid xs={4} md={2} item key={index}>
-                  <img
-                    className="animate__pop"
-                    style={{ width: "100%" }}
-                    src={`${
-                      SERVER_URL + category.image.replace(/\\/g, "/")
-                    }`.replace("/public/", "/")}
-                    alt={category.name}
-                  />
+                  <Link to={`/category/${category.name}`}>
+                    <div className="animate__pop w-full cursor-pointer bg-slate-200 rounded-md">
+                      <img
+                        className=""
+                        style={{ width: "100%", mixBlendMode: "multiply" }}
+                        src={`${
+                          SERVER_URL + category.image.replace(/\\/g, "/")
+                        }`.replace("/public/", "/")}
+                        alt={category.name}
+                      />
+                    </div>
+                    <h4 className="font-normal text-sm text-center mt-2">
+                      {category.name}
+                    </h4>
+                  </Link>
                 </Grid>
               );
             })}
