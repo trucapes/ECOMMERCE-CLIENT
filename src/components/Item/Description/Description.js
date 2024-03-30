@@ -7,7 +7,10 @@ const Description = (props) => {
         <div className="description__header__line"></div>
         <div className="description__header">Details</div>
       </div>
-      <div className="w-full">{props.item.description}</div>
+      <div
+        className="w-full specifications-container"
+        dangerouslySetInnerHTML={{ __html: props.item.description }}
+      />
       {/* <div className="description__specifics__container">
                 <div className="description__specifics">
                 <div className="description__header__line"></div>

@@ -66,7 +66,7 @@ const Detail = (props) => {
         <div className="product__main__detail">
           {/* <div className="product__name__main">{props.item.name}</div> */}
           <div className="product__detail__description">
-            {props.item.description.trim().split(".").slice(0, 1).join(".")}
+            {props.item.name}
           </div>
           <div className="product__color flex flex-row gap-3">
             {props.item.hotProduct && (

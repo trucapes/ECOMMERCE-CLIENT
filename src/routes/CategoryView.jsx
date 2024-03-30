@@ -44,7 +44,7 @@ const CategoryView = ({ profile }) => {
       setData([]);
       setLoading(true);
     };
-  }, [param.id, page]);
+  }, [param.id]);
 
   return (
     <>
