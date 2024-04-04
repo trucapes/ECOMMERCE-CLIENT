@@ -13,7 +13,10 @@
 }
 .landing {
   width: 100%;
-  min-height: 520px;
+  min-height: 480px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: #fff;
   background-color: #0000006a;
 }
@@ -37,12 +40,13 @@
   width: 90%;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   flex-direction: column;
 }
 
 .landing__header__main {
   font-size: 4rem;
+  text-align: center;
   font-weight: 800;
 }
 
