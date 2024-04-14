@@ -55,11 +55,29 @@ export function BasicTabs({ user, isAdmin }) {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+      <Box
+        sx={{
+          borderBottom: 1,
+          borderColor: "divider",
+          overflow: "scroll",
+          WebkitOverflowScrolling: "touch",
+          scrollBehavior: "smooth",
+        }}
+      >
         <Tabs
           value={value}
           onChange={handleChange}
           aria-label="basic tabs example"
+          sx={{
+            "& .MuiTabs-indicator": { display: "none" },
+            scrollSnapType: "x mandatory",
+            "& .MuiTab-root": {
+              fontSize: "0.8rem",
+              minWidth: "40px",
+              padding: "0px 10px",
+              textAlign: "center",
+            },
+          }}
         >
           <Tab label="Basic Info" {...a11yProps(0)} />
           <Tab label="My Orders" {...a11yProps(1)} />
@@ -94,7 +112,7 @@ const MyAccount = ({ user, isAdmin, isAuthenticated }) => {
   return (
     <>
       {user && (
-        <div className="account-container py-10 px-72">
+        <div className="account-container py-10 lg:px-60">
           <div className="account-header bg-[#ffe26e] flex flex-col sm:flex-row rounded-t-lg p-[25px]">
             <div className="profile-container rounded-2xl overflow-hidden w-full sm:w-52 aspect-square">
               <img

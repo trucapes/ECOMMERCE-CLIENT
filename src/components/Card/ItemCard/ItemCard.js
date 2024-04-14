@@ -44,10 +44,18 @@ const ItemCard = (props) => {
               </Link>
             </div>
             <div className="product__description">
-              {/* <span>{props.item.description}</span> */}x lorem Ipsem
-              description lorem Ipsem description lorem Ipsem description lorem
-              Ipsem description
+              <span>
+                {props.item.description
+                  .replace(/<\/?[^>]+(>|$)/g, "")
+                  .split(" ")
+                  .slice(0, 20)
+                  .join(" ")
+                  .concat(
+                    props.item.description.split(" ").length > 80 ? " ..." : ""
+                  )}
+              </span>
             </div>
+            <br />
             <div className="product__price">
               {props.profile !== null ? (
                 <span>

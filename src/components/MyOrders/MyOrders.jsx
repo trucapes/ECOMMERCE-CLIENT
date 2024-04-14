@@ -31,7 +31,7 @@ function MyOrders({ profile }) {
       setLoading(true);
       const response = await OrderAPI.getOrders();
       setLoading(false);
-      console.log(response.data.data)
+      console.log(response.data.data);
       if (response.data.error === false) {
         setOrder(response.data.data);
       } else {
@@ -73,55 +73,59 @@ function MyOrders({ profile }) {
           <NoDataFound TryingToFind={"Orders"} />
         ) : (
           order.map((item, index) => (
-            <div className="order-container flex flex-col bg-[#fff1b8] hover:bg-[#ffeca0] duration-200 p-8 rounded-xl">
+            <div className="order-container flex flex-col bg-[#fff1b8] hover:bg-[#ffeca0] duration-200 p-8 rounded-xl sm:p-4">
               <div className="orders-header flex flex-row justify-between">
                 <div className="icon-id-date-container gap-4 flex flex-row justify-start">
-                  <div className="icon flex justify-center items-center w-16 aspect-square border-[3px] rounded-xl border-slate-600 border-dashed">
+                  <div className="icon flex justify-center items-center w-16 aspect-square border-[3px] rounded-xl border-slate-600 border-dashed text-sm">
                     {item.isDelivered ? (
                       <Check color="success" />
                     ) : (
                       <PriorityHigh color="error" />
                     )}
                   </div>
+                </div>
+                &nbsp; &nbsp;
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center sm:items-stretch">
                   <div className="flex flex-col ">
-                    <div className="order-id my-auto">
+                    <div className="order-id my-auto text-sm">
                       <span className="font-bold">Order ID </span> - {item._id}
                     </div>
-                    <div className="order-date my-auto">
+                    <div className="order-date my-auto text-sm">
                       <span className="font-bold">Ordered On</span> -{" "}
                       {DateToString(item.createdAt)}
                     </div>
                   </div>
                   <div className="flex flex-col ">
-                    <div className="order-price my-auto">
+                    <div className="order-price my-auto text-sm">
                       <span className="font-bold">Order Price </span> -{" "}
                       {`$${item.price}`}
                     </div>
-                    <div className="order-status my-auto">
+                    <div className="order-status my-auto text-sm">
                       <span className="font-bold">Order Status - </span>
-                      <span className="bg-[#d1b95a] capitalize px-2 rounded-full font-normal text-base">
+                      <span className="bg-[#d1b95a] capitalize px-2 rounded-full font-normal text-base sm:text-sm">
                         {item.status}
                       </span>
                     </div>
                   </div>
-                </div>
-                <div className="view-order flex flex-col items-start">
-                  <Button
-                    variant="text"
-                    onClick={() => {
-                      ItemPopUp(index, item);
-                      console.log(itemIndex, itemforPopUp, isPopped);
-                    }}
-                    sx={{ color: "black" }}
-                  >
-                    View All {item.products.length} Items <ChevronRight />
-                  </Button>
-                  {item.isDelivered && (
-                    <div className="delivered-date">
-                      <span className="font-bold">Delivered On</span> -{" "}
-                      {DateToString(item.updatedAt)}
-                    </div>
-                  )}
+                  <div className="view-order flex flex-col items-start">
+                    <Button
+                      variant="text"
+                      onClick={() => {
+                        ItemPopUp(index, item);
+                        console.log(itemIndex, itemforPopUp, isPopped);
+                      }}
+                      sx={{ color: "black" }}
+                      className="text-sm"
+                    >
+                      View All {item.products.length} Items <ChevronRight />
+                    </Button>
+                    {item.isDelivered && (
+                      <div className="delivered-date text-sm">
+                        <span className="font-bold">Delivered On</span> -{" "}
+                        {DateToString(item.updatedAt)}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
               <div className="order-footer"></div>

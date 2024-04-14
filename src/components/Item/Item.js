@@ -9,7 +9,7 @@ const Item = (props) => {
   console.log(props);
   return (
     <div className="item__container">
-      <div className="w-full flex flex-col px-28 py-14">
+      <div className="w-full flex flex-col px-10 md:px-20 py-14">
         <div className="product__name__main">{props.item.name}</div>
         <div style={{ height: "30px" }} />
         <div className="detail__and__carousel__container">

@@ -13,6 +13,7 @@ import { CartItemsContext } from "../../../Context/CartItemsContext";
 import { WishItemsContext } from "../../../Context/WishItemsContext";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Detail = (props) => {
   console.log(props.item);
@@ -43,7 +44,7 @@ const Detail = (props) => {
         ? props.item.price.contractor
         : props.item.price.regular;
     cartItems.addItem(itemForCart, quantity, size);
-    console.log(cartItems.items);
+    toast.success("Item added to cart");
   };
 
   const handelAddToWish = () => {
@@ -65,9 +66,7 @@ const Detail = (props) => {
       <div className="product__detail">
         <div className="product__main__detail">
           {/* <div className="product__name__main">{props.item.name}</div> */}
-          <div className="product__detail__description">
-            {props.item.name}
-          </div>
+          <div className="product__detail__description">{props.item.name}</div>
           <div className="product__color flex flex-row gap-3">
             {props.item.hotProduct && (
               <Chip

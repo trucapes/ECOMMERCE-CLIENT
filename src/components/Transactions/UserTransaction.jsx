@@ -59,7 +59,7 @@ export default function Orders() {
       ) : data.length === 0 ? (
         <NoDataFound TryingToFind={"Transactions"} />
       ) : (
-        <Table size="small">
+        <Table size="small" sx={{ overflow: "scroll", width: "100%" }}>
           <TableHead>
             <TableRow>
               <TableCell>Transaction ID</TableCell>
@@ -73,7 +73,12 @@ export default function Orders() {
             {data.map((row, index) => (
               <TableRow key={index}>
                 <TableCell>{row._id}</TableCell>
-                <TableCell sx={{ color: row.amount > 0 ? "green" : "red", fontWeight: "bold" }}>
+                <TableCell
+                  sx={{
+                    color: row.amount > 0 ? "green" : "red",
+                    fontWeight: "bold",
+                  }}
+                >
                   {parseFloat(row.amount).toFixed(2)}
                 </TableCell>
                 <TableCell>{row.description}</TableCell>
