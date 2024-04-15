@@ -88,19 +88,16 @@ const Detail = (props) => {
           </div>
           <div className="product__price__detail">
             $
-            {props.profile && props.item ? (
-              props.profile.userRole === "dealer" ? (
-                props.item.price.dealer
-              ) : props.profile.userRole === "distributor" ? (
-                props.item.price.distributor
-              ) : props.profile.userRole === "contractor" ? (
-                props.item.price.contractor
-              ) : (
-                props.item.price.regular
-              )
-            ) : (
-              <Link to="/account/login">Login to see price</Link>
-            )}
+            {props.profile && props.item
+              ? props.profile.userRole === "dealer"
+                ? props.item.price.dealer
+                : props.profile.userRole === "distributor"
+                ? props.item.price.distributor
+                : props.profile.userRole === "contractor"
+                ? props.item.price.contractor
+                : props.item.price.regular
+              : // <Link to="/account/login">Login to see price</Link>
+                null}
           </div>
         </div>
         {props.profile && (
