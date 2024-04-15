@@ -1,6 +1,6 @@
 import axios from "axios";
-export const SERVER_URL = "http://localhost:5003/";
-export const API_BASE_URL = "http://localhost:5003/api"; // Update with your API base URL
+export const SERVER_URL = "https://starfish-app-5ajoy.ondigitalocean.app/";
+export const API_BASE_URL = "https://starfish-app-5ajoy.ondigitalocean.app/api"; // Update with your API base URL
 //https://starfish-app-5ajoy.ondigitalocean.app/
 //http://localhost:5000/api
 const api = axios.create({
