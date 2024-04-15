@@ -56,8 +56,8 @@ const ItemCard = (props) => {
               </span>
             </div>
             <br />
-            <div className="product__price">
-              {props.profile !== null ? (
+            {props.profile !== null && (
+              <div className="product__price">
                 <span>
                   {props.profile.userRole === "dealer"
                     ? "$" + props.item.price.dealer
@@ -67,9 +67,8 @@ const ItemCard = (props) => {
                     ? "$" + props.item.price.contractor
                     : "$" + props.item.price.regular}
                 </span>
-              ) : // <Link to="/account/login">Login to see price</Link>
-              null}
-            </div>
+              </div>
+            )}
             {props.profile && (
               <div className="product__card__action">
                 <IconButton
