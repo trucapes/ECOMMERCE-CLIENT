@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import authAPI from "../api/auth";
 
 var pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -142,7 +143,23 @@ export function handleLogIn(email, password, setAlt, setAltMsg, setLoader) {
         setAlt(true);
         setAltMsg(res.data.message);
         if (res.status === 200) {
-          console.log(res.data)
+          console.log(res.data);
+
+          if (res.data.user.isPending === true) {
+            toast.error(
+              "Your account is not verified yet. Please contact admin for verification"
+            );
+            setAlt(true);
+            setAltMsg(
+              "Your account is not verified yet. Please contact admin for verification"
+            );
+            setTimeout(() => {
+              setAlt(false);
+              setAltMsg("");
+            }, 2000);
+            return;
+          }
+
           //set the token and UserContext and navigate to main page
           localStorage.setItem("tru-scapes-token", res.data.token);
           if (res.data.user.userRole === "admin") {
