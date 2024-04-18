@@ -24,6 +24,7 @@ const CategoryView = ({ profile }) => {
 
   const fetchData = async (currentPage = 1) => {
     setData([]);
+    setLoading(true);
     const response = await CategoryAPI.getCategoryByName({
       category: param.id,
       page: currentPage,

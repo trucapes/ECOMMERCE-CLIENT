@@ -86,7 +86,7 @@ const RegisterCard = () => {
           />
         </div>
         <div className="w-full flex gap-4 flex-col sm:flex-row">
-          <div className=" w-full sm:w-[45%]">
+          {/* <div className=" w-full sm:w-[45%]">
             <label htmlFor="ISDcode" className="font-roboto font-bold">
               Select ISD Code<span className="text-red-700">*</span>
             </label>
@@ -110,7 +110,7 @@ const RegisterCard = () => {
                 );
               })}
             </select>
-          </div>
+          </div> */}
           <InputBox
             label={"Enter Mobile No."}
             required={true}

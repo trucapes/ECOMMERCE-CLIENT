@@ -129,7 +129,7 @@ function Checkout() {
           </div>
           <div className="w-full flex flex-row gap-2">
             <InputBox label={"City"} required={true} setter={setCity} />
-            <InputBox label={"Pincode"} required={true} setter={setPincode} />
+            <InputBox label={"ZIPcode"} required={true} setter={setPincode} />
           </div>
         </div>
         <div className="my-8">

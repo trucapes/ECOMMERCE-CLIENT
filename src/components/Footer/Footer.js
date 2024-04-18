@@ -73,7 +73,7 @@ const Footer = () => {
           </div>
         </div> */}
         <div className="fotter__copyright__container">
-          <div>Copyright © 2023 tru-scapes.com, All rights reserved.</div>
+          <div>Copyright © 2024 tru-scapes.com, All rights reserved.</div>
           <ul className="nav">
             <li className="footer__terms__condition"> Terms & Condition |</li>
             <li className="footer__privacy__policy">| Privacy Policy</li>
@@ -90,7 +90,6 @@ const Footer = () => {
 
           </Grid>
         </Container> */}
-
       </div>
     </footer>
   );
