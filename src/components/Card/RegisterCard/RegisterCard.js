@@ -24,7 +24,7 @@ const RegisterCard = () => {
   const [agree, setAgree] = useState(false);
   const [viewPassword, setViewPassword] = useState(false);
   const [viewCnfPassword, setViewCnfPassword] = useState(false);
-  const [enteredISDcode, setEnteredISDcode] = useState("");
+  const [enteredISDcode, setEnteredISDcode] = useState("+1");
   const [cnfPassword, setCnfPassword] = useState("");
   const [password, setPassword] = useState("");
   const [loader, setLoader] = useState(false);
