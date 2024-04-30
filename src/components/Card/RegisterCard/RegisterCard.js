@@ -16,7 +16,7 @@ const RegisterCard = () => {
   const [lName, setLName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
-  const [enteredCountry, setEnteredCountry] = useState("");
+  const [enteredCountry, setEnteredCountry] = useState("United States");
   const [city, setCity] = useState("");
   const [comName, setComName] = useState(null);
   const [comWeb, setComWeb] = useState(null);
@@ -111,6 +111,7 @@ const RegisterCard = () => {
               })}
             </select>
           </div> */}
+
           <InputBox
             label={"Enter Mobile No."}
             required={true}
@@ -129,6 +130,7 @@ const RegisterCard = () => {
                 e.preventDefault();
                 setEnteredCountry(e.target.value);
               }}
+              value={enteredCountry}
               type="text"
               name="country"
               id="country"
@@ -254,19 +256,26 @@ const RegisterCard = () => {
             </div>
           </InputBox>
         </div>
-        <div
-          onClick={(e) => {
-            e.preventDefault();
-            setAgree(!agree);
-          }}
-          className=" w-full flex flex-row justify-start items-center"
-        >
-          <FormControlLabel control={<Checkbox checked={agree} />} label="" />
+        <div className=" w-full flex flex-row justify-start items-center">
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={agree}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setAgree(!agree);
+                }}
+              />
+            }
+            label=""
+          />
           <h1 className="text-sm font-normal">
             I agree to the{" "}
-            <span className="text-blue-600 underline cursor-pointer">
-              Terms and Conditions
-            </span>{" "}
+            <a href="https://tru-scapes.com/refund_returns/">
+              <span className="text-blue-600 underline cursor-pointer">
+                Terms and Conditions
+              </span>
+            </a>{" "}
             of Tru Scapes
           </h1>
         </div>

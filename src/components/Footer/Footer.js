@@ -75,8 +75,25 @@ const Footer = () => {
         <div className="fotter__copyright__container">
           <div>Copyright © 2024 tru-scapes.com, All rights reserved.</div>
           <ul className="nav">
-            <li className="footer__terms__condition"> Terms & Condition |</li>
-            <li className="footer__privacy__policy">| Privacy Policy</li>
+            <li className="footer__terms__condition">
+              {" "}
+              <a
+                style={{ textDecoration: "none", color: "white" }}
+                href="https://tru-scapes.com/refund_returns/"
+              >
+                Refund & Returns Policy
+              </a>{" "}
+              |
+            </li>
+            <li className="footer__privacy__policy">
+              |{" "}
+              <a
+                style={{ textDecoration: "none", color: "white" }}
+                href="https://tru-scapes.com/privacy-policy/"
+              >
+                Privacy Policy
+              </a>
+            </li>
           </ul>
         </div>
         {/* <Container maxWidth={"lg"}>

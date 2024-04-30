@@ -28,6 +28,7 @@ const Control = ({ profile, isAuthenticated }) => {
               size="large"
               sx={{ width: "35px" }}
             />
+            {profile ? null : " Login"}
           </Link>
         </div>
         {profile && (

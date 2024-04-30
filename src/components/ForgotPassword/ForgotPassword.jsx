@@ -11,7 +11,10 @@ function ForgotPassword() {
   const [msg, setMsg] = useState("This is an Error");
   return (
     <div className="forgot_password_container w-full h-full p-[5%]">
-      <div className="w-full flex justify-center items-center">
+      <div
+        style={{ minHeight: "62vh" }}
+        className="w-full flex justify-center items-center"
+      >
         <Stack
           spacing={4}
           className="shadow-md rounded-md w-[95%] sm:w-[50%] p-4 sm:p-8"
@@ -27,9 +30,11 @@ function ForgotPassword() {
               setter={setEmail}
             />
           </div>
-          {alert &&<div className="w-full flex justify-center">
-             <AlertMsg message={msg} /> 
-          </div>}
+          {alert && (
+            <div className="w-full flex justify-center">
+              <AlertMsg message={msg} />
+            </div>
+          )}
           <div className="w-full flex justify-center">
             <button
               onClick={(e) => {

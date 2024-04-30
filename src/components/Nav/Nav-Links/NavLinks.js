@@ -19,9 +19,7 @@ const NavLinks = () => {
       <div className="bottom__container">
         <ul className="nav">
           <li className="nav-link">
-            <a href="https://tru-scapes.com/" target="_blank">
-              Home
-            </a>
+            <a href="https://tru-scapes.com/">Home</a>
           </li>
           <li className="nav-link">
             <Link to="/">Shop</Link>{" "}

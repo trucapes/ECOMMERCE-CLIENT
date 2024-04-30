@@ -1,11 +1,8 @@
 import axios from "axios";
+import { API_BASE_URL } from "../api/apiwrapper";
 
 var pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-export function handleForgotPassword(
-  email,
-  setAlt,
-  setAltMsg
-) {
+export function handleForgotPassword(email, setAlt, setAltMsg) {
   if (email !== "") {
     if (!pattern.test(email)) {
       setAlt(true);
@@ -17,11 +14,13 @@ export function handleForgotPassword(
       return;
     }
     axios
-      .post("http://localhost:3000/forgot", { email })
+      .post(`${API_BASE_URL}/auth/forgot`, { email })
       .then((res) => {
         if (res.data.state === "done") {
           setAlt(true);
-          setAltMsg("Password changed, new password has been sent to your email");
+          setAltMsg(
+            "Password changed, new password has been sent to your email"
+          );
           //set the new password and send it to email
         } else if (res.data.state === "doesNotExist") {
           setAlt(true);

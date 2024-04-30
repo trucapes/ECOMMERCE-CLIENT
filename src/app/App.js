@@ -107,7 +107,10 @@ function App() {
                     </Route>
                   </Route>
                   <Route path="/wishlist" element={<Wishlist />} />
-                  <Route path="/search/*" element={<SearchView />} />
+                  <Route
+                    path="/search/*"
+                    element={<SearchView profile={user} />}
+                  />
 
                   <Route path="/admin">
                     <Route path="" element={<AdminDashboard />} />
