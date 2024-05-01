@@ -6,7 +6,7 @@ import { handleForgotPassword } from "../../helpers/ForgotPassword";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
-
+  const [loader, setLoader] = useState(false);
   const [alert, setAlert] = useState(false);
   const [msg, setMsg] = useState("This is an Error");
   return (
@@ -37,9 +37,10 @@ function ForgotPassword() {
           )}
           <div className="w-full flex justify-center">
             <button
+              disabled={loader}
               onClick={(e) => {
                 e.preventDefault();
-                handleForgotPassword(email, setAlert, setMsg);
+                handleForgotPassword(email, setAlert, setMsg, setLoader);
               }}
               type="submit"
               className="Registration-button w-fit text-black hover:text-white bg-[#ffe26e] duration-300 hover:bg-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"

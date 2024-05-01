@@ -22,7 +22,9 @@ import {
   Add,
   AttachMoney,
   Category,
+  Home,
   LockResetRounded,
+  Person,
   PieChart,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
@@ -276,6 +278,26 @@ const AdminLayout = ({ children, profile }) => {
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
               >
+                <MenuItem
+                  onClick={() => {
+                    window.location.href = "/account/me";
+                  }}
+                >
+                  <ListItemIcon>
+                    <Person fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary="Account" />
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    window.location.href = "/";
+                  }}
+                >
+                  <ListItemIcon>
+                    <Home fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary="Home" />
+                </MenuItem>
                 <MenuItem
                   onClick={() => {
                     setOpenResetPassword(true);
