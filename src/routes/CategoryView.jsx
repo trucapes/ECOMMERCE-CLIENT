@@ -23,7 +23,6 @@ const CategoryView = ({ profile }) => {
   }
 
   const fetchData = async (currentPage = 1) => {
-    setData([]);
     setLoading(true);
     const response = await CategoryAPI.getCategoryByName({
       category: param.id,
@@ -31,7 +30,9 @@ const CategoryView = ({ profile }) => {
     });
     setCategoryName(param.id);
     console.log(response.data.data.products);
-    setData([...data, ...response.data.data.products]);
+    currentPage === 1
+      ? setData([...response.data.data.products])
+      : setData([...data, ...response.data.data.products]);
     setTotalPages(response.data.data.totalPages);
     setLoading(false);
     console.log(data);
