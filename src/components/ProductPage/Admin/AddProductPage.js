@@ -230,7 +230,7 @@ const AddProductPage = ({ product }) => {
   return (
     <div>
       <Typography variant="h4" gutterBottom>
-        Add Product
+        {product ? "Edit Product" : "Add Product"}
       </Typography>
       <form onSubmit={handleSubmit}>
         {/* Product Details Section */}
@@ -554,7 +554,7 @@ const AddProductPage = ({ product }) => {
 
         {/* Submit Button */}
         <Button type="submit" variant="contained" color="primary">
-          Add Product
+          {product ? "Update Product" : "Add Product"}
         </Button>
       </form>
     </div>

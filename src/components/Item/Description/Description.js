@@ -2,7 +2,7 @@ import "./Description.css";
 
 const Description = (props) => {
   return (
-    <div className="product__description__product">
+    <div className="product__description__product" id="description">
       <div className="description__header__container">
         <div className="description__header__line"></div>
         <div className="description__header">Details</div>

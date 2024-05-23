@@ -61,13 +61,41 @@ const Detail = (props) => {
     wishItems.addItem(itemForWish);
   };
 
+  const stripHtml = (html) => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent || "";
+  };
+
+  const truncateText = (text, maxLength) => {
+    return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+  };
+
+  const getShortDescription = (htmlContent, maxLength) => {
+    const plainText = stripHtml(htmlContent);
+    return truncateText(plainText, maxLength);
+  };
+
   return (
     <div className="product__detail__container">
       <div className="product__detail">
         <div className="product__main__detail">
-          {/* <div className="product__name__main">{props.item.name}</div> */}
-          <div className="product__detail__description">{props.item.name}</div>
-          <div className="product__color flex flex-row gap-3">
+          <div className="product__name__main" style={{ fontSize: "18px" }}>
+            {props.item.name}
+          </div>
+          <div
+            className="product__detail__description"
+            style={{ fontSize: "14px", marginTop: "10px" }}
+          >
+            {getShortDescription(props.item.description, 200)}
+          </div>
+          <a
+            href="#description"
+            className="product__link"
+            style={{ marginTop: "10px", color: "blue" }}
+          >
+            Read more &nbsp; &gt;&gt;
+          </a>
+          {/* <div className="product__color flex flex-row gap-3">
             {props.item.hotProduct && (
               <Chip
                 label={"Hot Product"}
@@ -85,7 +113,7 @@ const Detail = (props) => {
                 sx={{ color: "black", backgroundColor: "#FFE26E" }}
               />
             )}
-          </div>
+          </div> */}
           <div className="product__price__detail">
             {props.profile && props.item
               ? props.profile.userRole === "dealer"

@@ -46,9 +46,9 @@ const DrawerNav = ({ profile, isAuthenticated }) => {
     >
       <List>
         <ListItem>
-          <Link to="https://tru-scapes.com/">
+          <a href="https://tru-scapes.com/">
             <ListItemText primary="Home" />
-          </Link>
+          </a>
         </ListItem>
         <ListItem>
           <Link to="/">

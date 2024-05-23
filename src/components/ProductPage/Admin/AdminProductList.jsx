@@ -23,13 +23,17 @@ import {
   DeleteOutline,
   Close,
   Edit,
+  ArrowUpward,
+  ArrowDownward,
+  ArrowCircleUp,
+  ArrowCircleDown,
 } from "@mui/icons-material";
 import Modal from "@mui/material/Modal";
 import { toast } from "react-toastify";
 import AdminUserAPI from "../../../api/admin/adminUserAPI";
 import AdminProductAPI from "../../../api/admin/adminProductAPI";
 import AddProductPage from "./AddProductPage";
-import { SERVER_URL } from "../../../api/apiwrapper";
+import { SERVER_URL, setDynamicContentType } from "../../../api/apiwrapper";
 import NoDataFound from "../../NoDataFound/NoDataFound";
 
 const AdminProductList = () => {
@@ -38,7 +42,7 @@ const AdminProductList = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [sortBy, setSortBy] = useState("createdAt"); // Default sorting by createdAt
+  const [sortBy, setSortBy] = useState("index"); // Default sorting by createdAt
   const [openModal, setOpenModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
@@ -142,6 +146,196 @@ const AdminProductList = () => {
     setSelectedUser(null);
   };
 
+  const handleMoveUp = async (product, index) => {
+    try {
+      loading = true;
+      if (index > 0) {
+        const product_at_index = products[index];
+        const product_at_index_1 = products[index - 1];
+
+        const inputData = product_at_index;
+        const prodData_i = {
+          name: inputData.name,
+          description: inputData.description,
+          category: inputData.category._id,
+          "price.regular": inputData.price.regular.toString(),
+          "price.distributor": inputData.price.distributor.toString(),
+          "price.dealer": inputData.price.dealer.toString(),
+          "price.contractor": inputData.price.contractor.toString(),
+          "discount.distributor": inputData.discount.distributor.toString(),
+          "discount.dealer": inputData.discount.dealer.toString(),
+          "discount.contractor": inputData.discount.contractor.toString(),
+          "salesTax.distributor": inputData.salesTax.distributor.toString(),
+          "salesTax.dealer": inputData.salesTax.dealer.toString(),
+          "salesTax.contractor": inputData.salesTax.contractor.toString(),
+          shippingCost: inputData.shippingCost.toString(),
+          stockAvailable: inputData.stockAvailable,
+          hotProduct: inputData.hotProduct,
+          index: product_at_index_1.index.toString(),
+        };
+        const prodData_i_1 = {
+          name: product_at_index_1.name,
+          description: product_at_index_1.description,
+          category: product_at_index_1.category._id,
+          "price.regular": product_at_index_1.price.regular.toString(),
+          "price.distributor": product_at_index_1.price.distributor.toString(),
+          "price.dealer": product_at_index_1.price.dealer.toString(),
+          "price.contractor": product_at_index_1.price.contractor.toString(),
+          "discount.distributor":
+            product_at_index_1.discount.distributor.toString(),
+          "discount.dealer": product_at_index_1.discount.dealer.toString(),
+          "discount.contractor":
+            product_at_index_1.discount.contractor.toString(),
+          "salesTax.distributor":
+            product_at_index_1.salesTax.distributor.toString(),
+          "salesTax.dealer": product_at_index_1.salesTax.dealer.toString(),
+          "salesTax.contractor":
+            product_at_index_1.salesTax.contractor.toString(),
+          shippingCost: product_at_index_1.shippingCost.toString(),
+          stockAvailable: product_at_index_1.stockAvailable,
+          hotProduct: product_at_index_1.hotProduct,
+          index: product_at_index.index.toString(),
+        };
+
+        product_at_index.index = product_at_index_1.index;
+        product_at_index_1.index = inputData.index;
+
+        const formdata_i = new FormData();
+        const formdata_i_1 = new FormData();
+
+        for (const key in prodData_i) {
+          formdata_i.append(key, prodData_i[key]);
+          formdata_i_1.append(key, prodData_i_1[key]);
+        }
+
+        setDynamicContentType("multipart/form-data");
+
+        const response = await AdminProductAPI.editProduct(
+          product_at_index._id,
+          formdata_i
+        );
+        const response2 = await AdminProductAPI.editProduct(
+          product_at_index_1._id,
+          formdata_i_1
+        );
+
+        if ((response.data.error === false, response2.data.error === false)) {
+          setProducts([
+            ...products.slice(0, index - 1),
+            product_at_index,
+            product_at_index_1,
+            ...products.slice(index + 1),
+          ]);
+          toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setDynamicContentType("application/json");
+      loading = false;
+      fetchData();
+    }
+  };
+
+  const handleMovedown = async (product, index) => {
+    try {
+      loading = true;
+      if (index < products.length - 1) {
+        const product_at_index = products[index + 1];
+        const product_at_index_1 = products[index];
+
+        const inputData = product_at_index;
+        const prodData_i = {
+          name: inputData.name,
+          description: inputData.description,
+          category: inputData.category._id,
+          "price.regular": inputData.price.regular.toString(),
+          "price.distributor": inputData.price.distributor.toString(),
+          "price.dealer": inputData.price.dealer.toString(),
+          "price.contractor": inputData.price.contractor.toString(),
+          "discount.distributor": inputData.discount.distributor.toString(),
+          "discount.dealer": inputData.discount.dealer.toString(),
+          "discount.contractor": inputData.discount.contractor.toString(),
+          "salesTax.distributor": inputData.salesTax.distributor.toString(),
+          "salesTax.dealer": inputData.salesTax.dealer.toString(),
+          "salesTax.contractor": inputData.salesTax.contractor.toString(),
+          shippingCost: inputData.shippingCost.toString(),
+          stockAvailable: inputData.stockAvailable,
+          hotProduct: inputData.hotProduct,
+          index: product_at_index_1.index.toString(),
+        };
+        const prodData_i_1 = {
+          name: product_at_index_1.name,
+          description: product_at_index_1.description,
+          category: product_at_index_1.category._id,
+          "price.regular": product_at_index_1.price.regular.toString(),
+          "price.distributor": product_at_index_1.price.distributor.toString(),
+          "price.dealer": product_at_index_1.price.dealer.toString(),
+          "price.contractor": product_at_index_1.price.contractor.toString(),
+          "discount.distributor":
+            product_at_index_1.discount.distributor.toString(),
+          "discount.dealer": product_at_index_1.discount.dealer.toString(),
+          "discount.contractor":
+            product_at_index_1.discount.contractor.toString(),
+          "salesTax.distributor":
+            product_at_index_1.salesTax.distributor.toString(),
+          "salesTax.dealer": product_at_index_1.salesTax.dealer.toString(),
+          "salesTax.contractor":
+            product_at_index_1.salesTax.contractor.toString(),
+          shippingCost: product_at_index_1.shippingCost.toString(),
+          stockAvailable: product_at_index_1.stockAvailable,
+          hotProduct: product_at_index_1.hotProduct,
+          index: product_at_index.index.toString(),
+        };
+
+        product_at_index.index = product_at_index_1.index;
+        product_at_index_1.index = inputData.index;
+
+        const formdata_i = new FormData();
+        const formdata_i_1 = new FormData();
+
+        for (const key in prodData_i) {
+          formdata_i.append(key, prodData_i[key]);
+          formdata_i_1.append(key, prodData_i_1[key]);
+        }
+
+        setDynamicContentType("multipart/form-data");
+
+        const response = await AdminProductAPI.editProduct(
+          product_at_index._id,
+          formdata_i
+        );
+        const response2 = await AdminProductAPI.editProduct(
+          product_at_index_1._id,
+          formdata_i_1
+        );
+
+        if ((response.data.error === false, response2.data.error === false)) {
+          setProducts([
+            ...products.slice(0, index - 1),
+            product_at_index,
+            product_at_index_1,
+            ...products.slice(index + 1),
+          ]);
+          toast.success(response.data.message);
+        } else {
+          toast.error(response.data.message);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      loading = false;
+
+      setDynamicContentType("application/json");
+
+      fetchData();
+    }
+  };
+
   return (
     <div className="p-2 w-full">
       <div className="w-full flex flex-row justify-between items-center">
@@ -213,7 +407,22 @@ const AdminProductList = () => {
             <TableBody>
               {products.map((product, index) => (
                 <TableRow key={index}>
-                  <TableCell>{product.index}</TableCell>
+                  <TableCell style={{ fontSize: "16px" }}>
+                    <div className="flex flex-row justify-center items-center">
+                      <ArrowCircleUp
+                        style={{
+                          color: `${index == 0 ? "gray" : "green"}`,
+                          paddingRight: "5px",
+                        }}
+                        onClick={() => handleMoveUp(product, index)}
+                      />
+                      {product.index}
+                      <ArrowCircleDown
+                        style={{ color: "red", paddingLeft: "5px" }}
+                        onClick={() => handleMovedown(product, index)}
+                      />
+                    </div>
+                  </TableCell>
                   <TableCell>
                     {product.images[0] && (
                       <a
