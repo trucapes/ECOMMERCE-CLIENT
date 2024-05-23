@@ -148,7 +148,7 @@ const AdminProductList = () => {
 
   const handleMoveUp = async (product, index) => {
     try {
-      loading = true;
+      setLoading(true);
       if (index > 0) {
         const product_at_index = products[index];
         const product_at_index_1 = products[index - 1];
@@ -235,14 +235,14 @@ const AdminProductList = () => {
       console.error(error);
     } finally {
       setDynamicContentType("application/json");
-      loading = false;
+      setLoading(false);
       fetchData();
     }
   };
 
   const handleMovedown = async (product, index) => {
     try {
-      loading = true;
+      setLoading(true);
       if (index < products.length - 1) {
         const product_at_index = products[index + 1];
         const product_at_index_1 = products[index];
@@ -328,10 +328,8 @@ const AdminProductList = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      loading = false;
-
+      setLoading(false);
       setDynamicContentType("application/json");
-
       fetchData();
     }
   };
