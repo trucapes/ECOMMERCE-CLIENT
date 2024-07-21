@@ -22,6 +22,7 @@ const NavLinks = () => {
             <a href="https://tru-scapes.com/" target="_blank">
               Home
             </a>
+
           </li>
           <li className="nav-link">
             <Link to="/">Shop</Link>{" "}

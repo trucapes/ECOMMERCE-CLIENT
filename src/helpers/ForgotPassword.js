@@ -1,11 +1,9 @@
 import axios from "axios";
+import { API_BASE_URL } from "../api/apiwrapper";
+import { toast } from "react-toastify";
 
 var pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-export function handleForgotPassword(
-  email,
-  setAlt,
-  setAltMsg
-) {
+export function handleForgotPassword(email, setAlt, setAltMsg, setLoader) {
   if (email !== "") {
     if (!pattern.test(email)) {
       setAlt(true);
@@ -16,12 +14,23 @@ export function handleForgotPassword(
       }, 2000);
       return;
     }
+
+    setLoader(true);
     axios
-      .post("http://localhost:3000/forgot", { email })
+      .post(`${API_BASE_URL}/auth/forgot`, { email })
       .then((res) => {
-        if (res.data.state === "done") {
+        if (
+          res.data.state === "done" ||
+          res.status === 200 ||
+          res.status === 201
+        ) {
           setAlt(true);
-          setAltMsg("Password changed, new password has been sent to your email");
+          setAltMsg(
+            "Password changed, new password has been sent to your email"
+          );
+          toast.success(
+            "Password changed, new password has been sent to your email"
+          );
           //set the new password and send it to email
         } else if (res.data.state === "doesNotExist") {
           setAlt(true);
@@ -33,6 +42,7 @@ export function handleForgotPassword(
         setAltMsg("Error while sending the data");
       })
       .finally(() => {
+        setLoader(false);
         setTimeout(() => {
           setAlt(false);
           setAltMsg("");

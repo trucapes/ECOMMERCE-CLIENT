@@ -12,9 +12,12 @@ import {
   IconButton,
   styled,
   Grid,
+  Tooltip,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
+import { LockResetRounded } from "@mui/icons-material";
+import ResetPasswordPopup from "../../Card/RegisterCard/ResetPasswordPopup";
 
 const Container = styled("div")({
   marginTop: "20px",
@@ -37,6 +40,7 @@ const StyledTextField = styled(TextField)({
 const BasicInfoTab = ({ userData, isAdmin }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedData, setEditedData] = useState(userData);
+  const [openResetPasswordPopup, setOpenResetPasswordPopup] = useState(false);
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -80,13 +84,25 @@ const BasicInfoTab = ({ userData, isAdmin }) => {
                 </Button>
               </>
             ) : (
-              <EditButton
-                aria-label="edit"
-                color="primary"
-                onClick={handleEditClick}
-              >
-                <EditIcon />
-              </EditButton>
+              <>
+                <Tooltip title="Edit user information">
+                  <EditButton
+                    aria-label="edit"
+                    color="primary"
+                    onClick={handleEditClick}
+                  >
+                    <EditIcon />
+                  </EditButton>
+                </Tooltip>
+                <Tooltip title="Reset password">
+                  <IconButton
+                    aria-label="reset password"
+                    onClick={() => setOpenResetPasswordPopup(true)}
+                  >
+                    <LockResetRounded color="primary" />
+                  </IconButton>
+                </Tooltip>
+              </>
             )}
           </Grid>
         </Grid>
@@ -218,6 +234,11 @@ const BasicInfoTab = ({ userData, isAdmin }) => {
           </TableBody>
         </Table>
       </TableContainer>
+      <ResetPasswordPopup
+        isOpen={openResetPasswordPopup}
+        setIsOpen={setOpenResetPasswordPopup}
+        email={userData.email}
+      />
     </Container>
   );
 };

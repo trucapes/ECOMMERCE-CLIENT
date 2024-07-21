@@ -18,7 +18,15 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
-import { Add, AttachMoney, Category, PieChart } from "@mui/icons-material";
+import {
+  Add,
+  AttachMoney,
+  Category,
+  Home,
+  LockResetRounded,
+  Person,
+  PieChart,
+} from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import Avatar from "@mui/material/Avatar";
@@ -27,6 +35,7 @@ import MenuItem from "@mui/material/MenuItem";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { FaChevronDown } from "react-icons/fa6";
 import profileAPI from "../../../api/profileAPI";
+import ResetPasswordPopup from "../../Card/RegisterCard/ResetPasswordPopup";
 
 export const mainListItems = (
   <React.Fragment>
@@ -179,6 +188,7 @@ const AdminLayout = ({ children, profile }) => {
   const [open, setOpen] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [openResetPassword, setOpenResetPassword] = React.useState(false);
   const nav = useNavigate();
 
   const toggleDrawer = () => {
@@ -268,6 +278,36 @@ const AdminLayout = ({ children, profile }) => {
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
               >
+                <MenuItem
+                  onClick={() => {
+                    window.location.href = "/account/me";
+                  }}
+                >
+                  <ListItemIcon>
+                    <Person fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary="Account" />
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    window.location.href = "/";
+                  }}
+                >
+                  <ListItemIcon>
+                    <Home fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary="Home" />
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    setOpenResetPassword(true);
+                  }}
+                >
+                  <ListItemIcon>
+                    <LockResetRounded fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary="Reset Password" />
+                </MenuItem>
                 <MenuItem onClick={handleLogout}>
                   <ListItemIcon>
                     <LogoutIcon fontSize="small" />
@@ -313,6 +353,14 @@ const AdminLayout = ({ children, profile }) => {
             </Container>
           </Box>
         </Box>
+      )}
+
+      {profile && profile.email && (
+        <ResetPasswordPopup
+          isOpen={openResetPassword}
+          setIsOpen={setOpenResetPassword}
+          email={profile.email}
+        />
       )}
 
       {loading && (

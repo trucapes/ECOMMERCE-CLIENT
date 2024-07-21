@@ -32,6 +32,7 @@ import MyAccount from "../components/Account/MyAccount/MyAccount";
 import { toast } from "react-toastify";
 import TransactionPopUp from "../components/TransactionPopUp/TransactionPopUp";
 import NoDataFound from "../components/NoDataFound/NoDataFound";
+import Register from "../components/Authentication/Register/Register";
 
 const AdminUsers = ({ profile }) => {
   const [users, setUsers] = useState([]);
@@ -43,6 +44,7 @@ const AdminUsers = ({ profile }) => {
   const [isPending, setIsPending] = useState("all"); // Default no filter for isPending
   const [userRole, setUserRole] = useState("all"); // Default no filter for userRole
   const [openModal, setOpenModal] = useState(false);
+  const [openUserRegisterModel, setOpenUserRegisterModel] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
   console.log(profile);
@@ -153,12 +155,31 @@ const AdminUsers = ({ profile }) => {
     setSelectedUser(null);
   };
 
+  const handleOpenRegisterUserModel = () => {
+    setSelectedUser(null);
+    setOpenUserRegisterModel(true);
+  };
+
+  const handleCloseRegisterUserModel = () => {
+    setOpenUserRegisterModel(false);
+    setSelectedUser(null);
+  };
+
   console.log(users);
 
   return (
     <div className="p-2 w-full">
       <div className="w-full flex flex-row justify-between items-center">
-        <h1 className="text-3xl mt-4 mb-4 text-gray-900">Users</h1>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <h1 className="text-3xl mt-4 mb-4 text-gray-900">Users</h1>
+          &nbsp;
+          <button
+            onClick={handleOpenRegisterUserModel}
+            className="Registration-button w-fit text-black hover:text-white bg-[#ffe26e] duration-300 hover:bg-black font-medium rounded-lg text-sm px-4 py-2.5 text-center"
+          >
+            Add User
+          </button>
+        </div>
         {users && users.length > 0 && (
           <div className=" flex flex-row items-stretch justify-center">
             <input
@@ -316,6 +337,34 @@ const AdminUsers = ({ profile }) => {
             <Close color="error" />
           </IconButton>
           {selectedUser && <MyAccount user={selectedUser} isAdmin={true} />}
+        </div>
+      </Modal>
+
+      <Modal
+        open={openUserRegisterModel}
+        onClose={handleCloseRegisterUserModel}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            background: "rgba(0,0,0, 0.5)",
+            height: "100vh",
+            overflowY: "auto",
+          }}
+        >
+          <div
+            style={{ background: "#fff", height: "80vh", overflowY: "auto" }}
+          >
+            <IconButton
+              style={{ position: "absolute", top: "10px", right: "10px" }}
+              onClick={handleCloseRegisterUserModel}
+            >
+              <Close color="error" />
+            </IconButton>
+            <Register />
+          </div>
         </div>
       </Modal>
     </div>

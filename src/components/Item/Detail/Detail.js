@@ -13,9 +13,10 @@ import { CartItemsContext } from "../../../Context/CartItemsContext";
 import { WishItemsContext } from "../../../Context/WishItemsContext";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Detail = (props) => {
-  console.log(props);
+  console.log(props.item);
   const [quantity, setQuantity] = useState(1);
   const [size, setSize] = useState();
 
@@ -41,9 +42,9 @@ const Detail = (props) => {
         ? props.item.price.distributor
         : props.profile.userRole === "contractor"
         ? props.item.price.contractor
-        : props.item.pricer.regular;
+        : props.item.price.regular;
     cartItems.addItem(itemForCart, quantity, size);
-    console.log(cartItems.items);
+    toast.success("Item added to cart");
   };
 
   const handelAddToWish = () => {
@@ -56,19 +57,45 @@ const Detail = (props) => {
         ? props.item.price.distributor
         : props.profile.userRole === "contractor"
         ? props.item.price.contractor
-        : props.item.pricer.regular;
+        : props.item.price.regular;
     wishItems.addItem(itemForWish);
+  };
+
+  const stripHtml = (html) => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent || "";
+  };
+
+  const truncateText = (text, maxLength) => {
+    return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+  };
+
+  const getShortDescription = (htmlContent, maxLength) => {
+    const plainText = stripHtml(htmlContent);
+    return truncateText(plainText, maxLength);
   };
 
   return (
     <div className="product__detail__container">
       <div className="product__detail">
         <div className="product__main__detail">
-          {/* <div className="product__name__main">{props.item.name}</div> */}
-          <div className="product__detail__description">
-            {props.item.description.trim().split(".").slice(0, 1).join(".")}
+          <div className="product__name__main" style={{ fontSize: "18px" }}>
+            {props.item.name}
           </div>
-          <div className="product__color flex flex-row gap-3">
+          <div
+            className="product__detail__description"
+            style={{ fontSize: "14px", marginTop: "10px" }}
+          >
+            {getShortDescription(props.item.description, 200)}
+          </div>
+          <a
+            href="#description"
+            className="product__link"
+            style={{ marginTop: "10px", color: "blue" }}
+          >
+            Read more &nbsp; &gt;&gt;
+          </a>
+          {/* <div className="product__color flex flex-row gap-3">
             {props.item.hotProduct && (
               <Chip
                 label={"Hot Product"}
@@ -86,22 +113,18 @@ const Detail = (props) => {
                 sx={{ color: "black", backgroundColor: "#FFE26E" }}
               />
             )}
-          </div>
+          </div> */}
           <div className="product__price__detail">
-            $
-            {props.profile ? (
-              props.profile.userRole === "dealer" ? (
-                props.item.price.dealer
-              ) : props.profile.userRole === "distributor" ? (
-                props.item.price.distributor
-              ) : props.profile.userRole === "contractor" ? (
-                props.item.price.contractor
-              ) : (
-                props.item.pricer.regular
-              )
-            ) : (
-              <Link to="/account/login">Login to see price</Link>
-            )}
+            {props.profile && props.item
+              ? props.profile.userRole === "dealer"
+                ? "$" + props.item.price.dealer
+                : props.profile.userRole === "distributor"
+                ? "$" + props.item.price.distributor
+                : props.profile.userRole === "contractor"
+                ? "$" + props.item.price.contractor
+                : "$" + props.item.price.regular
+              : // <Link to="/account/login">Login to see price</Link>
+                null}
           </div>
         </div>
         {props.profile && (

@@ -16,7 +16,7 @@ const RegisterCard = () => {
   const [lName, setLName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
-  const [enteredCountry, setEnteredCountry] = useState("");
+  const [enteredCountry, setEnteredCountry] = useState("United States");
   const [city, setCity] = useState("");
   const [comName, setComName] = useState(null);
   const [comWeb, setComWeb] = useState(null);
@@ -24,7 +24,7 @@ const RegisterCard = () => {
   const [agree, setAgree] = useState(false);
   const [viewPassword, setViewPassword] = useState(false);
   const [viewCnfPassword, setViewCnfPassword] = useState(false);
-  const [enteredISDcode, setEnteredISDcode] = useState("");
+  const [enteredISDcode, setEnteredISDcode] = useState("+1");
   const [cnfPassword, setCnfPassword] = useState("");
   const [password, setPassword] = useState("");
   const [loader, setLoader] = useState(false);
@@ -86,7 +86,7 @@ const RegisterCard = () => {
           />
         </div>
         <div className="w-full flex gap-4 flex-col sm:flex-row">
-          <div className=" w-full sm:w-[45%]">
+          {/* <div className=" w-full sm:w-[45%]">
             <label htmlFor="ISDcode" className="font-roboto font-bold">
               Select ISD Code<span className="text-red-700">*</span>
             </label>
@@ -110,7 +110,8 @@ const RegisterCard = () => {
                 );
               })}
             </select>
-          </div>
+          </div> */}
+
           <InputBox
             label={"Enter Mobile No."}
             required={true}
@@ -129,6 +130,7 @@ const RegisterCard = () => {
                 e.preventDefault();
                 setEnteredCountry(e.target.value);
               }}
+              value={enteredCountry}
               type="text"
               name="country"
               id="country"
@@ -254,19 +256,26 @@ const RegisterCard = () => {
             </div>
           </InputBox>
         </div>
-        <div
-          onClick={(e) => {
-            e.preventDefault();
-            setAgree(!agree);
-          }}
-          className=" w-full flex flex-row justify-start items-center"
-        >
-          <FormControlLabel control={<Checkbox checked={agree} />} label="" />
+        <div className=" w-full flex flex-row justify-start items-center">
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={agree}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setAgree(!agree);
+                }}
+              />
+            }
+            label=""
+          />
           <h1 className="text-sm font-normal">
             I agree to the{" "}
-            <span className="text-blue-600 underline cursor-pointer">
-              Terms and Conditions
-            </span>{" "}
+            <a href="https://tru-scapes.com/refund_returns/">
+              <span className="text-blue-600 underline cursor-pointer">
+                Terms and Conditions
+              </span>
+            </a>{" "}
             of Tru Scapes
           </h1>
         </div>

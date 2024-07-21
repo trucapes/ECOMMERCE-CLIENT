@@ -214,8 +214,8 @@ const AdminUsers = ({ profile }) => {
                 <TableCell>Email</TableCell>
                 <TableCell>User Role</TableCell>
                 <TableCell>Balance</TableCell>
-                <TableCell>Credit</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell>Due Credits</TableCell>
+                <TableCell>Manage Credits</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -231,7 +231,10 @@ const AdminUsers = ({ profile }) => {
                     2
                   )}`}</TableCell>
                   <TableCell sx={{ textTransform: "capitalize" }}>
-                    ${user.credit !== null ? parseFloat(user.credit.credit).toFixed(2) : 0}
+                    $
+                    {user.credit !== null
+                      ? parseFloat(user.credit.credit).toFixed(2)
+                      : 0}
                   </TableCell>
                   <TableCell>
                     <IconButton

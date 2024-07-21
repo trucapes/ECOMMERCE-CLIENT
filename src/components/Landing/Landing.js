@@ -7,12 +7,14 @@ const Landing = () => {
   return (
     <div className="landing__container">
       <div className="landing">
+
           <Container maxWidth="lg" sx={{mt: 16, mb: 10}}>
             {/* <h3 className="landing__header__discount">UP TO 15% DISCOUNT</h3> */}
             <h1 className="landing__header__main">
               Create Stunning Outdoor Spaces with Tru-Scapes Lighting
             </h1>
             {/* <Link to="/shop">
+
               <Button
                 variant="outlined"
                 sx={[
@@ -37,8 +39,10 @@ const Landing = () => {
                 SHOP NOW
               </Button>
             </Link> */}
+
           </Container>
         </div>
+
     </div>
   );
 };
