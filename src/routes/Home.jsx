@@ -7,13 +7,14 @@ import { TabTitle } from "../utils/General";
 import ShopCategory from "../components/Shop/Container/ShopCategory";
 import { userProductsAPI } from "../api/userProductsAPI";
 import { CartItemsContext } from "../Context/CartItemsContext";
+import { Container } from "@mui/material";
 
 const Home = ({ profile }) => {
   const [categoryFeaturedItems, setCategoryFeaturedItems] = useState([]);
   TabTitle("Shop - Tru Scapes");
   const [loading, setLoading] = useState(true);
   const cartItems = useContext(CartItemsContext);
-  console.log(cartItems.items, cartItems.totalAmount);
+  // console.log(cartItems.items, cartItems.totalAmount);
 
   useEffect(() => {
     const getHomeItems = async () => {
@@ -38,18 +39,21 @@ const Home = ({ profile }) => {
   return (
     <Fragment>
       <Landing />
-      <FeaturedCategories />
-      <FeaturedItems profile={profile} />
-      {categoryFeaturedItems &&
-        categoryFeaturedItems.length > 0 &&
-        categoryFeaturedItems.map((item) => (
-          <ShopCategory
-            profile={profile}
-            name="Hardscape"
-            key="men"
-            items={item}
-          />
-        ))}
+      <Container maxWidth="xl" sx={{mt: 16, mb: 10}}>
+        <FeaturedCategories />
+        <FeaturedItems profile={profile} />
+        {categoryFeaturedItems &&
+          categoryFeaturedItems.length > 0 &&
+          categoryFeaturedItems.map((item) => (
+            <ShopCategory
+              profile={profile}
+              name="Hardscape"
+              key="men"
+              items={item}
+            />
+          ))}
+      </Container>
+      
     </Fragment>
   );
 };
