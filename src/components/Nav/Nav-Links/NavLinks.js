@@ -18,12 +18,15 @@ const NavLinks = () => {
     <nav className="nav__bottom__container">
       <div className="bottom__container">
         <ul className="nav">
-          <li className="nav-link">
-            <a href="https://tru-scapes.com/">Home</a>
+          {/* <li className="nav-link">
+            <a href="https://tru-scapes.com/" target="_blank">
+              Home
+            </a>
+
           </li>
           <li className="nav-link">
             <Link to="/">Shop</Link>{" "}
-          </li>
+          </li> */}
           {categories.length > 0 &&
             categories.map((category) => (
               <li className="nav-link">

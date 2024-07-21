@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Footer from "../../Footer/Footer";
 import Header from "../../Header/Header";
+import { Container } from "@mui/material";
 
 const UserLayout = ({ children, profile, isAuthenticated }) => {
   useEffect(()=> {
@@ -14,7 +15,10 @@ const UserLayout = ({ children, profile, isAuthenticated }) => {
   return (
     <>
       <Header profile={profile} isAuthenticated={isAuthenticated} />
-      <div className="page-wrapper">{children}</div>
+      
+      <Container maxWidth="xl" sx={{mt: 5, mb: 5}}>
+        <div className="page-wrapper">{children}</div>
+      </Container>
       <Footer />
     </>
   );

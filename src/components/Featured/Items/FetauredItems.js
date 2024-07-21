@@ -29,7 +29,7 @@ const FeaturedItems = (props) => {
           <h3 className="featured__items__header__big">Featured Items </h3>
         </div>
         <div className="featured__products__header__line"></div>
-        <div className="d-flex min-vh-100 w-100 justify-content-center align-items-center m-auto">
+        <div className="d-flex w-100 justify-content-center align-items-center m-auto">
           {featuredItems && featuredItems.length === 0 && (
             <ReactLoading
               type="balls"
