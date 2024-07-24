@@ -30,9 +30,9 @@ const ItemCard = (props) => {
         <div className="product__card">
           <div className="product__image">
             <img
-              src={`${
+              src={props.item.images[0] && props.item.images[0].path ?`${
                 SERVER_URL + props.item.images[0].path.replace(/\\/g, "/")
-              }`.replace("/public/", "/")}
+              }`.replace("/public/", "/"): props.item.images[0]}
               alt="item"
               className="product__img"
             />
