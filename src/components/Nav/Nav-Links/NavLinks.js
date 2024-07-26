@@ -3,16 +3,18 @@ import "./NavLinks.css";
 import { useEffect, useState } from "react";
 import { CategoryAPI } from "../../../api/categoryAPI";
 
-const NavLinks = () => {
+const NavLinks = ({profile}) => {
   const [categories, setCategories] = useState([]);
   useEffect(() => {
     const getCategories = async () => {
-      const response = await CategoryAPI.getCategories();
-      console.log(response.data.data);
-      setCategories([...response.data.data]);
+      const res = await CategoryAPI.getCategories();
+      if(profile && profile.userRole === "contractor"){
+        res.data.data = res.data.data.filter((item) => !(item.name.includes("Hardscape") || item.name.includes("Landscape")));
+      }
+      setCategories([...res.data.data]);
     };
     getCategories();
-  }, []);
+  }, [profile]);
 
   return (
     <nav className="nav__bottom__container">

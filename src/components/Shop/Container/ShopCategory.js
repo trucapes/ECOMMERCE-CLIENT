@@ -5,9 +5,9 @@ import { ArrowRight } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
 const ShopCategory = (props) => {
-  console.log(props.items);
   return (
-    <div className="shop__category__container">
+    <>
+    {props.profile && props.profile.userRole === "contractor" && !(props.items.title.includes('Landscape') || props.items.title.includes('Hardscape')) ? <div className="shop__category__container">
       <div className="shop__category__header">
         <div className="shop__category__header__big">
           <div className="shop__category__head flex flex-row">
@@ -43,7 +43,8 @@ const ShopCategory = (props) => {
           ))}
         </div>
       </div>
-    </div>
+    </div>: <div></div>}
+    </>
   );
 };
 

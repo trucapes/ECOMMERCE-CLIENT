@@ -40,7 +40,7 @@ const Home = ({ profile }) => {
     <Fragment>
       <Landing />
       <Container maxWidth="xl" sx={{mt: 16, mb: 10}}>
-        <FeaturedCategories />
+        <FeaturedCategories profile={profile} />
         <FeaturedItems profile={profile} />
         {categoryFeaturedItems &&
           categoryFeaturedItems.length > 0 &&
