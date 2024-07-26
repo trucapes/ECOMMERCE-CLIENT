@@ -1,9 +1,9 @@
 import axios from "axios";
 
-// export const SERVER_URL = "https://orca-app-ulef7.ondigitalocean.app/";
-// export const API_BASE_URL = "https://orca-app-ulef7.ondigitalocean.app/api"; // Update with your API base URL
-export const SERVER_URL = "http://localhost:5003/";
-export const API_BASE_URL = "http://localhost:5003/api"; // Update with your API base URL
+export const SERVER_URL = "https://orca-app-ulef7.ondigitalocean.app/";
+export const API_BASE_URL = "https://orca-app-ulef7.ondigitalocean.app/api"; // Update with your API base URL
+// export const SERVER_URL = "http://localhost:5003/";
+// export const API_BASE_URL = "http://localhost:5003/api"; // Update with your API base URL
 
 //https://starfish-app-5ajoy.ondigitalocean.app/
 //http://localhost:5000/api

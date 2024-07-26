@@ -7,6 +7,7 @@ import Cart from "../../Card/Cart/Cart";
 import { useContext } from "react";
 import { WishItemsContext } from "../../../Context/WishItemsContext";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import { Button } from "@mui/material";
 
 const Control = ({ profile, isAuthenticated }) => {
   const wishItems = useContext(WishItemsContext);
@@ -21,14 +22,9 @@ const Control = ({ profile, isAuthenticated }) => {
   return (
     <div className="control__bar__container">
       <div className="controls__container">
-        <div className="control">
+        <div className="controls">
           <Link to={`/account/${profile ? "me" : "login"}`}>
-            <PersonOutlineIcon
-              color="black"
-              size="large"
-              sx={{ width: "35px" }}
-            />
-            {profile ? null : " Login"}
+            <Button variant="contained" > Login</Button>
           </Link>
         </div>
         {profile && (
