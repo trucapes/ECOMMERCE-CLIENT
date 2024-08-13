@@ -23,9 +23,9 @@ const Control = ({ profile, isAuthenticated }) => {
     <div className="control__bar__container">
       <div className="controls__container">
         <div className="controls">
-          <Link to={`/account/${profile ? "me" : "login"}`}>
+          {!profile && <Link to={`/account/${profile ? "me" : "login"}`}>
             <Button variant="contained" > Login</Button>
-          </Link>
+          </Link>} 
         </div>
         {profile && (
           <>
