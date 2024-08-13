@@ -23,6 +23,7 @@ import {
   AttachMoney,
   Category,
   Home,
+  Image,
   LockResetRounded,
   Person,
   PieChart,
@@ -93,6 +94,14 @@ export const mainListItems = (
           <AttachMoney />
         </ListItemIcon>
         <ListItemText primary="Payments" />
+      </ListItemButton>
+    </Link>
+    <Link style={{ color: "#000" }} legacyBehavior href="/gallery">
+      <ListItemButton>
+        <ListItemIcon>
+          <Image />
+        </ListItemIcon>
+        <ListItemText primary="Image Gallery" />
       </ListItemButton>
     </Link>
   </React.Fragment>
