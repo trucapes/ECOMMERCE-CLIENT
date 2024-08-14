@@ -31,7 +31,7 @@ const NavLinks = ({profile}) => {
           </li> */}
           {categories.length > 0 &&
             categories.map((category) => (
-              <li className="nav-link">
+              <li className="nav-link" key={category._id}>
                 <Link to={`/category/${category.name}`}>{category.name}</Link>
               </li>
             ))}

@@ -44,11 +44,11 @@ const Home = ({ profile }) => {
         <FeaturedItems profile={profile} />
         {categoryFeaturedItems &&
           categoryFeaturedItems.length > 0 &&
-          categoryFeaturedItems.map((item) => (
+          categoryFeaturedItems.map((item, index) => (
             <ShopCategory
               profile={profile}
               name="Hardscape"
-              key="men"
+              key={index}
               items={item}
             />
           ))}
