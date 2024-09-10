@@ -6,7 +6,7 @@ const Header = ({profile, isAuthenticated}) => {
     return ( 
         <div className='header__container'>
             <Navtop profile={profile} isAuthenticated={isAuthenticated}/>
-            <Navbottom />
+            <Navbottom profile={profile} />
         </div>
      );
 }

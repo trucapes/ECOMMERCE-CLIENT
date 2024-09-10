@@ -1,16 +1,17 @@
 // CategoryForm.js
 import React, { useEffect, useState } from "react";
-import { TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
+import { TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import AdminCategoryAPI from "../../api/admin/adminCategoryAPI";
 import {toast} from 'react-toastify'
 import { setDynamicContentType } from "../../api/apiwrapper";
+import { handleFireBaseUpload } from "../../utils/upload-file";
 
-const CategoryForm = ({ category, open, onClose }) => {
+const CategoryForm = ({ category, open, onClose, categories }) => {
   const [formData, setFormData] = useState({
     name: "",
     index: "",
     image: "",
-    category: "categories"
+    category: "categories",
   });
 
   useEffect(() => {
@@ -32,6 +33,13 @@ const CategoryForm = ({ category, open, onClose }) => {
     });
   };
 
+  const handleCategoryChange = (e) => {
+    setFormData({
+      ...formData,
+      parent: e.target.value,
+    });
+  };
+
   const handleImageChange = (e) => {
     const selectedFile = e.target.files[0];
     console.log("Selected File:", selectedFile.name, selectedFile.type);
@@ -46,6 +54,15 @@ const CategoryForm = ({ category, open, onClose }) => {
   const handleSubmit = async () => {
     console.log("Form Data:", formData);
     // Handle form submission logic here
+
+    const form = formData;
+
+    const imageUrl = await handleFireBaseUpload(form.image);
+
+    form.imageUrl = imageUrl;
+
+    console.log("Form Data:", form);
+    console.log("Image URL:", imageUrl);
 
     setDynamicContentType("multipart/form-data");
 
@@ -93,6 +110,23 @@ const CategoryForm = ({ category, open, onClose }) => {
           value={formData.index}
           onChange={handleChange}
         />
+        { categories &&
+        <FormControl fullWidth>
+              <InputLabel>Parent Category</InputLabel>
+              <Select
+                name="category"
+                value={formData.parent}
+                onChange={handleCategoryChange}
+              >
+                {
+                  categories.map((category) => (
+                    <MenuItem key={category._id} value={category._id}>
+                      {category.name}
+                    </MenuItem>
+                  ))}
+              </Select>
+        </FormControl>
+        }
         <TextField
           type="file"
           label="Upload Image"

@@ -43,6 +43,7 @@ const FeaturedItems = (props) => {
             <div className="featured__products__card__container">
               {featuredItems.map((item) => (
                 <ItemCard
+                  key={item._id}
                   profile={props.profile}
                   item={item}
                   category={item.category.name}

@@ -1,39 +1,38 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { Skeleton } from "@mui/material";
 import {
-  Button,
-  MenuItem,
-  Select,
-  TableContainer,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  Paper,
+  Box,
+  List,
+  Typography,
   IconButton,
+  Button,
+  Select,
+  MenuItem,
+  Grid,
+  Divider,
+  Chip,
+  Card,
+  CardMedia,
+  CardContent
 } from "@mui/material";
 import {
   FirstPage,
   LastPage,
   NavigateBefore,
   NavigateNext,
-  Visibility,
-  CheckCircleOutline,
-  DeleteOutline,
-  Close,
   Edit,
+  Delete,
+  Close,
+  Check,
   ArrowUpward,
-  ArrowDownward,
-  ArrowCircleUp,
-  ArrowCircleDown,
+  ArrowDownward
 } from "@mui/icons-material";
 import Modal from "@mui/material/Modal";
 import { toast } from "react-toastify";
-import AdminUserAPI from "../../../api/admin/adminUserAPI";
 import AdminProductAPI from "../../../api/admin/adminProductAPI";
 import AddProductPage from "./AddProductPage";
-import { SERVER_URL, setDynamicContentType } from "../../../api/apiwrapper";
+import { SERVER_URL } from "../../../api/apiwrapper";
 import NoDataFound from "../../NoDataFound/NoDataFound";
 
 const AdminProductList = () => {
@@ -76,25 +75,9 @@ const AdminProductList = () => {
     }
   };
 
-  const handleApproveUser = async (userId) => {
-    const confirmed = window.confirm(
-      "Are you sure you want to approve this user?"
-    );
-    if (confirmed) {
-      try {
-        // Call API to approve user
-        await AdminUserAPI.verifyUserById(userId);
-        toast.success("User approved successfully");
-        // Optionally, you can also fetch updated user data after approval
-        fetchData();
-      } catch (error) {
-        console.error("Error approving user:", error);
-        toast.error("Failed to approve user");
-      }
-    }
-  };
 
-  const handleDeleteUser = async (userId) => {
+
+  const handleDeleteProduct = async (userId) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this Product?"
     );
@@ -111,10 +94,6 @@ const AdminProductList = () => {
       }
     }
   };
-
-  // const handlePageChange = (newPage) => {
-  //   setPage(newPage);
-  // };
 
   const handleFirstPage = () => {
     setPage(1);
@@ -153,70 +132,13 @@ const AdminProductList = () => {
         const product_at_index = products[index];
         const product_at_index_1 = products[index - 1];
 
-        const inputData = product_at_index;
-        const prodData_i = {
-          name: inputData.name,
-          description: inputData.description,
-          category: inputData.category._id,
-          "price.regular": inputData.price.regular.toString(),
-          "price.distributor": inputData.price.distributor.toString(),
-          "price.dealer": inputData.price.dealer.toString(),
-          "price.contractor": inputData.price.contractor.toString(),
-          "discount.distributor": inputData.discount.distributor.toString(),
-          "discount.dealer": inputData.discount.dealer.toString(),
-          "discount.contractor": inputData.discount.contractor.toString(),
-          "salesTax.distributor": inputData.salesTax.distributor.toString(),
-          "salesTax.dealer": inputData.salesTax.dealer.toString(),
-          "salesTax.contractor": inputData.salesTax.contractor.toString(),
-          shippingCost: inputData.shippingCost.toString(),
-          stockAvailable: inputData.stockAvailable,
-          hotProduct: inputData.hotProduct,
-          index: product_at_index_1.index.toString(),
-        };
-        const prodData_i_1 = {
-          name: product_at_index_1.name,
-          description: product_at_index_1.description,
-          category: product_at_index_1.category._id,
-          "price.regular": product_at_index_1.price.regular.toString(),
-          "price.distributor": product_at_index_1.price.distributor.toString(),
-          "price.dealer": product_at_index_1.price.dealer.toString(),
-          "price.contractor": product_at_index_1.price.contractor.toString(),
-          "discount.distributor":
-            product_at_index_1.discount.distributor.toString(),
-          "discount.dealer": product_at_index_1.discount.dealer.toString(),
-          "discount.contractor":
-            product_at_index_1.discount.contractor.toString(),
-          "salesTax.distributor":
-            product_at_index_1.salesTax.distributor.toString(),
-          "salesTax.dealer": product_at_index_1.salesTax.dealer.toString(),
-          "salesTax.contractor":
-            product_at_index_1.salesTax.contractor.toString(),
-          shippingCost: product_at_index_1.shippingCost.toString(),
-          stockAvailable: product_at_index_1.stockAvailable,
-          hotProduct: product_at_index_1.hotProduct,
-          index: product_at_index.index.toString(),
-        };
-
-        product_at_index.index = product_at_index_1.index;
-        product_at_index_1.index = inputData.index;
-
-        const formdata_i = new FormData();
-        const formdata_i_1 = new FormData();
-
-        for (const key in prodData_i) {
-          formdata_i.append(key, prodData_i[key]);
-          formdata_i_1.append(key, prodData_i_1[key]);
-        }
-
-        setDynamicContentType("multipart/form-data");
-
         const response = await AdminProductAPI.editProduct(
           product_at_index._id,
-          formdata_i
+          {index: product_at_index_1.index}
         );
         const response2 = await AdminProductAPI.editProduct(
           product_at_index_1._id,
-          formdata_i_1
+          {index: product_at_index.index}
         );
 
         if ((response.data.error === false, response2.data.error === false)) {
@@ -234,83 +156,26 @@ const AdminProductList = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      setDynamicContentType("application/json");
       setLoading(false);
       fetchData();
     }
   };
 
-  const handleMovedown = async (product, index) => {
+  const handleMoveDown = async (product, index) => {
     try {
       setLoading(true);
       if (index < products.length - 1) {
         const product_at_index = products[index + 1];
         const product_at_index_1 = products[index];
 
-        const inputData = product_at_index;
-        const prodData_i = {
-          name: inputData.name,
-          description: inputData.description,
-          category: inputData.category._id,
-          "price.regular": inputData.price.regular.toString(),
-          "price.distributor": inputData.price.distributor.toString(),
-          "price.dealer": inputData.price.dealer.toString(),
-          "price.contractor": inputData.price.contractor.toString(),
-          "discount.distributor": inputData.discount.distributor.toString(),
-          "discount.dealer": inputData.discount.dealer.toString(),
-          "discount.contractor": inputData.discount.contractor.toString(),
-          "salesTax.distributor": inputData.salesTax.distributor.toString(),
-          "salesTax.dealer": inputData.salesTax.dealer.toString(),
-          "salesTax.contractor": inputData.salesTax.contractor.toString(),
-          shippingCost: inputData.shippingCost.toString(),
-          stockAvailable: inputData.stockAvailable,
-          hotProduct: inputData.hotProduct,
-          index: product_at_index_1.index.toString(),
-        };
-        const prodData_i_1 = {
-          name: product_at_index_1.name,
-          description: product_at_index_1.description,
-          category: product_at_index_1.category._id,
-          "price.regular": product_at_index_1.price.regular.toString(),
-          "price.distributor": product_at_index_1.price.distributor.toString(),
-          "price.dealer": product_at_index_1.price.dealer.toString(),
-          "price.contractor": product_at_index_1.price.contractor.toString(),
-          "discount.distributor":
-            product_at_index_1.discount.distributor.toString(),
-          "discount.dealer": product_at_index_1.discount.dealer.toString(),
-          "discount.contractor":
-            product_at_index_1.discount.contractor.toString(),
-          "salesTax.distributor":
-            product_at_index_1.salesTax.distributor.toString(),
-          "salesTax.dealer": product_at_index_1.salesTax.dealer.toString(),
-          "salesTax.contractor":
-            product_at_index_1.salesTax.contractor.toString(),
-          shippingCost: product_at_index_1.shippingCost.toString(),
-          stockAvailable: product_at_index_1.stockAvailable,
-          hotProduct: product_at_index_1.hotProduct,
-          index: product_at_index.index.toString(),
-        };
-
-        product_at_index.index = product_at_index_1.index;
-        product_at_index_1.index = inputData.index;
-
-        const formdata_i = new FormData();
-        const formdata_i_1 = new FormData();
-
-        for (const key in prodData_i) {
-          formdata_i.append(key, prodData_i[key]);
-          formdata_i_1.append(key, prodData_i_1[key]);
-        }
-
-        setDynamicContentType("multipart/form-data");
-
+        
         const response = await AdminProductAPI.editProduct(
           product_at_index._id,
-          formdata_i
+          {index: product_at_index_1.index}
         );
         const response2 = await AdminProductAPI.editProduct(
           product_at_index_1._id,
-          formdata_i_1
+          {index: product_at_index.index}
         );
 
         if ((response.data.error === false, response2.data.error === false)) {
@@ -329,10 +194,71 @@ const AdminProductList = () => {
       console.error(error);
     } finally {
       setLoading(false);
-      setDynamicContentType("application/json");
       fetchData();
     }
   };
+
+  const onDragEnd = useCallback(async (result) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const newProducts = Array.from(products);
+    const [reorderedItem] = newProducts.splice(result.source.index, 1);
+    newProducts.splice(result.destination.index, 0, reorderedItem);
+
+    // Update indexes
+    newProducts.forEach((product, index) => {
+      product.index = (totalPages - page + 1) * 20 + 20 - (index + 1) ; // Assuming 10 items per page
+    });
+
+    setProducts(newProducts);
+
+    try {
+      for (const product of newProducts) {
+        await AdminProductAPI.editProduct(product._id, { index: product.index });
+      }
+      toast.success("Product order updated successfully");
+    } catch (error) {
+      console.error("Error updating product order:", error);
+      toast.error("Failed to update product order");
+    }
+  }, [products, page]);
+
+  const updateProductIndexes = useCallback(async () => {
+    setLoading(true);
+    try {
+      for (const product of products) {
+        await AdminProductAPI.editProduct(product._id, { index: product.index });
+      }
+      toast.success("Product order updated successfully");
+    } catch (error) {
+      console.error("Error updating product order:", error);
+      toast.error("Failed to update product order");
+    } finally {
+      setLoading(false);
+    }
+  }, [products]);
+  
+  const PriceInfo = ({ label, price, discount, tax }) => (
+    <Box mb={1}>
+      <Typography variant="subtitle2" color="text.secondary">{label}</Typography>
+      <Grid container spacing={1}>
+        <Grid item xs={4}>
+          <Typography variant="body2">Price: ${price}</Typography>
+        </Grid>
+        <Grid item xs={4}>
+          <Typography variant="body2">Discount: ${discount}</Typography>
+        </Grid>
+        <Grid item xs={4}>
+          <Typography variant="body2">Tax: ${tax}</Typography>
+        </Grid>
+      </Grid>
+      <Typography variant="body1" fontWeight="bold">
+        Total: ${(price - discount + tax).toFixed(2)}
+      </Typography>
+    </Box>
+  );
 
   return (
     <div className="p-2 w-full">
@@ -385,112 +311,38 @@ const AdminProductList = () => {
       ) : products && products.length === 0 ? (
         <NoDataFound TryingToFind={"Products"} />
       ) : (
-        <TableContainer component={Paper}>
-          <Table aria-label="products table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Index</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Category</TableCell>
-                <TableCell>Price (Regular)</TableCell>
-                <TableCell>Price </TableCell>
-                <TableCell>Discount</TableCell>
-                <TableCell>Sales Tax </TableCell>
-                <TableCell>Shipping Cost</TableCell>
-                <TableCell>Stock Available</TableCell>
-                <TableCell>Hot Product</TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {products.map((product, index) => (
-                <TableRow key={index}>
-                  <TableCell style={{ fontSize: "16px" }}>
-                    <div className="flex flex-row justify-center items-center">
-                      <ArrowCircleUp
-                        style={{
-                          color: `${index == 0 ? "gray" : "green"}`,
-                          paddingRight: "5px",
-                        }}
-                        onClick={() => handleMoveUp(product, index)}
-                      />
-                      {product.index}
-                      <ArrowCircleDown
-                        style={{ color: "red", paddingLeft: "5px" }}
-                        onClick={() => handleMovedown(product, index)}
-                      />
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    {product.images[0] && (
-                      <a
-                        href={`${
-                          SERVER_URL +
-                          product.images[0].path.replace(/\\/g, "/")
-                        }`.replace("/public/", "/")}
-                        target="_blank"
-                        rel="noopener noreferrer"
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="products">
+            {(provided) => (
+              <List {...provided.droppableProps} ref={provided.innerRef}>
+                {products.map((product, index) => (
+                  <Draggable key={product._id} draggableId={product._id} index={index}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
                       >
-                        <img
-                          src={`${
-                            SERVER_URL +
-                            product.images[0].path.replace(/\\/g, "/")
-                          }`.replace("/public/", "/")}
-                          alt={product.name}
-                          style={{ width: "50px", height: "50px" }}
+                        <ProductCard
+                          product={product}
+                          handleOpenModal={handleOpenModal}
+                          handleDeleteProduct={handleDeleteProduct}
+                          PriceInfo={PriceInfo}
+                          isDragging={snapshot.isDragging}
+                          products={products}
+                          handleMoveUp={handleMoveUp}
+                          handleMoveDown={handleMoveDown}
+                          index={index}
                         />
-                      </a>
+                      </div>
                     )}
-                    <br />
-                    {product.name}
-                  </TableCell>
-                  <TableCell>{product.category.name}</TableCell>
-                  <TableCell>{product.price.regular}</TableCell>
-                  <TableCell>
-                    Distributor: {product.price.distributor}
-                    <br />
-                    Dealer: {product.price.dealer}
-                    <br />
-                    Contractor{product.price.contractor}
-                  </TableCell>
-                  <TableCell>
-                    Distributor: {product.discount.distributor}
-                    <br />
-                    Dealer: {product.discount.dealer}
-                    <br />
-                    Contractor{product.discount.contractor}
-                  </TableCell>
-                  <TableCell>
-                    Distributor: {product.salesTax.distributor}
-                    <br />
-                    Dealer: {product.salesTax.dealer}
-                    <br />
-                    Contractor{product.salesTax.contractor}
-                  </TableCell>
-                  <TableCell>{product.shippingCost}</TableCell>
-                  <TableCell>{product.stockAvailable ? "Yes" : "No"}</TableCell>
-                  <TableCell>{product.hotProduct ? "Yes" : "No"}</TableCell>
-                  <TableCell>
-                    <IconButton onClick={() => handleOpenModal(product)}>
-                      <Edit color="info" />
-                    </IconButton>
-                    {/* Assuming you have similar functionality for product approval */}
-                    {product.isPending && (
-                      <IconButton
-                        onClick={() => handleApproveUser(product._id)}
-                      >
-                        <CheckCircleOutline color="success" />
-                      </IconButton>
-                    )}
-                    <IconButton onClick={() => handleDeleteUser(product._id)}>
-                      <DeleteOutline color="error" />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </List>
+            )}
+          </Droppable>
+        </DragDropContext>
       )}
       {totalPages > 0 && (
         <div className="flex justify-center mt-4">
@@ -552,5 +404,108 @@ const AdminProductList = () => {
     </div>
   );
 };
+
+const ProductCard = ({ products, product, index, handleDeleteProduct, handleOpenModal, handleMoveDown, handleMoveUp, PriceInfo, isDragging }) => {
+  return (
+    <Card elevation={3} sx={{ mb: 2, opacity: isDragging ? 0.5 : 1, cursor: 'move' }}>
+            <Grid container>
+              <Grid item xs={12} md={3}>
+                <CardMedia
+                  component="img"
+                  height="200"
+                  image={product.images[0] && product.images[0].path ? `${
+                    SERVER_URL +
+                    product.images[0].path.replace(/\\/g, "/")
+                  }`.replace("/public/", "/") : product.images[0]}
+                  alt={product.name}
+                />
+              </Grid>
+              <Grid item xs={12} md={9}>
+                <CardContent>
+                  <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                    <Typography variant="h5" component="div">
+                      {product.index}. {product.name}
+                    </Typography>
+                    <Box>
+                    <IconButton onClick={() => handleOpenModal(product)} color="primary">
+                      <Edit />
+                    </IconButton>
+                    <IconButton onClick={() => handleDeleteProduct(product._id)} color="error">
+                      <Delete />
+                    </IconButton>
+                    <IconButton onClick={() => handleMoveUp(product, index)} disabled={index === 0} color="success">
+                      <ArrowUpward />
+                    </IconButton>
+                    <IconButton onClick={() => handleMoveDown(product, index)} disabled={index === products.length - 1} color="success">
+                      <ArrowDownward />
+                    </IconButton>
+                  </Box>
+                  </Box>
+                  
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6}>
+                      <Typography variant="body2" color="text.secondary">
+                        Category: {product.category.name}
+                      </Typography>
+                      <Typography variant="body2">
+                        Regular Price: ${product.price.regular}
+                      </Typography>
+                      <Typography variant="body2">
+                        Shipping Cost: ${product.shippingCost}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                      <Box display="flex" justifyContent="flex-end">
+                        <Chip 
+                          icon={product.stockAvailable ? <Check /> : <Close />}
+                          label={product.stockAvailable ? "In Stock" : "Out of Stock"}
+                          color={product.stockAvailable ? "success" : "error"}
+                          variant="outlined"
+                          sx={{ mr: 1 }}
+                        />
+                        <Chip 
+                          icon={product.hotProduct ? <Check /> : <Close />}
+                          label={product.hotProduct ? "Hot Product" : "Regular Product"}
+                          color={product.hotProduct ? "warning" : "default"}
+                          variant="outlined"
+                        />
+                      </Box>
+                    </Grid>
+                  </Grid>
+      
+                  <Divider sx={{ my: 2 }} />
+      
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} md={4}>
+                      <PriceInfo
+                        label="Distributor"
+                        price={product.price.distributor}
+                        discount={product.discount.distributor}
+                        tax={product.salesTax.distributor}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                      <PriceInfo
+                        label="Dealer"
+                        price={product.price.dealer}
+                        discount={product.discount.dealer}
+                        tax={product.salesTax.dealer}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                      <PriceInfo
+                        label="Contractor"
+                        price={product.price.contractor}
+                        discount={product.discount.contractor}
+                        tax={product.salesTax.contractor}
+                      />
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Grid>
+            </Grid>
+          </Card>
+  )
+}
 
 export default AdminProductList;

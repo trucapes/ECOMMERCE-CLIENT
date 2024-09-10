@@ -34,6 +34,7 @@ import AdminDashboard from "../routes/AdminDashboard";
 import UserDataProvider from "../Context/userDataProvider";
 import { userDataContext } from "../Context/UserDataContext";
 import AdminPayments from "../routes/AdminPayments";
+import GalleryPage from "../components/Gallery/GalleryPage";
 function App() {
   const [user, setUser] = useState(null);
   const userData = useContext(userDataContext);
@@ -116,6 +117,7 @@ function App() {
                     <Route path="" element={<AdminDashboard />} />
                     <Route path="order" element={<AdminOrder />} />
                     <Route path="categories" element={<CategoryList />} />
+                    <Route path="gallery" element={<GalleryPage />} />
                     <Route
                       path="payments"
                       element={<AdminPayments profile={user} />}

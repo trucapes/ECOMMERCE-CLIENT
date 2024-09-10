@@ -1,5 +1,3 @@
-
-
 .product__card__card {
     min-height: 400px;
     width: 300px;
@@ -12,6 +10,7 @@
 .product__card {
     height: 100%;
     width: 100%;
+    background-color: #dbdbdb26;
 }
 
 .product__image {
@@ -41,7 +40,6 @@
     justify-content: center;
     flex-direction: column;
     padding: 1rem;
-    background-color: #dbdbdb26;
 }
 
 .product__name {

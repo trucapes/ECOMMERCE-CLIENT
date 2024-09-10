@@ -58,7 +58,7 @@ const DrawerNav = ({ profile, isAuthenticated }) => {
 
         {categories.length > 0 &&
           categories.map((category) => (
-            <ListItem>
+            <ListItem key={category._id}>
               <Link to={`/category/${category.name}`}>
                 <ListItemText primary={category.name} />
               </Link>
