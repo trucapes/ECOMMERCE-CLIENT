@@ -59,7 +59,7 @@ const formats = [
 const AddProductPage = ({ product }) => {
   const [categories, setCategories] = useState(null);
   const [loading, setLoading] = useState(false);
-  const steps = ['Product Details', 'Pricing', 'Images', 'Additional Details'];
+  const steps = ["Product Details", "Pricing", "Images", "Additional Details"];
   const [activeStep, setActiveStep] = useState(0);
   const [errors, setErrors] = useState({});
   const [openGalleryPopup, setOpenGalleryPopup] = useState(false);
@@ -71,20 +71,28 @@ const AddProductPage = ({ product }) => {
 
     switch (step) {
       case 0:
-        if (!productData.name.trim()) newErrors.name = "Product name is required";
+        if (!productData.name.trim())
+          newErrors.name = "Product name is required";
         if (!productData.category) newErrors.category = "Category is required";
-        if (!productData.description.trim()) newErrors.description = "Description is required";
+        if (!productData.description.trim())
+          newErrors.description = "Description is required";
         break;
       case 1:
-        if (!productData["price.regular"]) newErrors["price.regular"] = "Regular price is required";
+        if (!productData["price.regular"])
+          newErrors["price.regular"] = "Regular price is required";
         // Add more price validations as needed
         break;
       case 2:
-        if (!product && (!productData.images || productData.images.length === 0)) newErrors.images = "At least one image is required";
+        if (
+          !product &&
+          (!productData.images || productData.images.length === 0)
+        )
+          newErrors.images = "At least one image is required";
         break;
       case 3:
         if (!productData.index) newErrors.index = "Index is required";
-        if (!productData.shippingCost) newErrors.shippingCost = "Shipping cost is required";
+        if (!productData.shippingCost)
+          newErrors.shippingCost = "Shipping cost is required";
         break;
       default:
         break;
@@ -99,7 +107,6 @@ const AddProductPage = ({ product }) => {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
   };
-
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -130,16 +137,16 @@ const AddProductPage = ({ product }) => {
     "price.distributor": "",
     "price.dealer": "",
     "price.contractor": "",
-    "discount.distributor": "",
-    "discount.dealer": "",
-    "discount.contractor": "",
-    "salesTax.distributor": "",
-    "salesTax.dealer": "",
-    "salesTax.contractor": "",
-    shippingCost: "",
+    "discount.distributor": "0",
+    "discount.dealer": "0",
+    "discount.contractor": "0",
+    "salesTax.distributor": "0",
+    "salesTax.dealer": "0",
+    "salesTax.contractor": "0",
+    shippingCost: "0",
     stockAvailable: true,
     hotProduct: true,
-    index: "",
+    index: "10000",
     images: null,
   });
 
@@ -153,16 +160,16 @@ const AddProductPage = ({ product }) => {
         "price.distributor": "",
         "price.dealer": "",
         "price.contractor": "",
-        "discount.distributor": "",
-        "discount.dealer": "",
-        "discount.contractor": "",
-        "salesTax.distributor": "",
-        "salesTax.dealer": "",
-        "salesTax.contractor": "",
-        shippingCost: "",
+        "discount.distributor": "0",
+        "discount.dealer": "0",
+        "discount.contractor": "0",
+        "salesTax.distributor": "0",
+        "salesTax.dealer": "0",
+        "salesTax.contractor": "0",
+        shippingCost: "0",
         stockAvailable: true,
         hotProduct: true,
-        index: "",
+        index: "10000",
         images: null,
       });
     } else {
@@ -186,10 +193,14 @@ const AddProductPage = ({ product }) => {
         hotProduct: inputData.hotProduct,
         index: inputData.index.toString(),
         images: inputData.images,
-        imagePreviews: inputData.images.map((image) => image && image.path ? `${
-                            SERVER_URL +
-                            image.path.replace(/\\/g, "/")
-                          }`.replace("/public/", "/") : image),
+        imagePreviews: inputData.images.map((image) =>
+          image && image.path
+            ? `${SERVER_URL + image.path.replace(/\\/g, "/")}`.replace(
+                "/public/",
+                "/"
+              )
+            : image
+        ),
       };
 
       setProductData(prodData);
@@ -234,22 +245,25 @@ const AddProductPage = ({ product }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!productData.shippingCost) {
       return;
     }
-  
+
     try {
       // Create a copy of productData to avoid modifying the original state
       const jsonProductData = { ...productData };
-  
+
       // Remove imagePreviews from the data to be sent
       delete jsonProductData.imagePreviews;
-  
+
       // Send the request using JSON
       if (product) {
-        const res = await AdminProductAPI.editProduct(product._id, jsonProductData);
-  
+        const res = await AdminProductAPI.editProduct(
+          product._id,
+          jsonProductData
+        );
+
         if (res.data.error === false) {
           toast.success(res.data.message);
         } else {
@@ -257,7 +271,7 @@ const AddProductPage = ({ product }) => {
         }
       } else {
         const res = await AdminProductAPI.createProduct(jsonProductData);
-  
+
         if (res.data.error === false) {
           toast.success(res.data.message);
         } else {
@@ -315,16 +329,19 @@ const AddProductPage = ({ product }) => {
                           <MenuItem key={category._id} value={category._id}>
                             {category.name}
                           </MenuItem>,
-                          ...(category.subcategories && category.subcategories.length > 0
+                          ...(category.subcategories &&
+                          category.subcategories.length > 0
                             ? [
-                                <ListSubheader key={`subheader-${category._id}`}>
+                                <ListSubheader
+                                  key={`subheader-${category._id}`}
+                                >
                                   {category.name} Subcategories
                                 </ListSubheader>,
                                 ...category.subcategories.map((subcategory) => (
                                   <MenuItem
                                     key={subcategory._id}
                                     value={subcategory._id}
-                                    style={{ paddingLeft: '32px' }}
+                                    style={{ paddingLeft: "32px" }}
                                   >
                                     {subcategory.name}
                                   </MenuItem>
@@ -336,7 +353,9 @@ const AddProductPage = ({ product }) => {
                   </FormControl>
                 </Grid>
                 <Grid item xs={12}>
-                  <Typography variant="subtitle1" gutterBottom>Description</Typography>
+                  <Typography variant="subtitle1" gutterBottom>
+                    Description
+                  </Typography>
                   <ReactQuill
                     className="bg-primary-50"
                     name="description"
@@ -357,9 +376,15 @@ const AddProductPage = ({ product }) => {
                   />
                 </Grid>
               </Grid>
-              {errors.name && <Typography color="error">{errors.name}</Typography>}
-              {errors.category && <Typography color="error">{errors.category}</Typography>}
-              {errors.description && <Typography color="error">{errors.description}</Typography>}
+              {errors.name && (
+                <Typography color="error">{errors.name}</Typography>
+              )}
+              {errors.category && (
+                <Typography color="error">{errors.category}</Typography>
+              )}
+              {errors.description && (
+                <Typography color="error">{errors.description}</Typography>
+              )}
             </Box>
           )}
 
@@ -372,29 +397,35 @@ const AddProductPage = ({ product }) => {
                 <Grid item xs={12}>
                   <Typography variant="subtitle1">Prices</Typography>
                   <Grid container spacing={2}>
-                    {['regular', 'distributor', 'dealer', 'contractor'].map((type) => (
-                      <Grid item xs={12} sm={6} md={3} key={`price-${type}`}>
-                        <TextField
-                          label={`${type.charAt(0).toUpperCase() + type.slice(1)} Price`}
-                          name={`price.${type}`}
-                          value={productData[`price.${type}`]}
-                          onChange={handleInputChange}
-                          fullWidth
-                          error={!!errors[`price.${type}`]}
-                          helperText={errors[`price.${type}`]}
-                        />
-                      </Grid>
-                    ))}
+                    {["regular", "distributor", "dealer", "contractor"].map(
+                      (type) => (
+                        <Grid item xs={12} sm={6} md={3} key={`price-${type}`}>
+                          <TextField
+                            label={`${
+                              type.charAt(0).toUpperCase() + type.slice(1)
+                            } Price`}
+                            name={`price.${type}`}
+                            value={productData[`price.${type}`]}
+                            onChange={handleInputChange}
+                            fullWidth
+                            error={!!errors[`price.${type}`]}
+                            helperText={errors[`price.${type}`]}
+                          />
+                        </Grid>
+                      )
+                    )}
                   </Grid>
                 </Grid>
-                
+
                 <Grid item xs={12}>
                   <Typography variant="subtitle1">Taxes</Typography>
                   <Grid container spacing={2}>
-                    {['distributor', 'dealer', 'contractor'].map((type) => (
+                    {["distributor", "dealer", "contractor"].map((type) => (
                       <Grid item xs={12} sm={6} md={4} key={`tax-${type}`}>
                         <TextField
-                          label={`${type.charAt(0).toUpperCase() + type.slice(1)} Tax`}
+                          label={`${
+                            type.charAt(0).toUpperCase() + type.slice(1)
+                          } Tax`}
                           name={`salesTax.${type}`}
                           value={productData[`salesTax.${type}`]}
                           onChange={handleInputChange}
@@ -406,14 +437,16 @@ const AddProductPage = ({ product }) => {
                     ))}
                   </Grid>
                 </Grid>
-                
+
                 <Grid item xs={12}>
                   <Typography variant="subtitle1">Discounts</Typography>
                   <Grid container spacing={2}>
-                    {['distributor', 'dealer', 'contractor'].map((type) => (
+                    {["distributor", "dealer", "contractor"].map((type) => (
                       <Grid item xs={12} sm={6} md={4} key={`discount-${type}`}>
                         <TextField
-                          label={`${type.charAt(0).toUpperCase() + type.slice(1)} Discount`}
+                          label={`${
+                            type.charAt(0).toUpperCase() + type.slice(1)
+                          } Discount`}
                           name={`discount.${type}`}
                           value={productData[`discount.${type}`]}
                           onChange={handleInputChange}
@@ -434,7 +467,12 @@ const AddProductPage = ({ product }) => {
               <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
                 Image Upload
               </Typography>
-              <Button variant="contained" onClick={() => setOpenGalleryPopup(true)}>Choose New Image</Button>
+              <Button
+                variant="contained"
+                onClick={() => setOpenGalleryPopup(true)}
+              >
+                Choose New Image
+              </Button>
               {/* <input type="file" multiple onChange={handleImageChange} /> */}
               {productData.imagePreviews && (
                 <Grid container spacing={2} sx={{ mt: 2 }}>
@@ -444,17 +482,19 @@ const AddProductPage = ({ product }) => {
                         src={preview}
                         alt={`Preview ${index + 1}`}
                         style={{
-                          width: '100%',
-                          height: '150px',
-                          objectFit: 'cover',
-                          borderRadius: '4px',
+                          width: "100%",
+                          height: "150px",
+                          objectFit: "cover",
+                          borderRadius: "4px",
                         }}
                       />
                     </Grid>
                   ))}
                 </Grid>
               )}
-              {errors.images && <Typography color="error">{errors.images}</Typography>}
+              {errors.images && (
+                <Typography color="error">{errors.images}</Typography>
+              )}
             </Box>
           )}
 
@@ -509,17 +549,17 @@ const AddProductPage = ({ product }) => {
                   />
                 </Grid>
               </Grid>
-              {errors.index && <Typography color="error">{errors.index}</Typography>}
-              {errors.shippingCost && <Typography color="error">{errors.shippingCost}</Typography>}
-          
+              {errors.index && (
+                <Typography color="error">{errors.index}</Typography>
+              )}
+              {errors.shippingCost && (
+                <Typography color="error">{errors.shippingCost}</Typography>
+              )}
             </Box>
           )}
 
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
-            <Button
-              disabled={activeStep === 0}
-              onClick={handleBack}
-            >
+          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
+            <Button disabled={activeStep === 0} onClick={handleBack}>
               Back
             </Button>
             <Box>
@@ -539,8 +579,14 @@ const AddProductPage = ({ product }) => {
       <GalleryPopup
         open={openGalleryPopup}
         onClose={() => setOpenGalleryPopup(false)}
-        setImages={(e) => {setProductData({ ...productData, images: e.map((image) => image.url), imagePreviews: e.map((image) => image.url) })}}
-        />
+        setImages={(e) => {
+          setProductData({
+            ...productData,
+            images: e.map((image) => image.url),
+            imagePreviews: e.map((image) => image.url),
+          });
+        }}
+      />
     </Container>
   );
 };
