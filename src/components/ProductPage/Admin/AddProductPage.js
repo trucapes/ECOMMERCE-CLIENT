@@ -26,6 +26,7 @@ import AdminProductAPI from "../../../api/admin/adminProductAPI";
 import { toast } from "react-toastify";
 import { SERVER_URL, setDynamicContentType } from "../../../api/apiwrapper";
 import GalleryPopup from "../../Gallery/Gallery";
+import { useNavigate } from "react-router-dom";
 
 const modules = {
   toolbar: [
@@ -63,6 +64,7 @@ const AddProductPage = ({ product }) => {
   const [activeStep, setActiveStep] = useState(0);
   const [errors, setErrors] = useState({});
   const [openGalleryPopup, setOpenGalleryPopup] = useState(false);
+  const nav = useNavigate();
 
   const validateStep = (step) => {
     const newErrors = {};
@@ -244,7 +246,7 @@ const AddProductPage = ({ product }) => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    // e.preventDefault();
 
     if (!productData.shippingCost) {
       return;
@@ -274,6 +276,7 @@ const AddProductPage = ({ product }) => {
 
         if (res.data.error === false) {
           toast.success(res.data.message);
+          nav(`/admin/products`);
         } else {
           toast.error(res.data.message);
         }
@@ -299,7 +302,7 @@ const AddProductPage = ({ product }) => {
           ))}
         </Stepper>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e) => e.preventDefault()}>
           {activeStep === 0 && (
             <Box>
               <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
@@ -555,6 +558,19 @@ const AddProductPage = ({ product }) => {
               {errors.shippingCost && (
                 <Typography color="error">{errors.shippingCost}</Typography>
               )}
+              <br />
+              <br />
+
+              <div style={{ display: "flex", justifyContent: "end" }}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  onClick={handleSubmit}
+                >
+                  {product ? "Update Product" : "Add Product"}
+                </Button>
+              </div>
             </Box>
           )}
 
@@ -563,11 +579,7 @@ const AddProductPage = ({ product }) => {
               Back
             </Button>
             <Box>
-              {activeStep === steps.length - 1 ? (
-                <Button type="submit" variant="contained" color="primary">
-                  {product ? "Update Product" : "Add Product"}
-                </Button>
-              ) : (
+              {activeStep === steps.length - 1 ? null : (
                 <Button variant="contained" onClick={handleNext}>
                   Next
                 </Button>
