@@ -39,9 +39,9 @@ const CartCard = (props) => {
       <div className="cart__item__detail">
         <div className="cart__item__image">
           <img
-            src={`${
+            src={props.item.images[0].path ?`${
               SERVER_URL + props.item.images[0].path.replace(/\\/g, "/")
-            }`.replace("/public/", "/")}
+            }`.replace("/public/", "/") : props.item.images[0]}
             alt="item"
             className="item__image"
           />

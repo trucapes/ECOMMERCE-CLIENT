@@ -26,10 +26,9 @@ const WishCard = (props) => {
       </div>
       <div className="wish__item__image">
         <img
-          src={`${SERVER_URL + props.item.images[0].path.replace(/\\/g, "/")}`.replace(
-            "/public/",
-            "/"
-          )}
+          src={props.item.images[0].path ? `${
+            SERVER_URL + props.item.images[0].path.replace(/\\/g, "/")
+          }`.replace("/public/", "/") : props.item.images[0]}
           alt="item"
           className="wish__image"
         />
