@@ -16,9 +16,13 @@ const ProductCarousel = (props) => {
                 <div className="carousel__image__container">
                   <img
                     className="carousel__image"
-                    src={`${
-                      SERVER_URL + item.path.replace(/\\/g, "/")
-                    }`.replace("/public/", "/")}
+                    src={
+                      item.path
+                        ? `${
+                            SERVER_URL + item.path.replace(/\\/g, "/")
+                          }`.replace("/public/", "/")
+                        : item
+                    }
                     alt="item"
                   />
                 </div>
