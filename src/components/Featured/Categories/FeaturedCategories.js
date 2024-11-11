@@ -7,15 +7,20 @@ import { Grid, Container } from "@mui/material";
 import { SERVER_URL } from "../../../api/apiwrapper";
 import { Link } from "react-router-dom";
 
-const Categories = ({profile}) => {
+const Categories = ({ profile }) => {
   // const featuredCategories = useContext(FeatureCategoryContext)
   const [categories, setCategories] = useState([]);
   const fetchCategories = async () => {
     const res = await publicAPI.getCategories("categories");
 
     if (res.data.error === false) {
-      if(profile && profile.userRole === "contractor"){
-        res.data.data = res.data.data.filter((item) => !(item.name.includes("Hardscape") || item.name.includes("Landscape")));
+      if (profile && profile.userRole === "contractor") {
+        res.data.data = res.data.data.filter(
+          (item) =>
+            !(
+              item.name.includes("Hardscape") || item.name.includes("Landscape")
+            )
+        );
       }
       setCategories(res.data.data);
     }
@@ -49,9 +54,13 @@ const Categories = ({profile}) => {
                       <img
                         className=""
                         style={{ width: "100%", mixBlendMode: "multiply" }}
-                        src={`${
-                          SERVER_URL + category.image.replace(/\\/g, "/")
-                        }`.replace("/public/", "/")}
+                        src={
+                          !category.image.startsWith("http")
+                            ? `${
+                                SERVER_URL + category.image.replace(/\\/g, "/")
+                              }`.replace("/public/", "/")
+                            : category.image
+                        }
                         alt={category.name}
                       />
                     </div>
