@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Skeleton } from "@mui/material";
 import {
   Box,
@@ -14,7 +14,7 @@ import {
   Chip,
   Card,
   CardMedia,
-  CardContent
+  CardContent,
 } from "@mui/material";
 import {
   FirstPage,
@@ -26,7 +26,7 @@ import {
   Close,
   Check,
   ArrowUpward,
-  ArrowDownward
+  ArrowDownward,
 } from "@mui/icons-material";
 import Modal from "@mui/material/Modal";
 import { toast } from "react-toastify";
@@ -34,6 +34,7 @@ import AdminProductAPI from "../../../api/admin/adminProductAPI";
 import AddProductPage from "./AddProductPage";
 import { SERVER_URL } from "../../../api/apiwrapper";
 import NoDataFound from "../../NoDataFound/NoDataFound";
+import AdminCategoryAPI from "../../../api/admin/adminCategoryAPI";
 
 const AdminProductList = () => {
   const [products, setProducts] = useState([]);
@@ -42,12 +43,15 @@ const AdminProductList = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [sortBy, setSortBy] = useState("index"); // Default sorting by createdAt
+  const [categorySelected, setCategorySelected] = useState("all");
+  const [categories, setCategories] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
     fetchData();
-  }, [search, page, sortBy, openModal]);
+    if (categories.length === 0) fetchCategoryData();
+  }, [search, page, sortBy, openModal, categorySelected]);
 
   const fetchData = async () => {
     try {
@@ -65,6 +69,11 @@ const AdminProductList = () => {
       if (sortBy) {
         filter.sortBy = sortBy;
       }
+
+      if (categorySelected !== "all") {
+        filter.category_id = categorySelected;
+      }
+
       const response = await AdminProductAPI.getAllProducts(filter);
       setProducts(response.data.data);
       setTotalPages(response.data.totalPages);
@@ -75,7 +84,20 @@ const AdminProductList = () => {
     }
   };
 
-
+  const fetchCategoryData = async () => {
+    try {
+      setLoading(true);
+      const response = await AdminCategoryAPI.getAllCategories();
+      const sortedCategories = response.data.data.sort(
+        (a, b) => b.index - a.index
+      );
+      setCategories(sortedCategories);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching categories:", error.response.data.message);
+      setLoading(false);
+    }
+  };
 
   const handleDeleteProduct = async (userId) => {
     const confirmed = window.confirm(
@@ -134,11 +156,11 @@ const AdminProductList = () => {
 
         const response = await AdminProductAPI.editProduct(
           product_at_index._id,
-          {index: product_at_index_1.index}
+          { index: product_at_index_1.index }
         );
         const response2 = await AdminProductAPI.editProduct(
           product_at_index_1._id,
-          {index: product_at_index.index}
+          { index: product_at_index.index }
         );
 
         if ((response.data.error === false, response2.data.error === false)) {
@@ -168,14 +190,13 @@ const AdminProductList = () => {
         const product_at_index = products[index + 1];
         const product_at_index_1 = products[index];
 
-        
         const response = await AdminProductAPI.editProduct(
           product_at_index._id,
-          {index: product_at_index_1.index}
+          { index: product_at_index_1.index }
         );
         const response2 = await AdminProductAPI.editProduct(
           product_at_index_1._id,
-          {index: product_at_index.index}
+          { index: product_at_index.index }
         );
 
         if ((response.data.error === false, response2.data.error === false)) {
@@ -198,38 +219,61 @@ const AdminProductList = () => {
     }
   };
 
-  const onDragEnd = useCallback(async (result) => {
-    if (!result.destination) {
-      return;
-    }
-
-    const newProducts = Array.from(products);
-    const [reorderedItem] = newProducts.splice(result.source.index, 1);
-    newProducts.splice(result.destination.index, 0, reorderedItem);
-
-    // Update indexes
-    newProducts.forEach((product, index) => {
-      product.index = (totalPages - page + 1) * 20 + 20 - (index + 1) ; // Assuming 10 items per page
-    });
-
-    setProducts(newProducts);
-
-    try {
-      for (const product of newProducts) {
-        await AdminProductAPI.editProduct(product._id, { index: product.index });
+  const onDragEnd = useCallback(
+    async (result) => {
+      if (!result.destination) {
+        return;
       }
-      toast.success("Product order updated successfully");
-    } catch (error) {
-      console.error("Error updating product order:", error);
-      toast.error("Failed to update product order");
-    }
-  }, [products, page]);
+
+      const newProducts = Array.from(products);
+      const [reorderedItem] = newProducts.splice(result.source.index, 1);
+      newProducts.splice(result.destination.index, 0, reorderedItem);
+
+      // Update indexes
+      newProducts.forEach((product, index) => {
+        if (categorySelected === "all") {
+        product.index = (totalPages - page + 1) * 20 + 20 - (index + 1); // Assuming 10 items per page
+        }
+        else{
+          product.category_index =
+            (totalPages - page + 1) * 20 + 20 - (index + 1); // Assuming 10 items per page
+        }
+      });
+
+      setProducts(newProducts);
+
+      try {
+        for (const product of newProducts) {
+          let updatevalue = {}
+
+          if (categorySelected === "all") {
+            updatevalue = {
+              index: product.index,
+            };
+          }
+          else{
+            updatevalue = {
+              category_index: product.category_index,
+            };
+          }
+          await AdminProductAPI.editProduct(product._id, updatevalue);
+        }
+        toast.success("Product order updated successfully");
+      } catch (error) {
+        console.error("Error updating product order:", error);
+        toast.error("Failed to update product order");
+      }
+    },
+    [products, page]
+  );
 
   const updateProductIndexes = useCallback(async () => {
     setLoading(true);
     try {
       for (const product of products) {
-        await AdminProductAPI.editProduct(product._id, { index: product.index });
+        await AdminProductAPI.editProduct(product._id, {
+          index: product.index,
+        });
       }
       toast.success("Product order updated successfully");
     } catch (error) {
@@ -239,10 +283,12 @@ const AdminProductList = () => {
       setLoading(false);
     }
   }, [products]);
-  
+
   const PriceInfo = ({ label, price, discount, tax }) => (
     <Box mb={1}>
-      <Typography variant="subtitle2" color="text.secondary">{label}</Typography>
+      <Typography variant="subtitle2" color="text.secondary">
+        {label}
+      </Typography>
       <Grid container spacing={1}>
         <Grid item xs={4}>
           <Typography variant="body2">Price: ${price}</Typography>
@@ -286,13 +332,25 @@ const AdminProductList = () => {
       </div>
       {products && products.length !== 0 && (
         <div className="flex flex-row items-center justify-between mt-4">
-          <div></div>
           <div>
-            <Select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+            <Select
+              value={categorySelected}
+              onChange={(e) => setCategorySelected(e.target.value)}
+            >
+              <MenuItem value="all">All Category Products</MenuItem>
+              {categories && categories.map((category) => (
+                <MenuItem key={category._id} value={category._id}>
+                  {category.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </div>
+          <div>
+            { categorySelected === "all" && <Select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
               <MenuItem value="createdAt">Sort by Date</MenuItem>
               <MenuItem value="name">Sort by Name</MenuItem>
               <MenuItem value="index">Sort by Index</MenuItem>
-            </Select>
+            </Select>}
           </div>
         </div>
       )}
@@ -316,7 +374,11 @@ const AdminProductList = () => {
             {(provided) => (
               <List {...provided.droppableProps} ref={provided.innerRef}>
                 {products.map((product, index) => (
-                  <Draggable key={product._id} draggableId={product._id} index={index}>
+                  <Draggable
+                    key={product._id}
+                    draggableId={product._id}
+                    index={index}
+                  >
                     {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
@@ -333,6 +395,7 @@ const AdminProductList = () => {
                           handleMoveUp={handleMoveUp}
                           handleMoveDown={handleMoveDown}
                           index={index}
+                          categorySelected={categorySelected}
                         />
                       </div>
                     )}
@@ -405,107 +468,145 @@ const AdminProductList = () => {
   );
 };
 
-const ProductCard = ({ products, product, index, handleDeleteProduct, handleOpenModal, handleMoveDown, handleMoveUp, PriceInfo, isDragging }) => {
+const ProductCard = ({
+  products,
+  product,
+  index,
+  handleDeleteProduct,
+  handleOpenModal,
+  handleMoveDown,
+  handleMoveUp,
+  PriceInfo,
+  isDragging,
+  categorySelected
+}) => {
   return (
-    <Card elevation={3} sx={{ mb: 2, opacity: isDragging ? 0.5 : 1, cursor: 'move' }}>
-            <Grid container>
-              <Grid item xs={12} md={3}>
-                <CardMedia
-                  component="img"
-                  height="200"
-                  image={product.images[0] && product.images[0].path ? `${
-                    SERVER_URL +
-                    product.images[0].path.replace(/\\/g, "/")
-                  }`.replace("/public/", "/") : product.images[0]}
-                  alt={product.name}
-                />
+    <Card
+      elevation={3}
+      sx={{ mb: 2, opacity: isDragging ? 0.5 : 1, cursor: "move" }}
+    >
+      <Grid container>
+        <Grid item xs={12} md={3}>
+          <CardMedia
+            component="img"
+            height="200"
+            image={
+              product.images[0] && product.images[0].path
+                ? `${
+                    SERVER_URL + product.images[0].path.replace(/\\/g, "/")
+                  }`.replace("/public/", "/")
+                : product.images[0]
+            }
+            alt={product.name}
+          />
+        </Grid>
+        <Grid item xs={12} md={9}>
+          <CardContent>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              mb={2}
+            >
+              <Typography variant="h5" component="div">
+                { categorySelected === 'all'? product.index : product.category_index}. {product.name}
+              </Typography>
+              <Box>
+                <IconButton
+                  onClick={() => handleOpenModal(product)}
+                  color="primary"
+                >
+                  <Edit />
+                </IconButton>
+                <IconButton
+                  onClick={() => handleDeleteProduct(product._id)}
+                  color="error"
+                >
+                  <Delete />
+                </IconButton>
+                <IconButton
+                  onClick={() => handleMoveUp(product, index)}
+                  disabled={index === 0}
+                  color="success"
+                >
+                  <ArrowUpward />
+                </IconButton>
+                <IconButton
+                  onClick={() => handleMoveDown(product, index)}
+                  disabled={index === products.length - 1}
+                  color="success"
+                >
+                  <ArrowDownward />
+                </IconButton>
+              </Box>
+            </Box>
+
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <Typography variant="body2" color="text.secondary">
+                  Category: {product.category.name}
+                </Typography>
+                <Typography variant="body2">
+                  Regular Price: ${product.price.regular}
+                </Typography>
+                <Typography variant="body2">
+                  Shipping Cost: ${product.shippingCost}
+                </Typography>
               </Grid>
-              <Grid item xs={12} md={9}>
-                <CardContent>
-                  <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                    <Typography variant="h5" component="div">
-                      {product.index}. {product.name}
-                    </Typography>
-                    <Box>
-                    <IconButton onClick={() => handleOpenModal(product)} color="primary">
-                      <Edit />
-                    </IconButton>
-                    <IconButton onClick={() => handleDeleteProduct(product._id)} color="error">
-                      <Delete />
-                    </IconButton>
-                    <IconButton onClick={() => handleMoveUp(product, index)} disabled={index === 0} color="success">
-                      <ArrowUpward />
-                    </IconButton>
-                    <IconButton onClick={() => handleMoveDown(product, index)} disabled={index === products.length - 1} color="success">
-                      <ArrowDownward />
-                    </IconButton>
-                  </Box>
-                  </Box>
-                  
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6}>
-                      <Typography variant="body2" color="text.secondary">
-                        Category: {product.category.name}
-                      </Typography>
-                      <Typography variant="body2">
-                        Regular Price: ${product.price.regular}
-                      </Typography>
-                      <Typography variant="body2">
-                        Shipping Cost: ${product.shippingCost}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <Box display="flex" justifyContent="flex-end">
-                        <Chip 
-                          icon={product.stockAvailable ? <Check /> : <Close />}
-                          label={product.stockAvailable ? "In Stock" : "Out of Stock"}
-                          color={product.stockAvailable ? "success" : "error"}
-                          variant="outlined"
-                          sx={{ mr: 1 }}
-                        />
-                        <Chip 
-                          icon={product.hotProduct ? <Check /> : <Close />}
-                          label={product.hotProduct ? "Hot Product" : "Regular Product"}
-                          color={product.hotProduct ? "warning" : "default"}
-                          variant="outlined"
-                        />
-                      </Box>
-                    </Grid>
-                  </Grid>
-      
-                  <Divider sx={{ my: 2 }} />
-      
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} md={4}>
-                      <PriceInfo
-                        label="Distributor"
-                        price={product.price.distributor}
-                        discount={product.discount.distributor}
-                        tax={product.salesTax.distributor}
-                      />
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                      <PriceInfo
-                        label="Dealer"
-                        price={product.price.dealer}
-                        discount={product.discount.dealer}
-                        tax={product.salesTax.dealer}
-                      />
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                      <PriceInfo
-                        label="Contractor"
-                        price={product.price.contractor}
-                        discount={product.discount.contractor}
-                        tax={product.salesTax.contractor}
-                      />
-                    </Grid>
-                  </Grid>
-                </CardContent>
+              <Grid item xs={12} sm={6}>
+                <Box display="flex" justifyContent="flex-end">
+                  <Chip
+                    icon={product.stockAvailable ? <Check /> : <Close />}
+                    label={product.stockAvailable ? "In Stock" : "Out of Stock"}
+                    color={product.stockAvailable ? "success" : "error"}
+                    variant="outlined"
+                    sx={{ mr: 1 }}
+                  />
+                  <Chip
+                    icon={product.hotProduct ? <Check /> : <Close />}
+                    label={
+                      product.hotProduct ? "Hot Product" : "Regular Product"
+                    }
+                    color={product.hotProduct ? "warning" : "default"}
+                    variant="outlined"
+                  />
+                </Box>
               </Grid>
             </Grid>
-          </Card>
-  )
-}
+
+            <Divider sx={{ my: 2 }} />
+
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={4}>
+                <PriceInfo
+                  label="Distributor"
+                  price={product.price.distributor}
+                  discount={product.discount.distributor}
+                  tax={product.salesTax.distributor}
+                />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <PriceInfo
+                  label="Dealer"
+                  price={product.price.dealer}
+                  discount={product.discount.dealer}
+                  tax={product.salesTax.dealer}
+                />
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <PriceInfo
+                  label="Contractor"
+                  price={product.price.contractor}
+                  discount={product.discount.contractor}
+                  tax={product.salesTax.contractor}
+                />
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Grid>
+      </Grid>
+    </Card>
+  );
+};
 
 export default AdminProductList;
