@@ -33,23 +33,53 @@ const RegisterCard = () => {
   const [msg, setMsg] = useState("");
 
   useEffect(() => {
-    axios.get("https://restcountries.com/v3.1/all").then((res) => {
-      let countries = res.data.map((data) => {
-        return data.name.common;
-      });
-      let ISDs = res.data.map((data) => {
-        if (!data.idd.root) return "";
-        let suf = "";
-        if (data.idd.suffixes) {
-          suf += data.idd.suffixes[0];
-        }
-        return data.idd.root + suf;
-      });
-      countries.sort();
-      ISDs.sort();
-      setCountry(countries);
-      setISDcodes(ISDs);
+    const res = [
+      { country: "Afghanistan", isdCode: "+93" },
+      { country: "Australia", isdCode: "+61" },
+      { country: "Brazil", isdCode: "+55" },
+      { country: "Canada", isdCode: "+1" },
+      { country: "China", isdCode: "+86" },
+      { country: "Egypt", isdCode: "+20" },
+      { country: "France", isdCode: "+33" },
+      { country: "Germany", isdCode: "+49" },
+      { country: "India", isdCode: "+91" },
+      { country: "Indonesia", isdCode: "+62" },
+      { country: "Iran", isdCode: "+98" },
+      { country: "Italy", isdCode: "+39" },
+      { country: "Japan", isdCode: "+81" },
+      { country: "Mexico", isdCode: "+52" },
+      { country: "Nigeria", isdCode: "+234" },
+      { country: "Pakistan", isdCode: "+92" },
+      { country: "Philippines", isdCode: "+63" },
+      { country: "Russia", isdCode: "+7" },
+      { country: "Saudi Arabia", isdCode: "+966" },
+      { country: "South Africa", isdCode: "+27" },
+      { country: "South Korea", isdCode: "+82" },
+      { country: "Spain", isdCode: "+34" },
+      { country: "Sri Lanka", isdCode: "+94" },
+      { country: "Thailand", isdCode: "+66" },
+      { country: "Turkey", isdCode: "+90" },
+      { country: "United Arab Emirates", isdCode: "+971" },
+      { country: "United Kingdom", isdCode: "+44" },
+      { country: "United States", isdCode: "+1" },
+      { country: "Vietnam", isdCode: "+84" },
+    ];
+
+    let countries = res.map((data) => {
+      return data.country;
     });
+    let ISDs = res.map((data) => {
+      // if (!data.idd.root) return "";
+      // let suf = "";
+      // if (data.idd.suffixes) {
+      //   suf += data.idd.suffixes[0];
+      // }
+      return data.isdCode;
+    });
+    countries.sort();
+    ISDs.sort();
+    setCountry(countries);
+    setISDcodes(ISDs);
   }, []);
 
   return (

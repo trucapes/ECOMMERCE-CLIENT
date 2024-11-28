@@ -58,6 +58,8 @@ const AdminProductList = () => {
       setLoading(true);
       var filter = {};
 
+      filter.limit = 50;
+
       if (search) {
         filter.search = search;
       }
@@ -232,9 +234,8 @@ const AdminProductList = () => {
       // Update indexes
       newProducts.forEach((product, index) => {
         if (categorySelected === "all") {
-        product.index = (totalPages - page + 1) * 20 + 20 - (index + 1); // Assuming 10 items per page
-        }
-        else{
+          product.index = (totalPages - page + 1) * 20 + 20 - (index + 1); // Assuming 10 items per page
+        } else {
           product.category_index =
             (totalPages - page + 1) * 20 + 20 - (index + 1); // Assuming 10 items per page
         }
@@ -244,14 +245,13 @@ const AdminProductList = () => {
 
       try {
         for (const product of newProducts) {
-          let updatevalue = {}
+          let updatevalue = {};
 
           if (categorySelected === "all") {
             updatevalue = {
               index: product.index,
             };
-          }
-          else{
+          } else {
             updatevalue = {
               category_index: product.category_index,
             };
@@ -338,19 +338,25 @@ const AdminProductList = () => {
               onChange={(e) => setCategorySelected(e.target.value)}
             >
               <MenuItem value="all">All Category Products</MenuItem>
-              {categories && categories.map((category) => (
-                <MenuItem key={category._id} value={category._id}>
-                  {category.name}
-                </MenuItem>
-              ))}
+              {categories &&
+                categories.map((category) => (
+                  <MenuItem key={category._id} value={category._id}>
+                    {category.name}
+                  </MenuItem>
+                ))}
             </Select>
           </div>
           <div>
-            { categorySelected === "all" && <Select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-              <MenuItem value="createdAt">Sort by Date</MenuItem>
-              <MenuItem value="name">Sort by Name</MenuItem>
-              <MenuItem value="index">Sort by Index</MenuItem>
-            </Select>}
+            {categorySelected === "all" && (
+              <Select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+              >
+                <MenuItem value="createdAt">Sort by Date</MenuItem>
+                <MenuItem value="name">Sort by Name</MenuItem>
+                <MenuItem value="index">Sort by Index</MenuItem>
+              </Select>
+            )}
           </div>
         </div>
       )}
@@ -478,7 +484,7 @@ const ProductCard = ({
   handleMoveUp,
   PriceInfo,
   isDragging,
-  categorySelected
+  categorySelected,
 }) => {
   return (
     <Card
@@ -509,7 +515,10 @@ const ProductCard = ({
               mb={2}
             >
               <Typography variant="h5" component="div">
-                { categorySelected === 'all'? product.index : product.category_index}. {product.name}
+                {categorySelected === "all"
+                  ? product.index
+                  : product.category_index}
+                . {product.name}
               </Typography>
               <Box>
                 <IconButton
