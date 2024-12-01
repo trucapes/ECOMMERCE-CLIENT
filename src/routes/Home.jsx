@@ -41,7 +41,7 @@ const Home = ({ profile }) => {
       <Landing />
       <Container maxWidth="xl" sx={{mt: 16, mb: 10}}>
         <FeaturedCategories profile={profile} />
-        <FeaturedItems profile={profile} />
+        {/* <FeaturedItems profile={profile} /> */}
         {categoryFeaturedItems &&
           categoryFeaturedItems.length > 0 &&
           categoryFeaturedItems.map((item, index) => (

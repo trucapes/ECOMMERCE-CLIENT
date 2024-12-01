@@ -34,6 +34,21 @@ const AdminUserAPI = {
     const response = await api.put(`/admin/users/verify/${userId}`);
     return response;
   },
+
+  addAdminEmail: async (email) => {
+    const response = await api.post("/admin/email/add", { email });
+    return response;
+  },
+
+  getAllAdminEmails: async () => {
+    const response = await api.get("/admin/email");
+    return response;
+  },
+
+  deleteAdminEmailById: async (id) => {
+    const response = await api.delete(`/admin/email/${id}`);
+    return response;
+  },
 };
 
 export default AdminUserAPI;

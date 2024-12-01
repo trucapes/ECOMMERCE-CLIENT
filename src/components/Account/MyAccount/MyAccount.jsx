@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./MyAccount.css";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
@@ -12,6 +12,21 @@ import { useNavigate } from "react-router";
 import UserTransaction from "../../Transactions/UserTransaction";
 import WalletPage from "../../WalletPage/WalletPage";
 import MyOrders from "../../MyOrders/MyOrders";
+import {
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Paper,
+  Button,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AdminUserAPI from "../../../api/admin/adminUserAPI";
+import { toast } from "react-toastify";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -83,6 +98,9 @@ export function BasicTabs({ user, isAdmin }) {
           <Tab label="My Orders" {...a11yProps(1)} />
           <Tab label="Transactions" {...a11yProps(2)} />
           <Tab label="Wallet" {...a11yProps(3)} />
+          {user && user.role === "admin" && (
+            <Tab label="Settings" {...a11yProps(4)} />
+          )}
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
@@ -97,6 +115,11 @@ export function BasicTabs({ user, isAdmin }) {
       <CustomTabPanel value={value} index={3}>
         <WalletPage profile={user} />
       </CustomTabPanel>
+      {user && user.role === "admin" && (
+        <CustomTabPanel value={value} index={4}>
+          <SettingsTabPanel profile={user} />
+        </CustomTabPanel>
+      )}
     </Box>
   );
 }
@@ -158,6 +181,117 @@ const MyAccount = ({ user, isAdmin, isAuthenticated }) => {
         </div>
       )}
     </>
+  );
+};
+
+const SettingsTabPanel = ({ profile }) => {
+  const [emails, setEmails] = useState([]);
+  const [newEmail, setNewEmail] = useState("");
+  const [showInput, setShowInput] = useState(false);
+
+  const getEmails = async () => {
+    try {
+      const response = await AdminUserAPI.getAllAdminEmails();
+      setEmails(response.data);
+    } catch (error) {
+      console.error("Error fetching emails:", error);
+    }
+  };
+
+  const handleAddEmail = async () => {
+    setShowInput(true);
+  };
+
+  const handleSaveEmail = async () => {
+    if (newEmail.trim() !== "") {
+      try {
+        const response = await AdminUserAPI.addAdminEmail(newEmail);
+        console.log("New email saved:", response.data);
+        setEmails([
+          ...emails,
+          { _id: response.data.data._id, email: newEmail },
+        ]);
+        setNewEmail("");
+        setShowInput(false);
+      } catch (error) {
+        toast.error("Error adding email. Please try again later.");
+        console.error("Error adding email:", error);
+      }
+    }
+  };
+
+  const handleDeleteEmail = async (id) => {
+    try {
+      await AdminUserAPI.deleteAdminEmailById(id);
+      console.log("Email deleted:", id);
+      setEmails(emails.filter((email) => email._id !== id));
+    } catch (error) {
+      toast.error("Error deleting email. Please try again later.");
+      console.error("Error deleting email:", error);
+    }
+  };
+
+  useEffect(() => {
+    getEmails();
+  }, []);
+
+  useEffect(() => {
+    console.log("Emails updated:", emails);
+  }, [emails]);
+
+  return (
+    <Box sx={{ py: 3 }}>
+      <Typography variant="h6" gutterBottom>
+        Manage Notification Emails
+      </Typography>
+
+      {/* Email List */}
+      <TableContainer component={Paper} sx={{ mb: 2 }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Email</TableCell>
+              <TableCell align="right">Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {emails.map((email) => (
+              <TableRow key={email._id}>
+                <TableCell>{email.email}</TableCell>
+                <TableCell align="right">
+                  <IconButton
+                    color="error"
+                    onClick={() => handleDeleteEmail(email._id)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {/* Add New Email */}
+      {showInput ? (
+        <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
+          <TextField
+            fullWidth
+            label="Enter email"
+            variant="outlined"
+            value={newEmail}
+            onChange={(e) => setNewEmail(e.target.value)}
+          />
+          <Button variant="contained" onClick={handleSaveEmail}>
+            Save
+          </Button>
+        </Box>
+      ) : (
+        <Button variant="contained" onClick={handleAddEmail}>
+          Add New Email
+        </Button>
+      )}
+    </Box>
   );
 };
 
