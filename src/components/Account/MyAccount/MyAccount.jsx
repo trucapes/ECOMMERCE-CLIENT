@@ -98,7 +98,7 @@ export function BasicTabs({ user, isAdmin }) {
           <Tab label="My Orders" {...a11yProps(1)} />
           <Tab label="Transactions" {...a11yProps(2)} />
           <Tab label="Wallet" {...a11yProps(3)} />
-          {user && user.role === "admin" && (
+          {user && user.userRole === "admin" && (
             <Tab label="Settings" {...a11yProps(4)} />
           )}
         </Tabs>
@@ -115,7 +115,7 @@ export function BasicTabs({ user, isAdmin }) {
       <CustomTabPanel value={value} index={3}>
         <WalletPage profile={user} />
       </CustomTabPanel>
-      {user && user.role === "admin" && (
+      {user && user.userRole === "admin" && (
         <CustomTabPanel value={value} index={4}>
           <SettingsTabPanel profile={user} />
         </CustomTabPanel>
