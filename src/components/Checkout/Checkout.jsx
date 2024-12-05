@@ -99,7 +99,7 @@ function Checkout() {
     }
     setTimeout(() => {
       setAlert(false);
-      // navigate("/account/me");
+      navigate("/account/me");
     }, 3000);
   }
 

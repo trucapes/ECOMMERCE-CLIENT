@@ -96,7 +96,7 @@ export const mainListItems = (
         <ListItemText primary="Payments" />
       </ListItemButton>
     </Link>
-    <Link style={{ color: "#000" }} legacyBehavior href="/gallery">
+    <Link style={{ color: "#000" }} legacyBehavior href="/admin/gallery">
       <ListItemButton>
         <ListItemIcon>
           <Image />
@@ -298,8 +298,9 @@ const AdminLayout = ({ children, profile }) => {
                   <ListItemText primary="Account" />
                 </MenuItem>
                 <MenuItem
-                  onClick={() => {
-                    window.location.href = "/";
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.open("/", "_blank");
                   }}
                 >
                   <ListItemIcon>

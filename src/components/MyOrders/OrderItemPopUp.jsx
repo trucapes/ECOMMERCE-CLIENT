@@ -46,13 +46,7 @@ function OrderItemPopUp({
                 <div className="h-full aspect-square object-contain grid place-items-center">
                   <img
                     className=" "
-                    src={
-                      item.imagePath
-                        ? `${
-                            SERVER_URL + item.imagePath.replace(/\\/g, "/")
-                          }`.replace("/public/", "/")
-                        : ""
-                    }
+                    src={item.imagePath}
                     alt={`${item.name}_Img`}
                   />
                 </div>

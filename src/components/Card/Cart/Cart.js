@@ -49,7 +49,7 @@ const Cart = ({ profile }) => {
         return {
           name: item.name,
           category: item.categoryName,
-          image: item.images[0].path,
+          image: item.images[0].path ? item.images[0].path : item.images[0],
           product: item._id,
           quantity: item.itemQuantity,
           price: item.price,

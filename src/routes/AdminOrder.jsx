@@ -88,7 +88,7 @@ function AdminOrder() {
         />
         <div className="w-full flex flex-row justify-between items-center">
           <h1 className="text-3xl mt-4 mb-4 text-gray-900">Orders</h1>
-          {data && data.length > 0 && (
+          {/* {data && data.length > 0 && (
             <div className=" flex flex-row items-stretch justify-center">
               <input
                 onChange={(e) => {
@@ -108,7 +108,7 @@ function AdminOrder() {
                 </button>
               </div>
             </div>
-          )}
+          )} */}
         </div>
         {data && data.length > 0 && (
           <div className="overflow-x-auto rounded-md">

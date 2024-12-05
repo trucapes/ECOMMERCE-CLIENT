@@ -149,6 +149,7 @@ const AddProductPage = ({ product }) => {
     stockAvailable: true,
     hotProduct: true,
     index: "10000",
+    category_index: "10000",
     images: null,
   });
 
@@ -172,6 +173,7 @@ const AddProductPage = ({ product }) => {
         stockAvailable: true,
         hotProduct: true,
         index: "10000",
+        category_index: "10000",
         images: null,
       });
     } else {
@@ -194,6 +196,7 @@ const AddProductPage = ({ product }) => {
         stockAvailable: inputData.stockAvailable,
         hotProduct: inputData.hotProduct,
         index: inputData.index.toString(),
+        category_index: inputData.category_index.toString(),
         images: inputData.images,
         imagePreviews: inputData.images.map((image) =>
           image && image.path
@@ -521,23 +524,34 @@ const AddProductPage = ({ product }) => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={productData.hotProduct}
-                        onChange={handleInputChange}
-                        name="hotProduct"
-                        color="primary"
-                      />
-                    }
-                    label="Hot Product"
-                  />
+                  <div style={{ display: "none" }}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={productData.hotProduct}
+                          onChange={handleInputChange}
+                          name="hotProduct"
+                          color="primary"
+                        />
+                      }
+                      label="Hot Product"
+                    />
+                  </div>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <TextField
                     label="Index"
                     name="index"
                     value={productData.index}
+                    onChange={handleInputChange}
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Category Index"
+                    name="category_index"
+                    value={productData.category_index}
                     onChange={handleInputChange}
                     fullWidth
                   />

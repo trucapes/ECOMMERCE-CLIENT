@@ -54,6 +54,7 @@ const CategoryForm = ({ category, open, onClose, categories }) => {
   const handleSubmit = async () => {
     console.log("Form Data:", formData);
     // Handle form submission logic here
+    toast.info("Processing...");
 
     const form = formData;
 

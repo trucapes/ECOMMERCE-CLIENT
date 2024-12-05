@@ -571,14 +571,14 @@ const ProductCard = ({
                     variant="outlined"
                     sx={{ mr: 1 }}
                   />
-                  <Chip
+                  {/* <Chip
                     icon={product.hotProduct ? <Check /> : <Close />}
                     label={
                       product.hotProduct ? "Hot Product" : "Regular Product"
                     }
                     color={product.hotProduct ? "warning" : "default"}
                     variant="outlined"
-                  />
+                  /> */}
                 </Box>
               </Grid>
             </Grid>

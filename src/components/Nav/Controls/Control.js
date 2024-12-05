@@ -8,6 +8,7 @@ import { useContext } from "react";
 import { WishItemsContext } from "../../../Context/WishItemsContext";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { Button } from "@mui/material";
+import { SecurityRounded } from "@mui/icons-material";
 
 const Control = ({ profile, isAuthenticated }) => {
   const wishItems = useContext(WishItemsContext);
@@ -23,12 +24,32 @@ const Control = ({ profile, isAuthenticated }) => {
     <div className="control__bar__container">
       <div className="controls__container">
         <div className="controls">
-          {!profile && <Link to={`/account/${profile ? "me" : "login"}`}>
-            <Button variant="contained" > Login</Button>
-          </Link>} 
+          {!profile && (
+            <Link to={`/account/${profile ? "me" : "login"}`}>
+              <Button variant="contained"> Login</Button>
+            </Link>
+          )}
         </div>
         {profile && (
           <>
+            {profile.userRole === "admin" ? (
+              <div
+                className="control"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = "/admin";
+                }}
+              >
+                <SecurityRounded color="black" sx={{ width: "35px" }} />
+              </div>
+            ) : (
+              <div className="control">
+                <Link to={`/account/${profile ? "me" : "login"}`}>
+                  <PersonOutlineIcon color="black" sx={{ width: "35px" }} />
+                </Link>
+              </div>
+            )}
+
             <div className="control">
               <Link to="/wishlist">
                 <Badge badgeContent={wishItems.items.length} color="error">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -13,10 +13,10 @@ import {
   Box,
   Pagination,
   Skeleton,
-} from '@mui/material';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import galleryAPI from '../../api/galleryApi';
-import { handleFireBaseUpload } from '../../utils/upload-file';
+} from "@mui/material";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import galleryAPI from "../../api/galleryApi";
+import { handleFireBaseUpload } from "../../utils/upload-file";
 
 const GalleryPopup = ({ open, onClose, setImage, setImages }) => {
   const [tab, setTab] = useState(0);
@@ -46,7 +46,7 @@ const GalleryPopup = ({ open, onClose, setImage, setImages }) => {
       setGalleryItems(response.data.gallery);
       setTotalPages(Math.ceil(response.data.total / itemsPerPage));
     } catch (error) {
-      console.error('Error fetching gallery items:', error);
+      console.error("Error fetching gallery items:", error);
     } finally {
       setLoading(false);
     }
@@ -95,7 +95,7 @@ const GalleryPopup = ({ open, onClose, setImage, setImages }) => {
       setFile(null);
       setTab(0);
     } catch (error) {
-      console.error('Error uploading image:', error);
+      console.error("Error uploading image:", error);
     } finally {
       setLoading(false);
     }
@@ -115,11 +115,26 @@ const GalleryPopup = ({ open, onClose, setImage, setImages }) => {
         </Tabs>
         {tab === 0 && (
           <>
+            {setImages && (
+              <Box mt={2} display="flex" justifyContent="flex-end">
+                <Button
+                  variant="contained"
+                  onClick={handleConfirmSelection}
+                  disabled={selectedItems.length === 0}
+                >
+                  Confirm Selection
+                </Button>
+              </Box>
+            )}
             <ImageList cols={3} gap={8}>
               {loading
                 ? Array.from(new Array(itemsPerPage)).map((_, index) => (
                     <ImageListItem key={index}>
-                      <Skeleton variant="rectangular" width={210} height={118} />
+                      <Skeleton
+                        variant="rectangular"
+                        width={210}
+                        height={118}
+                      />
                     </ImageListItem>
                   ))
                 : galleryItems.map((item) => (
@@ -128,11 +143,11 @@ const GalleryPopup = ({ open, onClose, setImage, setImages }) => {
                       onClick={() => handleImageSelect(item)}
                       sx={{
                         maxHeight: 280,
-                        cursor: 'pointer',
-                        '& img': {
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
+                        cursor: "pointer",
+                        "& img": {
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
                         },
                       }}
                     >
@@ -142,8 +157,8 @@ const GalleryPopup = ({ open, onClose, setImage, setImages }) => {
                         position="bottom"
                         sx={{
                           background: selectedItems.includes(item)
-                            ? '#0dcaf0'
-                            : 'rgba(0, 0, 0, 0.5)',
+                            ? "#0dcaf0"
+                            : "rgba(0, 0, 0, 0.5)",
                         }}
                       />
                     </ImageListItem>
@@ -157,24 +172,13 @@ const GalleryPopup = ({ open, onClose, setImage, setImages }) => {
                 color="primary"
               />
             </Box>
-            {setImages && (
-              <Box mt={2} display="flex" justifyContent="flex-end">
-                <Button
-                  variant="contained"
-                  onClick={handleConfirmSelection}
-                  disabled={selectedItems.length === 0}
-                >
-                  Confirm Selection
-                </Button>
-              </Box>
-            )}
           </>
         )}
         {tab === 1 && (
           <Box mt={2}>
             <input
               accept="image/*"
-              style={{ display: 'none' }}
+              style={{ display: "none" }}
               id="raised-button-file"
               type="file"
               onChange={handleFileChange}

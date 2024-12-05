@@ -18,6 +18,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
 import { LockResetRounded } from "@mui/icons-material";
 import ResetPasswordPopup from "../../Card/RegisterCard/ResetPasswordPopup";
+import authAPI from "../../../api/auth";
+import profileAPI from "../../../api/profileAPI";
+import { toast } from "react-toastify";
 
 const Container = styled("div")({
   marginTop: "20px",
@@ -46,9 +49,21 @@ const BasicInfoTab = ({ userData, isAdmin }) => {
     setIsEditing(true);
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
     // Handle save action
-    console.log("Saved!");
+    // console.log("Saved!");
+    const response = await profileAPI.updateProfile({
+      firstName: editedData.firstName,
+      email: editedData.email,
+      lastName: editedData.lastName,
+      mobileNo: editedData.mobileNo,
+      country: editedData.country,
+      city: editedData.city,
+      company: editedData.company,
+      companyWebsite: editedData.companyWebsite,
+    });
+
+    toast.success(response.data.message);
     setIsEditing(false);
   };
 
