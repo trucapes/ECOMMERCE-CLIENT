@@ -103,7 +103,7 @@ export default function Orders({ profile }) {
               <h1 className="text-lg">Due Credit</h1>
               <h1 className="sm:text-2xl text-xl">
                 $
-                {profile.credit !== null
+                {!isNaN(parseFloat(profile.credit.credit))
                   ? parseFloat(profile.credit.credit).toFixed(2)
                   : 0}
               </h1>

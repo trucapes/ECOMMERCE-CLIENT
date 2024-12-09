@@ -316,7 +316,7 @@ const AdminProductList = () => {
               onChange={(e) => setSearch(e.target.value)}
               value={search}
               type="text"
-              placeholder="Search in Users"
+              placeholder="Search in Products"
               className="bg-gray-50 border outline-none text-gray-900 rounded-l-lg focus:border-[#ffe26e] block w-full px-3"
             />
             <div className="w-fit flex justify-start">

@@ -99,12 +99,13 @@ function Checkout() {
     }
     setTimeout(() => {
       setAlert(false);
-      navigate("/account/me");
+      window.location.href = "/account/me";
     }, 3000);
   }
 
   useEffect(() => {
     let config = localStorage.getItem("checkoutConfig");
+    console.log(config);
     config = JSON.parse(config);
     setCheckOutConfig(config);
   }, []);
@@ -116,6 +117,34 @@ function Checkout() {
   return (
     <div className="w-full h-full flex p-8 justify-center">
       <div className="checkout-container py-8 w-[60%]">
+        {/* Product Details Section */}
+        <div className="my-8">
+          <h1 className="my-4">Order Summary</h1>
+          <div className="border p-4 rounded-md">
+            {checkOutConfig.items && checkOutConfig.items.length > 0 ? (
+              <div>
+                {checkOutConfig.items.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-row justify-between items-center border-b py-2"
+                  >
+                    <div>
+                      <p className="font-medium">{item.name}</p>
+                      <p className="text-sm">Quantity: {item.quantity}</p>
+                    </div>
+                    <p className="font-medium">${item.price.toFixed(2)}</p>
+                  </div>
+                ))}
+                <div className="flex justify-between mt-4 font-bold">
+                  <p>Total Amount:</p>
+                  <p>${checkOutConfig.amount.toFixed(2)}</p>
+                </div>
+              </div>
+            ) : (
+              <p>No items in the order.</p>
+            )}
+          </div>
+        </div>
         <div className="">
           <h1 className="my-4">Shipping Address</h1>
           <div className="">

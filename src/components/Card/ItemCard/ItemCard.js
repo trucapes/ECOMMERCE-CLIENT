@@ -7,42 +7,65 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { WishItemsContext } from "../../../Context/WishItemsContext";
 import { SERVER_URL } from "../../../api/apiwrapper";
+import { toast } from "react-toastify";
 
 const ItemCard = (props) => {
   console.log(props);
   const [isHovered, setIsHovered] = useState(false);
-  const cartItemsContext = useContext(CartItemsContext);
-  const wishItemsContext = useContext(WishItemsContext);
+  const cartItems = useContext(CartItemsContext);
+  const wishItems = useContext(WishItemsContext);
 
   //   console.log(props.item);
 
-  const handleAddToWishList = () => {
-    wishItemsContext.addItem(props.item);
+  const handelAddToCart = () => {
+    const itemForCart = { ...props.item };
+    itemForCart.price =
+      props.profile.userRole === "dealer"
+        ? props.item.price.dealer
+        : props.profile.userRole === "distributor"
+        ? props.item.price.distributor
+        : props.profile.userRole === "contractor"
+        ? props.item.price.contractor
+        : props.item.price.regular;
+    cartItems.addItem(itemForCart, 1, 1);
+    toast.success("Item added to cart");
   };
 
-  const handleAddToCart = () => {
-    cartItemsContext.addItem(props.item, 1);
+  const handelAddToWish = () => {
+    console.log(props.item);
+    const itemForWish = { ...props.item };
+    itemForWish.price =
+      props.profile.userRole === "dealer"
+        ? props.item.price.dealer
+        : props.profile.userRole === "distributor"
+        ? props.item.price.distributor
+        : props.profile.userRole === "contractor"
+        ? props.item.price.contractor
+        : props.item.price.regular;
+    wishItems.addItem(itemForWish);
   };
 
   return (
     <div className="product__card__card hover:scale-105 duration-150">
-      <Link to={`/item/${props.category}/${props.item._id}`}>
-        <div className="product__card">
+      <div className="product__card">
+        <Link to={`/item/${props.category}/${props.item._id}`}>
           <div className="product__image">
             <img
-              src={props.item.images[0] && props.item.images[0].path ?`${
-                SERVER_URL + props.item.images[0].path.replace(/\\/g, "/")
-              }`.replace("/public/", "/"): props.item.images[0]}
+              src={
+                props.item.images[0] && props.item.images[0].path
+                  ? `${
+                      SERVER_URL + props.item.images[0].path.replace(/\\/g, "/")
+                    }`.replace("/public/", "/")
+                  : props.item.images[0]
+              }
               alt="item"
               className="product__img"
             />
           </div>
-          <div className="product__card__detail">
-            <div className="product__name">
-              <Link to={`/item/${props.item.category.name}/${props.item._id}`}>
-                {props.item.name}
-              </Link>
-            </div>
+        </Link>
+        <div className="product__card__detail">
+          <Link to={`/item/${props.item.category.name}/${props.item._id}`}>
+            <div className="product__name">{props.item.name}</div>
             <div className="product__description">
               <span>
                 {props.item.description
@@ -69,45 +92,45 @@ const ItemCard = (props) => {
                 </span>
               </div>
             )}
-            {props.profile && (
-              <div className="product__card__action">
-                <IconButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleAddToWishList();
-                  }}
-                  sx={{
-                    borderRadius: "20px",
-                    width: "40px",
-                    height:
-                      "40px" /* borderWidth: '3px', borderStyle: 'solid', borderColor: '#FFE26E' */,
-                  }}
-                >
-                  <FavoriteBorderIcon
-                    sx={{ width: "22px", height: "22px", color: "black" }}
-                  />
-                </IconButton>
-                <IconButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleAddToCart();
-                  }}
-                  sx={{
-                    borderRadius: "20px",
-                    width: "40px",
-                    height:
-                      "40px" /*  borderWidth: '3px', borderStyle: 'solid', borderColor: '#FFE26E' */,
-                  }}
-                >
-                  <AddShoppingCartIcon
-                    sx={{ width: "22px", height: "22px", color: "black" }}
-                  />
-                </IconButton>
-              </div>
-            )}
-          </div>
+          </Link>
+          {props.profile && (
+            <div className="product__card__action">
+              <IconButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handelAddToWish();
+                }}
+                sx={{
+                  borderRadius: "20px",
+                  width: "40px",
+                  height:
+                    "40px" /* borderWidth: '3px', borderStyle: 'solid', borderColor: '#FFE26E' */,
+                }}
+              >
+                <FavoriteBorderIcon
+                  sx={{ width: "22px", height: "22px", color: "black" }}
+                />
+              </IconButton>
+              <IconButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handelAddToCart();
+                }}
+                sx={{
+                  borderRadius: "20px",
+                  width: "40px",
+                  height:
+                    "40px" /*  borderWidth: '3px', borderStyle: 'solid', borderColor: '#FFE26E' */,
+                }}
+              >
+                <AddShoppingCartIcon
+                  sx={{ width: "22px", height: "22px", color: "black" }}
+                />
+              </IconButton>
+            </div>
+          )}
         </div>
-      </Link>
+      </div>
     </div>
   );
 };

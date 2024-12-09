@@ -107,7 +107,7 @@ function App() {
                       />
                     </Route>
                   </Route>
-                  <Route path="/wishlist" element={<Wishlist />} />
+                  <Route path="/wishlist" element={<Wishlist profile={user} />} />
                   <Route
                     path="/search/*"
                     element={<SearchView profile={user} />}

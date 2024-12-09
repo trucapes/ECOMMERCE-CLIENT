@@ -8,7 +8,7 @@ import { useContext } from "react";
 import { WishItemsContext } from "../../../Context/WishItemsContext";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { Button } from "@mui/material";
-import { SecurityRounded } from "@mui/icons-material";
+import { Dashboard, SecurityRounded } from "@mui/icons-material";
 
 const Control = ({ profile, isAuthenticated }) => {
   const wishItems = useContext(WishItemsContext);
@@ -40,7 +40,7 @@ const Control = ({ profile, isAuthenticated }) => {
                   window.location.href = "/admin";
                 }}
               >
-                <SecurityRounded color="black" sx={{ width: "35px" }} />
+                <Dashboard color="black" sx={{ width: "35px" }} />
               </div>
             ) : (
               <div className="control">

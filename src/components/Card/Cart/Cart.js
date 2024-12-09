@@ -120,7 +120,7 @@ const Cart = ({ profile }) => {
                   <div className="total__amount">
                     <div className="total__amount__label">Total Amount:</div>
                     <div className="total__amount__value">
-                      ${cartItems.totalAmount}.00
+                      ${cartItems.totalAmount}
                     </div>
                   </div>
                   <Link
