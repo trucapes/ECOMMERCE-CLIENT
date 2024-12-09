@@ -88,7 +88,10 @@ function App() {
                     <Route path="forgot" element={<ForgotPassword />} />
                     <Route path="*" element={<Login />} />
                   </Route>
-                  <Route path="/order/checkout" element={<Checkout />} />
+                  <Route
+                    path="/order/checkout"
+                    element={<Checkout profile={user} />}
+                  />
                   <Route path={"/product"}>
                     <Route path=":id" element={<ViewProduct />} />
                   </Route>
@@ -107,7 +110,10 @@ function App() {
                       />
                     </Route>
                   </Route>
-                  <Route path="/wishlist" element={<Wishlist profile={user} />} />
+                  <Route
+                    path="/wishlist"
+                    element={<Wishlist profile={user} />}
+                  />
                   <Route
                     path="/search/*"
                     element={<SearchView profile={user} />}

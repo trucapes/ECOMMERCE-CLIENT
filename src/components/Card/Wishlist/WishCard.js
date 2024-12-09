@@ -38,7 +38,7 @@ const WishCard = (props) => {
         />
       </div>
       <div className="wish__item__name">{props.item.name}</div>
-      <div className="wish__item__price">${props.item.price}</div>
+      <div className="wish__item__price">${props.item.price.toFixed(2)}</div>
       <div className="add__to__cart">
         <Button
           variant="outlined"

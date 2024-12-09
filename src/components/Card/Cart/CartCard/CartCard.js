@@ -17,12 +17,12 @@ const CartCard = (props) => {
   //   const [size, setSize] = useState(props.item.size[0]);
 
   const handelQuantityIncrement = (event) => {
-    cartItems.quantity(props.item.id, "INC");
+    cartItems.quantity(props.item._id, "INC");
   };
 
   const handelQuantityDecrement = (event) => {
     if (props.item.itemQuantity > 1) {
-      cartItems.quantity(props.item.id, "DEC");
+      cartItems.quantity(props.item._id, "DEC");
     }
   };
 
@@ -39,9 +39,13 @@ const CartCard = (props) => {
       <div className="cart__item__detail">
         <div className="cart__item__image">
           <img
-            src={props.item.images[0].path ?`${
-              SERVER_URL + props.item.images[0].path.replace(/\\/g, "/")
-            }`.replace("/public/", "/") : props.item.images[0]}
+            src={
+              props.item.images[0].path
+                ? `${
+                    SERVER_URL + props.item.images[0].path.replace(/\\/g, "/")
+                  }`.replace("/public/", "/")
+                : props.item.images[0]
+            }
             alt="item"
             className="item__image"
           />

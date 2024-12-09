@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { ClipLoader } from "react-spinners";
 import { CartItemsContext } from "../../Context/CartItemsContext";
 
-function Checkout() {
+function Checkout({ profile }) {
   let cartItems = useContext(CartItemsContext);
 
   const [checkOutConfig, setCheckOutConfig] = useState({});
@@ -99,7 +99,7 @@ function Checkout() {
     }
     setTimeout(() => {
       setAlert(false);
-      window.location.href = "/account/me";
+      window.location.href = "/account/me?tab=1";
     }, 3000);
   }
 
@@ -132,7 +132,7 @@ function Checkout() {
                       <p className="font-medium">{item.name}</p>
                       <p className="text-sm">Quantity: {item.quantity}</p>
                     </div>
-                    <p className="font-medium">${item.price.toFixed(2)}</p>
+                    <p className="font-medium">${item.price}</p>
                   </div>
                 ))}
                 <div className="flex justify-between mt-4 font-bold">
@@ -195,6 +195,15 @@ function Checkout() {
               <label htmlFor="creditCard">Credit Card</label>
             </div>
           </div>
+
+          {paymentType === "wallet" && (
+            <div className="w-full flex flex-col gap-2 mt-4">
+              Current Wallet Balance:
+              {profile.walletBalance
+                ? parseFloat(profile.walletBalance).toFixed(2)
+                : 0}
+            </div>
+          )}
           {paymentType === "creditCard" && (
             <div className="w-full flex flex-col gap-2">
               <InputBox

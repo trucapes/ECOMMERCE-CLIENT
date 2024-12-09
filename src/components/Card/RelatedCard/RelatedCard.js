@@ -22,7 +22,7 @@ const RelatedCard = (props) => {
             <span>{props.item.description}</span>
           </div>
           <div className="related__product__price">
-            <span>${props.profile ? props.item.price : null}</span>
+            <span>${props.profile ? props.item.price.toFixed(2) : null}</span>
           </div>
         </div>
       </div>

@@ -37,12 +37,12 @@ const Detail = (props) => {
     const itemForCart = { ...props.item };
     itemForCart.price =
       props.profile.userRole === "dealer"
-        ? props.item.price.dealer
+        ? props.item.price.dealer.toFixed(2)
         : props.profile.userRole === "distributor"
-        ? props.item.price.distributor
+        ? props.item.price.distributor.toFixed(2)
         : props.profile.userRole === "contractor"
-        ? props.item.price.contractor
-        : props.item.price.regular;
+        ? props.item.price.contractor.toFixed(2)
+        : props.item.price.regular.toFixed(2);
     cartItems.addItem(itemForCart, quantity, size);
     toast.success("Item added to cart");
   };
@@ -52,12 +52,12 @@ const Detail = (props) => {
     const itemForWish = { ...props.item };
     itemForWish.price =
       props.profile.userRole === "dealer"
-        ? props.item.price.dealer
+        ? props.item.price.dealer.toFixed(2)
         : props.profile.userRole === "distributor"
-        ? props.item.price.distributor
+        ? props.item.price.distributor.toFixed(2)
         : props.profile.userRole === "contractor"
-        ? props.item.price.contractor
-        : props.item.price.regular;
+        ? props.item.price.contractor.toFixed(2)
+        : props.item.price.regular.toFixed(2);
     wishItems.addItem(itemForWish);
   };
 
@@ -117,12 +117,12 @@ const Detail = (props) => {
           <div className="product__price__detail">
             {props.profile && props.item
               ? props.profile.userRole === "dealer"
-                ? "$" + props.item.price.dealer
+                ? "$" + props.item.price.dealer.toFixed(2)
                 : props.profile.userRole === "distributor"
-                ? "$" + props.item.price.distributor
+                ? "$" + props.item.price.distributor.toFixed(2)
                 : props.profile.userRole === "contractor"
-                ? "$" + props.item.price.contractor
-                : "$" + props.item.price.regular
+                ? "$" + props.item.price.contractor.toFixed(2)
+                : "$" + props.item.price.regular.toFixed(2)
               : // <Link to="/account/login">Login to see price</Link>
                 null}
           </div>

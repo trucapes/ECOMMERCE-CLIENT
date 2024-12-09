@@ -21,12 +21,12 @@ const ItemCard = (props) => {
     const itemForCart = { ...props.item };
     itemForCart.price =
       props.profile.userRole === "dealer"
-        ? props.item.price.dealer
+        ? props.item.price.dealer.toFixed(2)
         : props.profile.userRole === "distributor"
-        ? props.item.price.distributor
+        ? props.item.price.distributor.toFixed(2)
         : props.profile.userRole === "contractor"
-        ? props.item.price.contractor
-        : props.item.price.regular;
+        ? props.item.price.contractor.toFixed(2)
+        : props.item.price.regular.toFixed(2);
     cartItems.addItem(itemForCart, 1, 1);
     toast.success("Item added to cart");
   };
@@ -36,12 +36,12 @@ const ItemCard = (props) => {
     const itemForWish = { ...props.item };
     itemForWish.price =
       props.profile.userRole === "dealer"
-        ? props.item.price.dealer
+        ? props.item.price.dealer.toFixed(2)
         : props.profile.userRole === "distributor"
-        ? props.item.price.distributor
+        ? props.item.price.distributor.toFixed(2)
         : props.profile.userRole === "contractor"
-        ? props.item.price.contractor
-        : props.item.price.regular;
+        ? props.item.price.contractor.toFixed(2)
+        : props.item.price.regular.toFixed(2);
     wishItems.addItem(itemForWish);
   };
 
@@ -83,12 +83,12 @@ const ItemCard = (props) => {
               <div className="product__price">
                 <span>
                   {props.profile.userRole === "dealer"
-                    ? "$" + props.item.price.dealer
+                    ? "$" + props.item.price.dealer.toFixed(2)
                     : props.profile.userRole === "distributor"
-                    ? "$" + props.item.price.distributor
+                    ? "$" + props.item.price.distributor.toFixed(2)
                     : props.profile.userRole === "contractor"
-                    ? "$" + props.item.price.contractor
-                    : "$" + props.item.price.regular}
+                    ? "$" + props.item.price.contractor.toFixed(2)
+                    : "$" + props.item.price.regular.toFixed(2)}
                 </span>
               </div>
             )}

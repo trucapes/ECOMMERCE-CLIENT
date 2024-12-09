@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import BasicInfoTab from "./BasicInfoTabb";
 import { useNavigate } from "react-router";
+import { useLocation } from "react-router-dom";
 import UserTransaction from "../../Transactions/UserTransaction";
 import WalletPage from "../../WalletPage/WalletPage";
 import MyOrders from "../../MyOrders/MyOrders";
@@ -62,11 +63,25 @@ function a11yProps(index) {
 }
 
 export function BasicTabs({ user, isAdmin }) {
-  const [value, setValue] = React.useState(0);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const queryParams = new URLSearchParams(location.search);
+  const initialTab = parseInt(queryParams.get("tab"), 10) || 0;
+
+  const [value, setValue] = useState(initialTab);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    navigate(`?tab=${newValue}`); // Update the URL query
   };
+
+  // Update tab based on URL changes
+  useEffect(() => {
+    const currentTab = parseInt(queryParams.get("tab"), 10) || 0;
+    if (currentTab !== value) {
+      setValue(currentTab);
+    }
+  }, [location.search]);
 
   return (
     <Box sx={{ width: "100%" }}>
