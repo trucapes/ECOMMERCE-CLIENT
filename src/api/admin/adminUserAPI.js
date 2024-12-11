@@ -30,8 +30,8 @@ const AdminUserAPI = {
   },
 
   // Verify user by ID
-  verifyUserById: async (userId) => {
-    const response = await api.put(`/admin/users/verify/${userId}`);
+  verifyUserById: async (userId, body = {}) => {
+    const response = await api.put(`/admin/users/verify/${userId}`, body);
     return response;
   },
 

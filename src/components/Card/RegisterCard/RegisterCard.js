@@ -8,6 +8,7 @@ import AlertMsg from "../../Alert/AlertMsg";
 import { handleSignup } from "../../../helpers/Auth";
 import handleToggle from "../../../helpers/VisibilityToggler";
 import { ClipLoader } from "react-spinners";
+import { toast } from "react-toastify";
 
 const RegisterCard = () => {
   const [ISDcodes, setISDcodes] = useState([]);
@@ -23,6 +24,7 @@ const RegisterCard = () => {
   const [comAddress, setComAddress] = useState(null);
   const [role, setRole] = useState("");
   const [agree, setAgree] = useState(false);
+  const [agreeDealer, setAgreeDealer] = useState(false);
   const [viewPassword, setViewPassword] = useState(false);
   const [viewCnfPassword, setViewCnfPassword] = useState(false);
   const [enteredISDcode, setEnteredISDcode] = useState("+1");
@@ -302,10 +304,10 @@ const RegisterCard = () => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={agree}
+                  checked={agreeDealer}
                   onClick={(e) => {
                     e.preventDefault();
-                    setAgree(!agree);
+                    setAgreeDealer(!agree);
                   }}
                 />
               }
@@ -349,6 +351,10 @@ const RegisterCard = () => {
             <button
               onClick={(e) => {
                 e.preventDefault();
+                if (agreeDealer === false && role === "dealer") {
+                  toast.error("Please agree to be a dealer");
+                  return;
+                }
                 handleSignup(
                   fName,
                   lName,
@@ -358,6 +364,7 @@ const RegisterCard = () => {
                   city,
                   comName,
                   comWeb,
+                  comAddress,
                   role,
                   agree,
                   enteredISDcode,

@@ -13,6 +13,7 @@ const convertToRequiredFormat = (data) => {
     city: data.city,
     company: data.comName,
     companyWebsite: data.comWeb,
+    companyAddress: data.comAddress,
     userRole: data.role,
     password: data.password,
   };
@@ -27,6 +28,7 @@ export function handleSignup(
   city,
   comName,
   comWeb,
+  comAddress,
   role,
   agree,
   enterISDcode,
@@ -79,6 +81,7 @@ export function handleSignup(
             city,
             comName,
             comWeb,
+            comAddress,
             role,
             enterISDcode,
             password,

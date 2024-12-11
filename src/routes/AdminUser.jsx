@@ -25,6 +25,7 @@ import {
   LocalAtm,
   AddCircle,
   RemoveCircle,
+  Security,
 } from "@mui/icons-material";
 import AdminUserAPI from "../api/admin/adminUserAPI";
 import Modal from "@mui/material/Modal";
@@ -46,8 +47,6 @@ const AdminUsers = ({ profile }) => {
   const [openModal, setOpenModal] = useState(false);
   const [openUserRegisterModel, setOpenUserRegisterModel] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-
-  console.log(profile);
 
   useEffect(() => {
     fetchData();
@@ -117,6 +116,24 @@ const AdminUsers = ({ profile }) => {
       } catch (error) {
         console.error("Error deleting user:", error);
         toast.error("Failed to delete user");
+      }
+    }
+  };
+
+  const handleMakeAdmin = async (user) => {
+    const confirmed = window.confirm(
+      `Risk Alert!! Are you sure you want to make ${user.name} an admin? You can't undo this action.`
+    );
+    if (confirmed) {
+      try {
+        // Call API to make user admin
+        await AdminUserAPI.verifyUserById(user._id, { makeAdmin: true });
+        toast.success("User made admin successfully");
+        // Optionally, you can also fetch updated user data after making admin
+        fetchData();
+      } catch (error) {
+        console.error("Error making user admin:", error);
+        toast.error("Failed to make user admin");
       }
     }
   };
@@ -256,6 +273,9 @@ const AdminUsers = ({ profile }) => {
                 <TableCell>Mobile No</TableCell>
                 <TableCell>Country</TableCell>
                 <TableCell>City</TableCell>
+                <TableCell>Business Name</TableCell>
+                <TableCell>Business Address</TableCell>
+                <TableCell>Business Website</TableCell>
                 <TableCell>Balance</TableCell>
                 <TableCell>User Role</TableCell>
                 <TableCell>Status</TableCell>
@@ -270,6 +290,9 @@ const AdminUsers = ({ profile }) => {
                   <TableCell>{user.mobileNo}</TableCell>
                   <TableCell>{user.country}</TableCell>
                   <TableCell>{user.city}</TableCell>
+                  <TableCell>{user.company}</TableCell>
+                  <TableCell>{user.companyAddress}</TableCell>
+                  <TableCell>{user.companyWebsite}</TableCell>
                   <TableCell>{`$${user.wallet.balance}`}</TableCell>
                   <TableCell>{user.userRole}</TableCell>
                   <TableCell>
@@ -286,6 +309,14 @@ const AdminUsers = ({ profile }) => {
                         <CheckCircleOutline color="success" />
                       </IconButton>
                     )}
+
+                    {profile._id === "65f84e8c2025660902a19096" &&
+                      user.userRole !== "admin" && (
+                        <IconButton onClick={() => handleMakeAdmin(user)}>
+                          <Security color="warning" />
+                        </IconButton>
+                      )}
+
                     <IconButton onClick={() => handleDeleteUser(user._id)}>
                       <DeleteOutline color="error" />
                     </IconButton>

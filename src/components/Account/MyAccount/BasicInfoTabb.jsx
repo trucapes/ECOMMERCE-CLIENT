@@ -61,10 +61,13 @@ const BasicInfoTab = ({ userData, isAdmin }) => {
       city: editedData.city,
       company: editedData.company,
       companyWebsite: editedData.companyWebsite,
+      companyAddress: editedData.companyAddress,
     });
 
     toast.success(response.data.message);
     setIsEditing(false);
+
+    window.location.reload();
   };
 
   const handleCancelClick = () => {
@@ -243,6 +246,20 @@ const BasicInfoTab = ({ userData, isAdmin }) => {
                   />
                 ) : (
                   userData.companyWebsite
+                )}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <StyledTableCell>Company Address:</StyledTableCell>
+              <TableCell>
+                {isEditing ? (
+                  <StyledTextField
+                    name="companyAddress"
+                    value={editedData.companyAddress}
+                    onChange={handleInputChange}
+                  />
+                ) : (
+                  userData.companyAddress
                 )}
               </TableCell>
             </TableRow>
