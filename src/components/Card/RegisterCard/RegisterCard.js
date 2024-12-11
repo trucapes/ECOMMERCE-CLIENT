@@ -20,6 +20,7 @@ const RegisterCard = () => {
   const [city, setCity] = useState("");
   const [comName, setComName] = useState(null);
   const [comWeb, setComWeb] = useState(null);
+  const [comAddress, setComAddress] = useState(null);
   const [role, setRole] = useState("");
   const [agree, setAgree] = useState(false);
   const [viewPassword, setViewPassword] = useState(false);
@@ -201,6 +202,16 @@ const RegisterCard = () => {
             setter={setComWeb}
             placeholder={"e.g. - www.example.com"}
             name={"companyWebsite"}
+          />
+        </div>
+
+        <div className="w-full flex gap-4 flex-col sm:flex-row">
+          <InputBox
+            label={"Enter Company/Business Address"}
+            required={false}
+            setter={setComAddress}
+            placeholder={"Business Full Address"}
+            name={"businessaddress"}
           />
         </div>
         <div className="w-full flex gap-4 flex-col sm:flex-row">
