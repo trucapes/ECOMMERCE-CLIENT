@@ -297,6 +297,23 @@ const RegisterCard = () => {
             </div>
           </InputBox>
         </div>
+        {role === "dealer" && (
+          <div className=" w-full flex flex-row justify-start items-center">
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={agree}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setAgree(!agree);
+                  }}
+                />
+              }
+              label=""
+            />
+            <h1 className="text-sm font-normal">Are you a dealer?</h1>
+          </div>
+        )}
         <div className=" w-full flex flex-row justify-start items-center">
           <FormControlLabel
             control={
