@@ -273,9 +273,9 @@ const AdminUsers = ({ profile }) => {
                 <TableCell>Mobile No</TableCell>
                 <TableCell>Country</TableCell>
                 <TableCell>City</TableCell>
-                <TableCell>Business Name</TableCell>
+                {/* <TableCell>Business Name</TableCell>
                 <TableCell>Business Address</TableCell>
-                <TableCell>Business Website</TableCell>
+                <TableCell>Business Website</TableCell> */}
                 <TableCell>Balance</TableCell>
                 <TableCell>User Role</TableCell>
                 <TableCell>Status</TableCell>
@@ -290,9 +290,9 @@ const AdminUsers = ({ profile }) => {
                   <TableCell>{user.mobileNo}</TableCell>
                   <TableCell>{user.country}</TableCell>
                   <TableCell>{user.city}</TableCell>
-                  <TableCell>{user.company}</TableCell>
+                  {/* <TableCell>{user.company}</TableCell>
                   <TableCell>{user.companyAddress}</TableCell>
-                  <TableCell>{user.companyWebsite}</TableCell>
+                  <TableCell>{user.companyWebsite}</TableCell> */}
                   <TableCell>{`$${user.wallet.balance}`}</TableCell>
                   <TableCell>{user.userRole}</TableCell>
                   <TableCell>
