@@ -88,8 +88,8 @@ export default function Orders({ profile }) {
             animation="wave"
           />
         </div>
-      ) : data.length === 0 ? (
-        <NoDataFound TryingToFind={"Transactions"} />
+      ) : profile === null ? (
+        <NoDataFound TryingToFind={"Credit Balance"} />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="border p-2 bg-slate-200 border-slate-600 w-full rounded-xl place-self-center">
@@ -122,7 +122,9 @@ export default function Orders({ profile }) {
                 type="submit"
                 className=" disabled:bg-slate-300 w-fit hover:text-[#ffe26e] bg-[#ffe26e] duration-300 hover:bg-black font-medium rounded-lg disabled:hover:text-black text-sm px-4 py-2.5 text-center"
               >
-                Repay
+                {profile.credit === null || profile.credit.credit === 0
+                  ? "No Due"
+                  : "Repay"}
                 <ChevronRight />
               </button>
             </div>

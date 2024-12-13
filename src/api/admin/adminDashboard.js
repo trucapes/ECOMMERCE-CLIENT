@@ -25,10 +25,10 @@ export const DashboardAPI = {
     const allOrders = ordersResponse.data.data.map((item) => {
       return {
         isDelivered: item.isDelivered,
-        userId: item.userId._id,
+        userId: item.userId?._id,
         address: item.shippingAddress,
         id: item._id,
-        customerName: item.userId.firstName + " " + item.userId.lastName,
+        customerName: item.userId?.firstName + " " + item.userId?.lastName,
         date: DateToString(item.createdAt),
         updatedAt: DateToString(item.updatedAt),
         amount: item.price,

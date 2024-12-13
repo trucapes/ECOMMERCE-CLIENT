@@ -3,13 +3,15 @@ import InputBox from "../InputBox/InputBox";
 import { OrderAPI } from "../../api/paymentAPI";
 import { Alert } from "bootstrap";
 import AlertMsg from "../Alert/AlertMsg";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { ClipLoader } from "react-spinners";
 import { CartItemsContext } from "../../Context/CartItemsContext";
 
 function Checkout({ profile }) {
   let cartItems = useContext(CartItemsContext);
+
+  let location = useLocation();
 
   const [checkOutConfig, setCheckOutConfig] = useState({});
   const [addressLine1, setAddressLine1] = useState("");
@@ -108,7 +110,7 @@ function Checkout({ profile }) {
     console.log(config);
     config = JSON.parse(config);
     setCheckOutConfig(config);
-  }, []);
+  }, [location]);
 
   if (!checkOutConfig) {
     return null;
@@ -247,6 +249,10 @@ function Checkout({ profile }) {
             <ClipLoader loading={loader} />
           ) : (
             <button
+              disabled={
+                checkOutConfig.amount > profile.walletBalance &&
+                paymentType === "wallet"
+              }
               onClick={(e) => {
                 e.preventDefault();
                 confirmOrder();
@@ -254,7 +260,10 @@ function Checkout({ profile }) {
               type="submit"
               className="Registration-button w-fit text-black hover:text-white bg-[#ffe26e] duration-300 hover:bg-black font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             >
-              Confirm Order
+              {checkOutConfig.amount > profile.walletBalance &&
+              paymentType === "wallet"
+                ? "Insufficient Balance"
+                : "Confirm Order"}
             </button>
           )}
         </div>

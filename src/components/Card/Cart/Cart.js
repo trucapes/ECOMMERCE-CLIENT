@@ -9,7 +9,7 @@ import "./Cart.css";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import { OrderAPI } from "../../../api/paymentAPI";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -36,6 +36,8 @@ const Cart = ({ profile }) => {
   const [openCheckoutModal, setOpenCheckoutModal] = useState(false);
   const handleCheckoutOpen = () => setOpenCheckoutModal(true);
   const handleCheckoutClose = () => setOpenCheckoutModal(false);
+
+  const nav = useNavigate();
 
   const cartItems = useContext(CartItemsContext);
   console.log(cartItems.items);
@@ -74,6 +76,10 @@ const Cart = ({ profile }) => {
 
       localStorage.setItem("checkoutConfig", JSON.stringify(config));
       console.log(localStorage.getItem("checkoutConfig"));
+
+      // window.location.href = "/order/checkout";
+
+      nav("/order/checkout?items=" + JSON.stringify(itemsObj));
 
       // const response = await OrderAPI.placeOrder(config);
 
@@ -123,15 +129,15 @@ const Cart = ({ profile }) => {
                       ${cartItems.totalAmount}
                     </div>
                   </div>
-                  <Link
-                    to={"/order/checkout"}
+                  <div
+                    // to={"/order/checkout"}
                     onClick={() => handleClose()}
                     className="checkout"
                   >
                     <Button variant="outlined" onClick={handleCheckout}>
                       Checkout
                     </Button>
-                  </Link>
+                  </div>
                 </div>
               )}
             </div>

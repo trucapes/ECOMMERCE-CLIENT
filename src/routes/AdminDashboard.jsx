@@ -99,7 +99,7 @@ function AdminDashboard() {
                   </div>
                   <div className="flex flex-col ">
                     <div className="order-id my-auto">
-                      <span className="font-bold">Order ID </span> - {item._id}
+                      <span className="font-bold">Order ID </span> - {item.id}
                     </div>
                     <div className="order-date my-auto">
                       <span className="font-bold">Ordered On</span> -{" "}
