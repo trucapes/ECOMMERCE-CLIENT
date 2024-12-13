@@ -95,7 +95,10 @@ export default function Orders({ profile }) {
           <div className="border p-2 bg-slate-200 border-slate-600 w-full rounded-xl place-self-center">
             <h1 className="text-lg">Wallet Balance</h1>
             <h1 className="sm:text-2xl text-xl">
-              ${parseFloat(profile.walletBalance).toFixed(2)}
+              $
+              {!isNaN(profile.walletBalance) || profile.walletBalance === null
+                ? profile.walletBalance.toFixed(2)
+                : 0}
             </h1>
           </div>
           <div className="border p-2 flex flex-row justify-between bg-slate-200 border-slate-600 w-full rounded-xl">
