@@ -48,16 +48,18 @@ function AdminOrder() {
 
     const responseData = response.data.data.map((item) => {
       return {
-        userId: item.userId._id,
+        userId: item.userId?._id,
         address: item.shippingAddress,
         id: item._id,
-        customerName: item.userId.firstName + " " + item.userId.lastName,
+        customerName: item.userId?.firstName + " " + item.userId?.lastName,
         date: DateToString(item.createdAt),
         amount: item.price,
         status: item.status.charAt(0).toUpperCase() + item.status.slice(1),
         products: [...item.products],
       };
     });
+
+    console.log(responseData);
 
     setData([...responseData]);
   }
