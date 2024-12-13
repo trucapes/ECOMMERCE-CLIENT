@@ -46,7 +46,11 @@ function OrderItemPopUp({
                 <div className="h-full aspect-square object-contain grid place-items-center">
                   <img
                     className=" "
-                    src={item.imagePath}
+                    src={
+                      item.imagePath
+                        ? item.imagePath
+                        : "https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTExL3BmLXMxMDgtcG0tNDExMy1tb2NrdXAuanBn.jpg"
+                    }
                     alt={`${item.name}_Img`}
                   />
                 </div>
