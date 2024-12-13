@@ -96,8 +96,9 @@ export default function Orders({ profile }) {
             <h1 className="text-lg">Wallet Balance</h1>
             <h1 className="sm:text-2xl text-xl">
               $
-              {!isNaN(profile.walletBalance) || profile.walletBalance === null
-                ? profile.walletBalance.toFixed(2)
+              {!isNaN(parseFloat(profile.walletBalance)) ||
+              profile.walletBalance === null
+                ? parseFloat(profile.walletBalance).toFixed(2)
                 : 0}
             </h1>
           </div>
