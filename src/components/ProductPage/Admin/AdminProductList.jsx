@@ -50,7 +50,10 @@ const AdminProductList = () => {
 
   useEffect(() => {
     fetchData();
-    if (categories.length === 0) fetchCategoryData();
+    if (categories.length === 0) {
+      fetchCategoryData();
+      
+    }
   }, [search, page, sortBy, openModal, categorySelected]);
 
   const fetchData = async () => {
@@ -93,6 +96,7 @@ const AdminProductList = () => {
       const sortedCategories = response.data.data.sort(
         (a, b) => b.index - a.index
       );
+      setCategorySelected(sortedCategories[0]._id);
       setCategories(sortedCategories);
       setLoading(false);
     } catch (error) {
@@ -337,7 +341,7 @@ const AdminProductList = () => {
               value={categorySelected}
               onChange={(e) => setCategorySelected(e.target.value)}
             >
-              <MenuItem value="all">All Category Products</MenuItem>
+              {/* <MenuItem value="all">All Category Products</MenuItem> */}
               {categories &&
                 categories.map((category) => (
                   <MenuItem key={category._id} value={category._id}>
