@@ -16,9 +16,15 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Detail = (props) => {
-  console.log(props.item);
+  // console.log(props.item);
   const [quantity, setQuantity] = useState(1);
   const [size, setSize] = useState();
+  const [selectedVariant, setSelectedVariant] = useState(
+    props?.item?.variants[0]?.name || null
+  );
+  const [variantPrice, setVariantPrice] = useState(
+    props?.item?.variants[0]?.additionalPrice || 0
+  );
 
   const cartItems = useContext(CartItemsContext);
   const wishItems = useContext(WishItemsContext);
@@ -34,30 +40,49 @@ const Detail = (props) => {
   };
 
   const handelAddToCart = () => {
+    if (selectedVariant === null && (props.item.variants || []).length > 0) {
+      toast.warning("Please choose a variant to continue.");
+    }
     const itemForCart = { ...props.item };
     itemForCart.price =
       props.profile.userRole === "dealer"
-        ? props.item.price.dealer.toFixed(2)
+        ? (
+            parseFloat(props.item.price.dealer.toFixed(2)) + variantPrice
+          ).toFixed(2)
         : props.profile.userRole === "distributor"
-        ? props.item.price.distributor.toFixed(2)
+        ? (
+            parseFloat(props.item.price.distributor.toFixed(2)) + variantPrice
+          ).toFixed(2)
         : props.profile.userRole === "contractor"
-        ? props.item.price.contractor.toFixed(2)
-        : props.item.price.regular.toFixed(2);
-    cartItems.addItem(itemForCart, quantity, size);
+        ? (
+            parseFloat(props.item.price.contractor.toFixed(2)) + variantPrice
+          ).toFixed(2)
+        : (
+            parseFloat(props.item.price.regular.toFixed(2)) + variantPrice
+          ).toFixed(2);
+    cartItems.addItem(itemForCart, quantity, selectedVariant);
     toast.success("Item added to cart");
   };
 
   const handelAddToWish = () => {
-    console.log(props.item);
+    // console.log(props.item);
     const itemForWish = { ...props.item };
     itemForWish.price =
       props.profile.userRole === "dealer"
-        ? props.item.price.dealer.toFixed(2)
+        ? (
+            parseFloat(props.item.price.dealer.toFixed(2)) + variantPrice
+          ).toFixed(2)
         : props.profile.userRole === "distributor"
-        ? props.item.price.distributor.toFixed(2)
+        ? (
+            parseFloat(props.item.price.distributor.toFixed(2)) + variantPrice
+          ).toFixed(2)
         : props.profile.userRole === "contractor"
-        ? props.item.price.contractor.toFixed(2)
-        : props.item.price.regular.toFixed(2);
+        ? (
+            parseFloat(props.item.price.contractor.toFixed(2)) + variantPrice
+          ).toFixed(2)
+        : (
+            parseFloat(props.item.price.regular.toFixed(2)) + variantPrice
+          ).toFixed(2);
     wishItems.addItem(itemForWish);
   };
 
@@ -117,18 +142,51 @@ const Detail = (props) => {
           <div className="product__price__detail">
             {props.profile && props.item
               ? props.profile.userRole === "dealer"
-                ? "$" + props.item.price.dealer.toFixed(2)
+                ? "$" +
+                  (
+                    parseFloat(props.item.price.dealer.toFixed(2)) +
+                    variantPrice
+                  ).toFixed(2)
                 : props.profile.userRole === "distributor"
-                ? "$" + props.item.price.distributor.toFixed(2)
+                ? "$" +
+                  (
+                    parseFloat(props.item.price.distributor.toFixed(2)) +
+                    variantPrice
+                  ).toFixed(2)
                 : props.profile.userRole === "contractor"
-                ? "$" + props.item.price.contractor.toFixed(2)
-                : "$" + props.item.price.regular.toFixed(2)
+                ? "$" +
+                  (
+                    parseFloat(props.item.price.contractor.toFixed(2)) +
+                    variantPrice
+                  ).toFixed(2)
+                : "$" +
+                  (
+                    parseFloat(props.item.price.regular.toFixed(2)) +
+                    variantPrice
+                  ).toFixed(2)
               : // <Link to="/account/login">Login to see price</Link>
                 null}
           </div>
         </div>
+
         {props.profile && (
           <form onSubmit={handelAddToCart} className="product__form">
+            <Box display="flex" flexWrap="wrap" gap={1}>
+              {props.item.variants.map((variant, indx) => (
+                <Chip
+                  key={indx}
+                  label={`${variant.name} (+$${variant.additionalPrice})`}
+                  variant={
+                    selectedVariant === variant.name ? "filled" : "outlined"
+                  }
+                  onClick={() => {
+                    setSelectedVariant(variant.name);
+                    setVariantPrice(variant.additionalPrice);
+                  }}
+                  color="primary"
+                />
+              ))}
+            </Box>
             <div className="product__quantity__and__size">
               <div className="product__quantity">
                 <IconButton onClick={handelQuantityIncrement}>

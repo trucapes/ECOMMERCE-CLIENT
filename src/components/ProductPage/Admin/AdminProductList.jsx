@@ -52,7 +52,6 @@ const AdminProductList = () => {
     fetchData();
     if (categories.length === 0) {
       fetchCategoryData();
-      
     }
   }, [search, page, sortBy, openModal, categorySelected]);
 
@@ -575,14 +574,6 @@ const ProductCard = ({
                     variant="outlined"
                     sx={{ mr: 1 }}
                   />
-                  {/* <Chip
-                    icon={product.hotProduct ? <Check /> : <Close />}
-                    label={
-                      product.hotProduct ? "Hot Product" : "Regular Product"
-                    }
-                    color={product.hotProduct ? "warning" : "default"}
-                    variant="outlined"
-                  /> */}
                 </Box>
               </Grid>
             </Grid>
@@ -615,6 +606,23 @@ const ProductCard = ({
                 />
               </Grid>
             </Grid>
+
+            <Divider sx={{ my: 2 }} />
+
+            {/* Variants Section */}
+            <Typography variant="h6" gutterBottom>
+              Available Variants
+            </Typography>
+            <Box display="flex" flexWrap="wrap" gap={1}>
+              {product.variants.map((variant) => (
+                <Chip
+                  key={variant._id}
+                  label={`${variant.name} (+$${variant.additionalPrice})`}
+                  variant="filled"
+                  color="primary"
+                />
+              ))}
+            </Box>
           </CardContent>
         </Grid>
       </Grid>

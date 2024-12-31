@@ -47,13 +47,14 @@ const Cart = ({ profile }) => {
       //Storing the items which are in cart, in local storage to be accessed on checkout
 
       const itemsObj = cartItems.items.map((item) => {
-        console.log(item);
+        // console.log(item);
         return {
           name: item.name,
           category: item.categoryName,
           image: item.images[0].path ? item.images[0].path : item.images[0],
           product: item._id,
           quantity: item.itemQuantity,
+          size: item.size,
           price: item.price,
         };
       });

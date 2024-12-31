@@ -94,15 +94,15 @@ function Checkout({ profile }) {
     if (response.status === 201) {
       toast.success("Order Placed Successfully");
       cartItems.removeItem({});
+      setTimeout(() => {
+        setAlert(false);
+        window.location.href = "/account/me?tab=1";
+      }, 3000);
     } else if (response.status === 200) {
-      toast.warn(response.data.message);
+      toast.error("Payment Failed Please Try Again");
     } else {
       toast.error("Internal Server Error");
     }
-    setTimeout(() => {
-      setAlert(false);
-      window.location.href = "/account/me?tab=1";
-    }, 3000);
   }
 
   useEffect(() => {
@@ -133,6 +133,7 @@ function Checkout({ profile }) {
                     <div>
                       <p className="font-medium">{item.name}</p>
                       <p className="text-sm">Quantity: {item.quantity}</p>
+                      <p className="text-sm">Size: {item.size ?? "Default"}</p>
                     </div>
                     <p className="font-medium">${item.price}</p>
                   </div>
@@ -199,12 +200,22 @@ function Checkout({ profile }) {
           </div>
 
           {paymentType === "wallet" && (
-            <div className="w-full flex flex-col gap-2 mt-4">
-              Current Wallet Balance:
-              {profile.walletBalance
-                ? parseFloat(profile.walletBalance).toFixed(2)
-                : 0}
-            </div>
+            <>
+              <div className="w-full flex flex-col gap-2 mt-4">
+                Current Wallet Balance: &nbsp;$ &nbsp;
+                {profile.walletBalance
+                  ? parseFloat(profile.walletBalance).toFixed(2)
+                  : 0}
+              </div>
+
+              <div className="w-full flex flex-col gap-2 mt-4">
+                Balance After Payment: &nbsp;$ &nbsp;
+                {profile.walletBalance
+                  ? parseFloat(profile.walletBalance).toFixed(2) -
+                    checkOutConfig.amount
+                  : 0}
+              </div>
+            </>
           )}
           {paymentType === "creditCard" && (
             <div className="w-full flex flex-col gap-2">

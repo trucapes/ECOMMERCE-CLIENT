@@ -12,7 +12,6 @@ import {
   Grid,
   Paper,
   Box,
-  Divider,
   ListSubheader,
   Container,
   Stepper,
@@ -60,16 +59,21 @@ const formats = [
 const AddProductPage = ({ product }) => {
   const [categories, setCategories] = useState(null);
   const [loading, setLoading] = useState(false);
-  const steps = ["Product Details", "Pricing", "Images", "Additional Details"];
+  const steps = [
+    "Product Details",
+    "Pricing",
+    "Images",
+    "Variants",
+    "Additional Details",
+  ];
   const [activeStep, setActiveStep] = useState(0);
   const [errors, setErrors] = useState({});
   const [openGalleryPopup, setOpenGalleryPopup] = useState(false);
+  const [variants, setVariants] = useState([]);
   const nav = useNavigate();
 
   const validateStep = (step) => {
     const newErrors = {};
-
-    console.log(productData);
 
     switch (step) {
       case 0:
@@ -92,6 +96,8 @@ const AddProductPage = ({ product }) => {
           newErrors.images = "At least one image is required";
         break;
       case 3:
+        break;
+      case 4:
         if (!productData.index) newErrors.index = "Index is required";
         if (!productData.shippingCost)
           newErrors.shippingCost = "Shipping cost is required";
@@ -208,6 +214,8 @@ const AddProductPage = ({ product }) => {
         ),
       };
 
+      setVariants(inputData.variants || []);
+
       setProductData(prodData);
     }
   };
@@ -257,7 +265,7 @@ const AddProductPage = ({ product }) => {
 
     try {
       // Create a copy of productData to avoid modifying the original state
-      const jsonProductData = { ...productData };
+      const jsonProductData = { ...productData, variants: variants };
 
       // Remove imagePreviews from the data to be sent
       delete jsonProductData.imagePreviews;
@@ -505,6 +513,75 @@ const AddProductPage = ({ product }) => {
           )}
 
           {activeStep === 3 && (
+            <Box>
+              <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
+                Variants
+              </Typography>
+              <Grid container spacing={3}>
+                {variants.map((variant, index) => (
+                  <Grid item xs={12} key={index}>
+                    <div
+                      style={{
+                        marginBottom: "6px",
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        gap: "10px",
+                      }}
+                    >
+                      <TextField
+                        label="Variant Name"
+                        value={variant.name}
+                        onChange={(e) => {
+                          const newVariants = [...variants];
+                          newVariants[index].name = e.target.value;
+                          setVariants(newVariants);
+                        }}
+                        fullWidth
+                        required
+                      />
+                      <TextField
+                        label="Additional Price"
+                        type="number"
+                        value={variant.additionalPrice}
+                        onChange={(e) => {
+                          const newVariants = [...variants];
+                          newVariants[index].additionalPrice = parseFloat(
+                            e.target.value
+                          );
+                          setVariants(newVariants);
+                        }}
+                        fullWidth
+                        required
+                      />
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        onClick={() => {
+                          const newVariants = variants.filter(
+                            (_, i) => i !== index
+                          );
+                          setVariants(newVariants);
+                        }}
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  </Grid>
+                ))}
+              </Grid>
+              <Button
+                variant="contained"
+                onClick={() =>
+                  setVariants([...variants, { name: "", additionalPrice: 0 }])
+                }
+              >
+                Add Variant
+              </Button>
+            </Box>
+          )}
+
+          {activeStep === 4 && (
             <Box>
               <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
                 Additional Details
