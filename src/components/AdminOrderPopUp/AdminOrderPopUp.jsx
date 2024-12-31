@@ -98,6 +98,11 @@ function AdminOrderPopUp({
                   <div className="order-date-quantity my-auto">
                     <span className="font-medium">Qty.: {item.quantity}</span>
                   </div>
+                  <div className="order-date-quantity my-auto">
+                    <span className="font-medium">
+                      Variant: {item.variant || "Default"}
+                    </span>
+                  </div>
                 </div>
               </div>
             );
